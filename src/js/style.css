@@ -7,11 +7,6 @@
     display: none;
     overflow: hidden;
 
-    /* Fallbacks - We will try to use github's colors first */
-    --bgpr-background: #fff;
-    --bgpr-color: #000;
-    --bgpr-border: #e1e4e8;
-
     --bgpr-filter-background: #efefef;
     --bgpr-filter-color: #666;
     --bgpr-filter-border: #efefef;
