@@ -1,0 +1,56 @@
+name: CI Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker cleanup
+        run: |
+          docker container prune -f
+          docker image prune -f
+          docker-compose -f ci.docker-compose.yml down --rmi local
+
+      - name: run dev services
+        env:
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+        run: |
+          docker-compose -f ci.docker-compose.yml down --rmi local
+          docker-compose -f ci.docker-compose.yml up --build -d
+      # -d will terminate quickly (as soon as the containers are up), likely migration complete.
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: os setup
+        run: |
+          sudo apt update -y
+          sudo apt install curl
+          touch $NPMRC
+          curl -H "X-JFrog-Art-API: $ARTIFACTORY_API_KEY" https://linearb.jfrog.io/linearb/api/npm/npm-local/auth/linearb >> $NPMRC
+        env:
+          NPMRC: '.npmrc'
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+
+      - name: npm install
+        run: npm ci
+
+      - name: build
+        run: npm build
+
+      - name: test
+        run: npm run test:coverage
+
+      - name: Integration Tests
+        run: |
+          npm run integration-test:coverage
+          docker-compose -f ci.docker-compose.yml down
