@@ -46,7 +46,7 @@ jobs:
     steps:
       - run: echo "PASSED ${{ needs.gitstream.outputs.docs_change_passed }}"
       - run: echo "ACTIVE ${{ needs.gitstream.outputs.docs_change_active }}"
-      - uses: juliangruber/approve-pull-request-action@v1.1.1
+      - uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: 1
