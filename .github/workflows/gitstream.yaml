@@ -75,5 +75,5 @@ jobs:
       - run: echo "ACTIVE ${{ needs.gitstream.outputs.docs_update_active }}"
       - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: add_tests
+          labels: docs📒
           token: ${{ secrets.GITHUB_TOKEN }}
