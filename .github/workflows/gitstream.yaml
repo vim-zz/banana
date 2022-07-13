@@ -15,11 +15,24 @@ jobs:
       - run: echo "getting the repo code"
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+          path: _GS_BASE_BRANCH_
+      - run: ls $GITHUB_WORKSPACE/_GS_BASE_BRANCH_
       - name: Run gitstream checks
         uses: vim-zz/action1@v1
         id: checks
         with:
           lanes: add_tests,small,docs_update,
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref }}
+          use_cache: true
   add_tests:
     needs: gitstream
     if: >-
@@ -75,5 +88,5 @@ jobs:
       - run: echo "ACTIVE ${{ needs.gitstream.outputs.docs_update_active }}"
       - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: docs📒
+          labels: add_tests
           token: ${{ secrets.GITHUB_TOKEN }}
