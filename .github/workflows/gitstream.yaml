@@ -19,7 +19,9 @@ jobs:
         uses: vim-zz/action1@v1
         id: checks
         with:
-          lanes: add_tests,small,docs_update,
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref }}
+          use_cache: true
   add_tests:
     needs: gitstream
     if: >-
