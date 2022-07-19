@@ -8,7 +8,7 @@ jobs:
       lane_add_tests_active: ${{ steps.checks.outputs.lane_add_tests_active }}
       lane_small_active: ${{ steps.checks.outputs.lane_small_active }}
       lane_docs_update_active: ${{ steps.checks.outputs.lane_docs_update_active }}
-      gate_add_shaked__as_reviewer_passed: ${{ steps.checks.outputs.gate_add_shaked__as_reviewer_passed }}
+      gate_a123_add_shaked__as_reviewer_passed: ${{ steps.checks.outputs.gate_a123_add_shaked__as_reviewer_passed }}
     steps:
       - run: echo "getting the repo code"
       - name: Check out repository code
@@ -28,10 +28,10 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - exec: hmarr/auto-approve-action@v2
+      - uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - exec: actions-ecosystem/action-add-labels@v1
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: add_tests
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - exec: actions-ecosystem/action-add-labels@v1
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: xsmall
   lane_docs_update:
@@ -54,25 +54,25 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - exec: hmarr/auto-approve-action@v2
+      - uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - exec: actions-ecosystem/action-add-labels@v1
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: add_tests
           token: ${{ secrets.GITHUB_TOKEN }}
-  gate_add_shaked__as_reviewer:
+  gate_a123_add_shaked__as_reviewer:
     needs: gitstream
-    if: needs.gitstream.outputs.gate_add_shaked__as_reviewer_passed == 'true'
+    if: needs.gitstream.outputs.gate_a123_add_shaked__as_reviewer_passed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - exec: hmarr/auto-approve-action@v2
+      - uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - exec: actions-ecosystem/action-add-labels@v1
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: add_tests
           token: ${{ secrets.GITHUB_TOKEN }}
