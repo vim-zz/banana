@@ -7,6 +7,7 @@
 // code
 // code
 // code
+new TextDecoderStream
 // code
 // code
 // code
