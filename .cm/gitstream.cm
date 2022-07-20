@@ -10,10 +10,10 @@ checks:
       tests_only: {{ files | allTests }}
   size:
     is:
-      xsmall: {{ branch.diff.size < 20 and branch.diff.size > 0 }}
-      small_or_less: {{ branch.diff.size < 100 and branch.diff.size > 0 }}
-      medium_or_less: {{ branch.diff.size < 200 and branch.diff.size > 0 }}
-      large: {{ branch.diff.size >= 200 and branch.diff.size > 0 }}
+      xsmall: {{ branch.diff.size in 1..20 }}
+      small_or_less: {{ branch.diff.size in 1..50 }}
+      medium_or_less: {{ branch.diff.size in 1..200 }}
+      large: {{ branch.diff.size >= 200 }}
   code_includes:
     is:
       analytics: {{ source.diff.content | grep('NotifyAmplitude') }}
