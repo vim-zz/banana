@@ -10,9 +10,9 @@ checks:
       tests_only: {{ files | allTests }}
   size:
     is:
-      xsmall: {{ branch.diff.size in 1..20 }}
-      small_or_less: {{ branch.diff.size in 1..50 }}
-      medium_or_less: {{ branch.diff.size in 1..200 }}
+      xsmall: {{ branch.diff.size < 20 }}
+      small_or_less: {{ branch.diff.size < 50 }}
+      medium_or_less: {{ branch.diff.size < 200 }}
       large: {{ branch.diff.size >= 200 }}
   code_includes:
     is:
