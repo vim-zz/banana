@@ -12,3 +12,4 @@ jobs:
         with:
           assignees: ${{ github.actor }} # assign pull request author
           reviewers: sys-d
+          max-num-of-reviewers: 2
