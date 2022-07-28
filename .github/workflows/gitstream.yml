@@ -13,6 +13,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: code
+      - name: Checkout base branch to compare with
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
       - name: Checkout default branch to process the repo .cm file
         uses: actions/checkout@v3
         with:
@@ -28,6 +33,7 @@ jobs:
           use_cache: false
           source_path: code
           cm_path: cm
+          base_path: base
   lane_add_tests:
     needs: gitstream
     if: needs.gitstream.outputs.lane_add_tests_active == 'true'
