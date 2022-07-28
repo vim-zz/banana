@@ -24,6 +24,7 @@ jobs:
         with:
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref }}
+          default_branch: ${{ github.event.repository.default_branch }}
           use_cache: false
           source_path: code
           cm_path: cm
