@@ -1,66 +1,48 @@
-# -*- mode: yaml -*-
 
 manifest:
   version: 1.0
+
 checks:
   content:
     is:
       asset_only: {{ files | allExtensions(['png', 'svg', 'jpg', 'gif', 'css']) }}
-      docs_only: {{ files | allExtensions(['md', 'txt', 'cm']) }}
+      docs_only: {{ files | allExtensions(['md', 'txt']) }}
       tests_only: {{ files | allTests }}
   size:
     is:
       xsmall: {{ branch.diff.size < 20 }}
-      small_or_less: {{ branch.diff.size < 50 }}
+      small_or_less: {{ branch.diff.size < 100 }}
       medium_or_less: {{ branch.diff.size < 200 }}
       large: {{ branch.diff.size >= 200 }}
-  code_includes:
-    is:
-      analytics: {{ source.diff.content | grep('NotifyAmplitude') }}
-      service: {{ files | regex('service') }}
 lanes:
   add_tests:
     on: [pull_request]
     rules:
       - rule: {{ checks.content.is.tests_only }}
     actions: 
-      - exec: hmarr/auto-approve-action@v2
+      - uses: hmarr/auto-approve-action@v2
         with:
-          github-token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
-      - exec: actions-ecosystem/action-add-labels@v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: add_tests
-          token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
-  small:
-    on: [pull_request]
-    rules:
-      - rule: {{ checks.size.is.xsmall }}
-    actions: 
-      - exec: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: xsmall
+          labels: tests
   docs_update:
     on: [pull_request]
     rules:
       - rule: {{ checks.content.is.docs_only }}
     actions: 
-      - exec: hmarr/auto-approve-action@v2
+      - uses: hmarr/auto-approve-action@v2
         with:
-          github-token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
-      - exec: actions-ecosystem/action-add-labels@v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: add_tests
-          token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
+          labels: docs
 gates:
-  a123_add_shaked__as_reviewer:
+  small:
     on: [pull_request]
     rules:
-      - rule: {{ checks.content.is.docs_only }}
+      - rule: {{ checks.size.is.xsmall }}
     actions: 
-      - exec: hmarr/auto-approve-action@v2
+      - uses: actions-ecosystem/action-add-labels@v1
         with:
-          github-token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
-      - exec: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: add_tests
-          token: ${{'{{'}} secrets.GITHUB_TOKEN {{'}}'}}
+          labels: small
