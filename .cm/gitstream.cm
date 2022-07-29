@@ -10,6 +10,9 @@ checks:
     is:
       small: {{ branch.diff.size < 20 }}
       large: {{ branch.diff.size >= 200 }}
+  change:
+    is:
+      bug: {{ branch.name | grep('fix') }}
   code_includes:
     is:
       analytics: {{ source.diff.content | grep('NotifyAmplitude') }}
@@ -18,7 +21,7 @@ lanes:
   bug_fix:
     on: [pull_request]
     rules:
-      - rule: true
+      - rule: {{ checks.change.is.bug }}
     actions: 
       - uses: actions-ecosystem/action-add-labels@v1
         with:
