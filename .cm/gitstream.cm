@@ -1,20 +1,38 @@
-
 manifest:
   version: 1.0
 
 checks:
   content:
     is:
-      asset_only: {{ files | allExtensions(['png', 'svg', 'jpg', 'gif', 'css']) }}
       docs_only: {{ files | allExtensions(['md', 'txt']) }}
       tests_only: {{ files | allTests }}
   size:
     is:
-      xsmall: {{ branch.diff.size < 20 }}
-      small_or_less: {{ branch.diff.size < 100 }}
-      medium_or_less: {{ branch.diff.size < 200 }}
+      small: {{ branch.diff.size < 20 }}
       large: {{ branch.diff.size >= 200 }}
+  code_includes:
+    is:
+      analytics: {{ source.diff.content | grep('NotifyAmplitude') }}
+      service: {{ files | regex('service') }}
 lanes:
+  bug_fix:
+    on: [pull_request]
+    rules:
+      - rule: true
+    actions: 
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: bug
+          token: ${{ secrets.GITHUB_TOKEN }}
+gates:
+  small:
+    on: [pull_request]
+    rules:
+      - rule: {{ checks.size.is.small }}
+    actions: 
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: small
   add_tests:
     on: [pull_request]
     rules:
@@ -25,7 +43,8 @@ lanes:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: tests
+          labels: add_tests
+          token: ${{ secrets.GITHUB_TOKEN }}
   docs_update:
     on: [pull_request]
     rules:
@@ -37,12 +56,4 @@ lanes:
       - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: docs
-gates:
-  small:
-    on: [pull_request]
-    rules:
-      - rule: {{ checks.size.is.xsmall }}
-    actions: 
-      - uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: small
+          token: ${{ secrets.GITHUB_TOKEN }}

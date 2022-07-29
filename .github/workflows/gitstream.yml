@@ -5,19 +5,15 @@ jobs:
   gitstream:
     runs-on: ubuntu-latest
     outputs:
-      lane_add_tests_active: ${{ steps.checks.outputs.lane_add_tests_active }}
-      lane_docs_update_active: ${{ steps.checks.outputs.lane_docs_update_active }}
+      lane_bug_fix_active: ${{ steps.checks.outputs.lane_bug_fix_active }}
       gate_small_passed: ${{ steps.checks.outputs.gate_small_passed }}
+      gate_add_tests_passed: ${{ steps.checks.outputs.gate_add_tests_passed }}
+      gate_docs_update_passed: ${{ steps.checks.outputs.gate_docs_update_passed }}
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
           path: code
-      - name: Checkout base branch to compare with
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.base_ref }}
-          path: base
       - name: Checkout default branch to process the repo .cm file
         uses: actions/checkout@v3
         with:
@@ -33,35 +29,18 @@ jobs:
           use_cache: false
           source_path: code
           cm_path: cm
-          base_path: base
-  lane_add_tests:
+  lane_bug_fix:
     needs: gitstream
-    if: needs.gitstream.outputs.lane_add_tests_active == 'true'
+    if: needs.gitstream.outputs.lane_bug_fix_active == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: hmarr/auto-approve-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: tests
-  lane_docs_update:
-    needs: gitstream
-    if: needs.gitstream.outputs.lane_docs_update_active == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: hmarr/auto-approve-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: docs
+          labels: bug
+          token: ${{ secrets.GITHUB_TOKEN }}
   gate_small:
     needs: gitstream
     if: needs.gitstream.outputs.gate_small_passed == 'true'
@@ -73,3 +52,33 @@ jobs:
       - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: small
+  gate_add_tests:
+    needs: gitstream
+    if: needs.gitstream.outputs.gate_add_tests_passed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: add_tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+  gate_docs_update:
+    needs: gitstream
+    if: needs.gitstream.outputs.gate_docs_update_passed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: docs
+          token: ${{ secrets.GITHUB_TOKEN }}
