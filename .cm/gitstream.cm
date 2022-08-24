@@ -1,0 +1,27 @@
+manifest:
+  version: 1.0
+checks:
+  content:
+    is:
+      asset_only: {{ files | allExtensions(['png', 'svg', 'jpg', 'gif', 'css']) }}
+      docs_only: {{ files | allExtensions(['md', 'txt']) }}
+      tests_only: {{ files | allTests }}
+      necessary_only: {{ files | filterRegex(['php']) | allExtensions(['txt']) }}
+  size:
+    is:
+      xsmall: {{ branch.diff.size < 20 }}
+      small_or_less: {{ branch.diff.size < 100 }}
+      medium_or_less: {{ branch.diff.size < 200 }}
+      large: {{ branch.diff.size >= 200 }}
+  code_includes:
+    is:
+      analytics: {{ source.diff.content | grep('NotifyAmplitude') }}
+      service: {{ files | allPassRegex('service') }}
+gates:
+  docs_only:
+    on: [pull_request]
+    rules:
+      - rule: {{ checks.content.is.docs_only }}
+    actions: 
+      - name : approve
+        type: gitstream
