@@ -18,20 +18,21 @@ on:
       installation_id:
           description: the installation id
           required: false
+      resolver_url:
+          description: the resolver url to pass results to
+          required: true
+      resolver_token:
+          description: Optional resolver token for resulver service
+          required: false
+          default: ''
 
 jobs:
   continuous-merge-rules:
     runs-on: ubuntu-latest
     name: CMR
     steps:
-      - name: Clone gitstream RE
-        uses: actions/checkout@v2
-        with:
-          repository: linear-b/gitstream-github-action
-          ref: develop
-          token: ${{ secrets.CI_USER_GIT_TOKEN }}
       - name: Evaluate Rules
-        uses: ./
+        uses: linear-b/gitstream-github-action@0.1.3
         id: rules-engine
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
@@ -39,3 +40,5 @@ jobs:
           base_ref: ${{ github.event.inputs.base_ref }}
           client_payload: ${{ github.event.inputs.client_payload }}
           installation_id: ${{ github.event.inputs.installation_id }}
+          resolver_url: ${{ github.event.inputs.resolver_url }}
+          resolver_token: ${{ github.event.inputs.resolver_token }}
