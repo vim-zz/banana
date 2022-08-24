@@ -1,0 +1,41 @@
+name: gitstream Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      client_payload:
+          description: The Client payload
+          required: true
+      full_repository:
+          description: the repository name include the owner in `owner/repo_name` format
+          required: true
+      head_ref:
+          description: the head sha
+          required: true
+      base_ref:
+          description: the base ref 
+          required: true
+      installation_id:
+          description: the installation id
+          required: false
+
+jobs:
+  continuous-merge-rules:
+    runs-on: ubuntu-latest
+    name: CMR
+    steps:
+      - name: Clone gitstream RE
+        uses: actions/checkout@v2
+        with:
+          repository: linear-b/gitstream-github-action
+          ref: develop
+          token: ${{ secrets.CI_USER_GIT_TOKEN }}
+      - name: Evaluate Rules
+        uses: ./
+        id: rules-engine
+        with:
+          full_repository: ${{ github.event.inputs.full_repository }}
+          head_ref: ${{ github.event.inputs.head_ref }}
+          base_ref: ${{ github.event.inputs.base_ref }}
+          client_payload: ${{ github.event.inputs.client_payload }}
+          installation_id: ${{ github.event.inputs.installation_id }}
