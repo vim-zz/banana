@@ -19,7 +19,7 @@ gates:
       - name: approve
       - name: add-labels
         args:
-          labels: ['no-code']
+          - labels: ['no-code']
   test_change:
     rules:
       - rule: {{ checks.content.is.tests_only }}
@@ -27,11 +27,11 @@ gates:
       - name: approve
       - name: add-labels
         args:
-          labels: ['no-code']
+          - labels: ['no-code']
   api_change:
     rules:
       - rule: {{ checks.code.is.api }}
     actions: 
       - name: set-required-reviewers
         args:
-          reviewers: 2
+          - reviewers: 2
