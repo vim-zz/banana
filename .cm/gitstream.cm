@@ -17,7 +17,7 @@ gates:
       - rule: {{ checks.content.is.docs_only }}
     actions: 
       - name: approve
-      - name: add-label
+      - name: add-labels
         args:
           labels: ['no-code']
   test_change:
@@ -25,7 +25,7 @@ gates:
       - rule: {{ checks.content.is.tests_only }}
     actions: 
       - name: approve
-      - name: add-label
+      - name: add-labels
         args:
           labels: ['no-code']
   api_change:
