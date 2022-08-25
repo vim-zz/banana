@@ -1,0 +1,28 @@
+manifest:
+  version: 1.0
+
+checks:
+  content:
+    is:
+      docs_only: {{ files | allExtensions(['md', 'txt', 'rst']) }}
+      tests_only: {{ files | allTests }}
+  size:
+    is:
+      small: {{ branch.diff.size < 20 }}
+
+automations:
+  docs_only:
+    if:
+      - {{ checks.content.is.docs_only }}
+    run: 
+      - action : approve@v1
+      - action : add-labels@v1
+        args:
+          labels: ['non-code']
+  small_pr:
+    if:
+      - {{ checks.size.is.small }}
+    run: 
+      - action : add-labels@v1
+        args:
+          labels: ['small']
