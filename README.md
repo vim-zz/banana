@@ -3,7 +3,6 @@
 yada yada
 
 hi luke
-hi dan
 hi oriel
 
 ok, changing here
