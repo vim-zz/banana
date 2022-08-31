@@ -2,9 +2,7 @@
 
 yada yada
 
-hi luke
-hi dan
-hi oriel
+hi luke!!
 
 ok, changing here
 ok, changing here
