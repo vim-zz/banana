@@ -29,7 +29,7 @@ on:
 jobs:
   continuous-merge-rules:
     runs-on: ubuntu-latest
-    name: gitStream automation
+    name: gitStream workflow
     steps:
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@v1
@@ -42,4 +42,3 @@ jobs:
           installation_id: ${{ github.event.inputs.installation_id }}
           resolver_url: ${{ github.event.inputs.resolver_url }}
           resolver_token: ${{ github.event.inputs.resolver_token }}
-
