@@ -11,7 +11,7 @@ checks:
   change:
     is:
       core_service: {{ files | includesRegex('core\/') }}
-      ui: {{ files | includesRegex('.*.png$|.*.jpg$|.*.svg$|.*\.css$') }}
+      ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
 
 automations:
   approve_docs_only:
