@@ -26,7 +26,7 @@ automations:
     if:
       - {{ checks.change.is.ui }}
     run:
-      - action: add-reviewer@v1
+      - action: add-reviewers@v1
         args:
           reviewers: [ShakedZrihen]
   double_review:
