@@ -1,6 +1,5 @@
 # banana
 
-yada yada
 
 hi luke
 hi dan
