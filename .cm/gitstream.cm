@@ -33,6 +33,6 @@ automations:
     if:
       - {{ checks.change.is.core_service }}
     run:
-      - action: set-required-reviewers@v1
+      - action: set-required-approvals@v1
         args:
           reviewers: 2
