@@ -1,0 +1,39 @@
+manifest:
+  version: 1.0
+
+checks:
+  content:
+    is:
+      docs_only: {{ files | allExtensions(['md', 'txt', 'rst']) }}
+  size:
+    is:
+      small: {{ branch.diff.size < 20 }}
+  change:
+    is:
+      core_service: {{ files | includesRegex('core\/') }}
+      ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
+
+automations:
+  approve_docs_only:
+    if:
+      - {{ checks.content.is.docs_only }}
+    run: 
+      - action : approve@v1
+      - action : add-labels@v1
+        args:
+          labels: ['non-code']
+  ux_review:
+    if:
+      - {{ checks.change.is.ui }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [orielz]
+  double_review:
+    if:
+      - {{ checks.change.is.core_service }}
+    run:
+      - action: set-required-approvals@v1
+        args:
+          reviewers: 2
+
