@@ -5,27 +5,16 @@ checks:
   content:
     is:
       docs_only: {{ files | allExtensions(['md', 'txt', 'rst']) }}
-      assets_only: {{ files | allPassRegex('.*\.styledComponents\.js$|.*.png$|.*.jpg$|.*.svg$|.*\.css$') }}
-      tests_only: {{ files | allTests }}
   size:
     is:
       small: {{ branch.diff.size < 20 }}
+  change:
+    is:
+      core_service: {{ files | filterRegex('core\/') | length > 0 }}
+      ui: {{ files | filterRegex('.*.png$|.*.jpg$|.*.svg$|.*\.css$') | length > 0 }}
 
 automations:
-  assets_only:
-    if:
-      - {{ checks.content.is.assets_only }}
-    run:
-      - action : approve@v1
-      - action : add-labels@v1
-        args:
-          labels: ['assets_only']
-      - action : update-check@v1
-        args:
-          checkName: cypress-e2e
-          status: completed
-          conclusion: success
-  docs_only:
+  approve_docs_only:
     if:
       - {{ checks.content.is.docs_only }}
     run: 
@@ -33,15 +22,17 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['non-code']
-      - action : update-check@v1
-        args:
-          checkName: cypress-e2e
-          status: completed
-          conclusion: success
-  small_pr:
+  ux_review:
     if:
-      - {{ checks.size.is.small }}
-    run: 
-      - action : add-labels@v1
+      - {{ checks.change.is.ui }}
+    run:
+      - action: set-reviewer@v1
         args:
-          labels: ['small']
+          reviewer: ShakedZrihen
+  double_review:
+    if:
+      - {{ checks.change.is.core_service }}
+    run:
+      - action: set-required-approvals@v1
+        args:
+          reviewers: 2
