@@ -13,7 +13,8 @@ checks:
       core_service: {{ files | includesRegex('core\/') }}
       ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
   review:
-    etr: {{ branch | estimatedReviewTime }}
+    etr_long: Estimated {{ branch | estimatedReviewTime }} minutes to review
+    etr_short: "~{{ branch | estimatedReviewTime }}m"
 
 automations:
   approve_docs_only:
@@ -44,7 +45,7 @@ automations:
     run: 
       - action : add-comment@v1
         args:
-          comment: Estimated {{ checks.review.etr }} minutes to review
+          comment: {{ checks.review.etr_long }}
       - action : add-lables@v1
         args:
-          lables: [~{{ checks.review.etr }}m]
+          lables: [ '{{ checks.review.etr_short }}' ]
