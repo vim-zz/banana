@@ -15,3 +15,6 @@ pause
 display "Hello World."
 prompt
 pause
+
+lorem   
+lorem
