@@ -13,9 +13,9 @@ checks:
       core_service: {{ files | includesRegex('core\/') }}
       ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
       formatting_only: {{ source.diff.files | allFormattingChange }}
-  review:
-    etr_long: Estimated {{ branch | estimatedReviewTime }} minutes to review
-    etr_short: "~{{ branch | estimatedReviewTime }}m"
+  # review:
+  #   etr_long: Estimated {{ branch | estimatedReviewTime }} minutes to review
+  #   etr_short: "~{{ branch | estimatedReviewTime }}m"
 
 automations:
   approve_docs_only:
@@ -48,13 +48,13 @@ automations:
       - action: set-required-approvals@v1
         args:
           approvals: 2
-  add_context:
-    if:
-      - true
-    run: 
-      - action : add-comment@v1
-        args:
-          comment: {{ checks.review.etr_long }}
-      - action : add-labels@v1
-        args:
-          labels: [ '{{ checks.review.etr_short }}' ]
+  # add_context:
+  #   if:
+  #     - true
+  #   run: 
+  #     - action : add-comment@v1
+  #       args:
+  #         comment: {{ checks.review.etr_long }}
+  #     - action : add-labels@v1
+  #       args:
+  #         labels: [ '{{ checks.review.etr_short }}' ]
