@@ -12,12 +12,10 @@ checks:
     is:
       core_service: {{ files | includesRegex('core\/') }}
       ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
+      formatting_only: {{ source.diff.files | allFormattingChange }}
   review:
     etr_long: Estimated {{ branch | estimatedReviewTime }} minutes to review
     etr_short: "~{{ branch | estimatedReviewTime }}m"
-  change:
-    is:
-      formatting_only: {{ source.diff.files | allFormattingChange }}
 
 automations:
   approve_docs_only:
