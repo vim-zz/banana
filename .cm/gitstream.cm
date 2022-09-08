@@ -11,7 +11,7 @@ manifest:
 checks:
   pr:
     is: 
-      bot: {{ branch.name | includes('pr-bot-v') }}
+      release_bot: {{ branch.name | includes('pr-bot-v') }}
   files:
     are:
       only_config: {{ files | allExtensions(['yml', 'yaml', 'json'])}}
@@ -36,11 +36,12 @@ checks:
 automations:
   merge_bot_release:
     if:
-      - {{ checks.pr.is.bot }}
+      - {{ checks.pr.is.release_bot }}
       - {{ checks.files.are.only_config }}
       # uncommnet if you want to limit these PR by size as well
       # - {{ size.is.xsmall or size.is.small }}
     run: 
+      - action : approve@v1
       - action : merge@v1
       - action : add-labels@v1
         args:
