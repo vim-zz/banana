@@ -2,6 +2,9 @@ manifest:
   version: 1.0
 
 checks:
+  pr:
+    is: 
+      release_bot: {{ branch.name | includes(['pr-bot-v']) }}
   files:
     are:
       only_config: {{ files | allExtensions(['yml', 'yaml', 'json'])}}
@@ -16,6 +19,7 @@ checks:
 automations:
   merge_bot_release:
     if:
+      - {{ checks.pr.is.release_bot }}
       - {{ checks.files.are.only_config }}
     run: 
       - action : approve@v1
