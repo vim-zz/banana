@@ -1,10 +1,17 @@
 manifest:
   version: 1.0
 
+# Define condition under the `checks` section, each check consists of
+# an expression. The checks results are evalauated and used as conditions 
+# for the next section `automations`. 
+# Checks expressions are wrapped with double curly braces and includes a
+# context variable like `files` and filter like `length`.
+# Filters are essentially functions that can be applied to variables. They 
+# are called with a pipe operator (|) and can take arguments.
 checks:
   pr:
     is: 
-      release_bot: {{ branch.name | includes(['pr-bot-v']) }}
+      bot: {{ branch.name | includes(['pr-bot-v']) }}
   files:
     are:
       only_config: {{ files | allExtensions(['yml', 'yaml', 'json'])}}
@@ -15,15 +22,42 @@ checks:
       medium: {{ branch.diff.size > 20 and branch.diff.size <= 100 }}
       large: {{ branch.diff.size > 100 and branch.diff.size <= 200 }}
       xlarge: {{ branch.diff.size > 200 }}
+  # change:
+  #   is:
+  #     formatting_only: {{ source.diff.files | allFormattingChange }}
+  # review:
+  #   etr: {{ branch | estimatedReviewTime }}
 
+# The `automations` section include the list of automation that applies 
+# for the repo in which gitStream is installed. 
+# Each autaomtion has `if` key with a list of the necessary condtions and
+# a `run` key with a list of all actions. All the listed condtions need to  
+# pass in order for the following actions to be executed.
 automations:
   merge_bot_release:
     if:
-      - {{ checks.pr.is.release_bot }}
+      - {{ checks.pr.is.bot }}
       - {{ checks.files.are.only_config }}
+      # uncommnet if you want to limit these PR by size as well
+      # - {{ size.is.xsmall or size.is.small }}
     run: 
       - action : approve@v1
       - action : merge@v1
       - action : add-labels@v1
         args:
           labels: ['bot-release']
+  # approve_reformatting:
+  #   if:
+  #     - {{ checks.change.is.formatting_only }}
+  #   run: 
+  #     - action : approve@v1
+  #     - action : add-labels@v1
+  #       args:
+  #         labels: ['formatting']
+  # add_context:
+  #   if:
+  #     - true
+  #   run: 
+  #     - action : add-comment@v1
+  #       args:
+  #         comment: Estimated {{ checks.review.etr }} minutes to review
