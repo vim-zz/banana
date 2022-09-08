@@ -1,60 +1,62 @@
 manifest:
   version: 1.0
 
+# Define condition under the `checks` section, each check consists of
+# an expression. The checks results are evalauated and used as conditions 
+# for the next section `automations`. 
+# Checks expressions are wrapped with double curly braces and includes a
+# context variable like `files` and filter like `length`.
+# Filters are essentially functions that can be applied to variables. They 
+# are called with a pipe operator (|) and can take arguments.
 checks:
-  content:
-    is:
-      docs_only: {{ files | allExtensions(['md', 'txt', 'rst']) }}
+  pr:
+    is: 
+      bot: {{ branch.name | includes('pr-bot-v') }}
+  files:
+    are:
+      only_config: {{ files | allExtensions(['yml', 'yaml', 'json'])}}
   size:
     is:
-      small: {{ branch.diff.size < 20 }}
-  change:
-    is:
-      core_service: {{ files | includesRegex('core\/') }}
-      ui: {{ files | includesRegex('.*\.png$|.*\.jpg$|.*\.svg$|.*\.css$') }}
-      formatting_only: {{ source.diff.files | allFormattingChange }}
+      xsmall: {{ branch.diff.size <= 5 }}
+      small: {{ branch.diff.size > 5 and branch.diff.size <= 20 }}
+      medium: {{ branch.diff.size > 20 and branch.diff.size <= 100 }}
+      large: {{ branch.diff.size > 100 and branch.diff.size <= 200 }}
+      xlarge: {{ branch.diff.size > 200 }}
+  # change:
+  #   is:
+  #     formatting_only: {{ source.diff.files | allFormattingChange }}
   # review:
-  #   etr_long: Estimated {{ branch | estimatedReviewTime }} minutes to review
-  #   etr_short: "~{{ branch | estimatedReviewTime }}m"
+  #   etr: {{ branch | estimatedReviewTime }}
 
+# The `automations` section include the list of automation that applies 
+# for the repo in which gitStream is installed. 
+# Each autaomtion has `if` key with a list of the necessary condtions and
+# a `run` key with a list of all actions. All the listed condtions need to  
+# pass in order for the following actions to be executed.
 automations:
-  approve_docs_only:
+  merge_bot_release:
     if:
-      - {{ checks.content.is.docs_only }}
+      - {{ checks.pr.is.bot }}
+      - {{ checks.files.are.only_config }}
+      # uncommnet if you want to limit these PR by size as well
+      # - {{ size.is.xsmall or size.is.small }}
     run: 
-      - action : approve@v1
+      - action : merge@v1
       - action : add-labels@v1
         args:
-          labels: ['non-code']
-  approve_reformatting:
-    if:
-      - {{ checks.change.is.formatting_only }}
-    run: 
-      - action : approve@v1
-      - action : add-labels@v1
-        args:
-          labels: ['formatting']
-  ux_review:
-    if:
-      - {{ checks.change.is.ui }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: [orielz]
-  double_review:
-    if:
-      - {{ checks.change.is.core_service }}
-    run:
-      - action: set-required-approvals@v1
-        args:
-          approvals: 2
+          labels: ['bot-release']
+  # approve_reformatting:
+  #   if:
+  #     - {{ checks.change.is.formatting_only }}
+  #   run: 
+  #     - action : approve@v1
+  #     - action : add-labels@v1
+  #       args:
+  #         labels: ['formatting']
   # add_context:
   #   if:
   #     - true
   #   run: 
   #     - action : add-comment@v1
   #       args:
-  #         comment: {{ checks.review.etr_long }}
-  #     - action : add-labels@v1
-  #       args:
-  #         labels: [ '{{ checks.review.etr_short }}' ]
+  #         comment: Estimated {{ checks.review.etr }} minutes to review
