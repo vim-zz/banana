@@ -1,21 +1,12 @@
-# banana
+# Foobar
 
-yada yada
+Foobar is a Python library for dealing with word pluralization.
 
-hi luke
-hi dan
-hi oriel
+## Installation
 
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
-ok, changing here
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+
+```bash
+pip install foobar
+```
 
