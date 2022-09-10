@@ -4,16 +4,18 @@ manifest:
   version: 1.0
 
 checks:
-  files:
-    are:
-      only_docs: {{ files | allExtensions(['md', 'txt', 'rst'])}}
+  change:
+    is:
+      core_service: {{ files | includesRegex('core') }}
 
 automations:
-  approve_docs_changes:
+  double_review:
     if:
-      - {{ checks.files.are.only_docs }}
-    run: 
-      - action : approve@v1
+      - {{ checks.change.is.core_service }}
+    run:
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
 
 # Define condition under the `checks` section, each check consists of
 # an expression. The checks results are evalauated and used as conditions 
