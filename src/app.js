@@ -8,7 +8,7 @@ const port = 3000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Content-Type', 'text/plain'); 
 
   const txt = "hello"; const reg = /hello/;
   const x = `${txt} is ${typeof txt} ${reg} is ${typeof reg}`;
