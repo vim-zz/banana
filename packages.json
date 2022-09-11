@@ -1,4 +1,1 @@
-{
-    "key": "one",
-    "nested": {"two" : 2}
-}
+{"key": "one",   "nested": {"two" : 2}}
