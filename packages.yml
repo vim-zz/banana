@@ -1,8 +1,7 @@
-1
-2
-3
-3
-4
-more
-more
-mo
+foo:
+    bar: true
+    more: 
+        - lla
+        - sa
+        - dfdsf
+        - sdfds   
