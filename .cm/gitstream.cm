@@ -5,13 +5,13 @@ checks:
   change:
     is:
       formatting_only: {{ source.diff.files | allFormattingChange }}
+      all_api: {{ files | isEveryInListRegex(‘\/api\/‘) }}
     
 automations:
   approve_reformatting:
     if:
-      - {{ checks.change.is.formatting_only }}
+      - {{ checks.change.is.all_api }}
     run: 
-      - action : approve@v1
       - action : add-labels@v1
         args:
-          labels: ['formatting']
+          labels: ['api']
