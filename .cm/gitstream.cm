@@ -5,7 +5,7 @@ checks:
   change:
     is:
       formatting_only: {{ source.diff.files | allFormattingChange }}
-      all_api: {{ files | isEveryInListRegex(‘\/api\/‘) }}
+      all_api: {{ files | isEveryInListRegex('\/api\/') }}
     
 automations:
   approve_reformatting:
