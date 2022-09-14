@@ -11,17 +11,15 @@ manifest:
 # Filters are essentially functions that can be applied to variables. They 
 # are called with a pipe operator (|) and can take arguments.
 checks:
-  deprecated:
-    in:
-      resource_manager: {{ files | filterListRegex('app\/ResourceManager\/') | length > 0 }}
-      managers: {{ files | filterListRegex('app\/Managers\/') | length > 0 }}
-      repositories: {{ files | filterListRegex('app\/Repositories\/') | length > 0 }}
+  complexity:
+    by:
+      many_files: {{ files | length >= 10 }}
+      review_time: {{ branch | estimatedReviewTime >= 20 }}
   change:
     is:
       formatting_only: {{ source.diff.files | allFormattingChange }}
-  filetypes:
-    is:
-      docs: {{ files | allDocs }}
+      docs_only: {{ files | allDocs }}
+      tests_only: {{ files | allTests }}
   
 # The `automations` section include the list of automation that applies 
 # for the repo in which gitStream is installed. 
@@ -29,13 +27,6 @@ checks:
 # a `run` key with a list of all actions. All the listed condtions need to  
 # pass in order for the following actions to be executed.
 automations:
-  label_complex_pr:
-    if:
-      - {{ checks.deprecated.in.resource_manager or checks.deprecated.in.managers or checks.deprecated.in.repositories }}
-    run:
-      - action : add-labels@v1
-        args:
-          labels: ['deprecated']
   mark_formatting:
     if:
       - {{ checks.change.is.formatting_only }}
@@ -45,8 +36,22 @@ automations:
           labels: ['formatting']
   mark_docs:
     if:
-      - {{ checks.filetypes.is.docs }}
+      - {{ checks.change.is.formatting_only }}
     run: 
       - action : add-labels@v1
         args:
           labels: ['docs']
+  mark_tests:
+    if:
+      - {{ checks.change.is.formatting_only }}
+    run: 
+      - action : add-labels@v1
+        args:
+          labels: ['tests']          
+  mark_complex_pr:
+    if:
+      - {{ checks.complexity.by.many_files or checks.complexity.by.review_time }}
+    run:
+      - action : add-labels@v1
+        args:
+          labels: ['complex-pr']
