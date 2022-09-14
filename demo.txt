@@ -8,7 +8,6 @@
 
 clear
 prompt
-pause
 
 # say hello world after input
 
