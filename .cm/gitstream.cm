@@ -41,6 +41,10 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['docs']
+      - action : merge@v1
+      - action : add-labels@v1
+        args:
+          labels: ['docs-merged']
   mark_tests:
     if:
       - {{ checks.change.is.tests_only }}
