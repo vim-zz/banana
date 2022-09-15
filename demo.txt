@@ -8,10 +8,11 @@
 
 clear
 prompt
-pause
 
 # say hello world after input
 
 display "Hello World."
 prompt
-pause
+pausea
+
+lorem   lore,m
