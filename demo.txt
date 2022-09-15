@@ -10,6 +10,8 @@ clear
 prompt
 pause
 
+lorem   lorem
+
 # say hello world after input
 
 display "Hello World."
