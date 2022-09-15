@@ -41,6 +41,7 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['docs']
+      - action : approve@v1
       - action : merge@v1
       - action : add-labels@v1
         args:
