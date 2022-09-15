@@ -13,7 +13,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [orielz]
+          reviewers: [yeelali14]
   # changes to services API goes to the backend team lead
   set_backend_review:
     if:
@@ -21,4 +21,4 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [yeela]
+          reviewers: [ShakedZrihen]
