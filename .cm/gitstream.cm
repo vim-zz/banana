@@ -1,62 +1,24 @@
-# -*- mode: yaml -*-
-
-manifest:
-  version: 1.0
-
-# Define condition under the `checks` section, each check consists of
-# an expression. The checks results are evalauated and used as conditions 
-# for the next section `automations`. 
-# Checks expressions are wrapped with double curly braces and includes a
-# context variable like `files` and filter like `length`.
-# Filters are essentially functions that can be applied to variables. They 
-# are called with a pipe operator (|) and can take arguments.
 checks:
-  complexity:
-    by:
-      many_files: {{ files | length >= 10 }}
-      review_time: {{ branch | estimatedReviewTime >= 20 }}
-  change:
-    is:
-      formatting_only: {{ source.diff.files | allFormattingChange }}
-      docs_only: {{ files | allDocs }}
-      tests_only: {{ files | allTests }}
-  
-# The `automations` section include the list of automation that applies 
-# for the repo in which gitStream is installed. 
-# Each autaomtion has `if` key with a list of the necessary condtions and
-# a `run` key with a list of all actions. All the listed condtions need to  
-# pass in order for the following actions to be executed.
+  changes:
+    in:
+      # conditions based on file path
+      ui: {{ files | isSomeInListRegex('src\/webapp\/') }}
+      api: {{ files | isSomeInListRegex('src\/api_services\/') }}
+
 automations:
-  mark_formatting:
+  # changes to UI goes to the forntend team lead
+  set_frontend_review:
     if:
-      - {{ checks.change.is.formatting_only }}
-    run: 
-      - action : add-labels@v1
-        args:
-          labels: ['formatting']
-  mark_docs:
-    if:
-      - {{ checks.change.is.docs_only }}
-    run: 
-      - action : add-labels@v1
-        args:
-          labels: ['docs']
-      - action : approve@v1
-      - action : merge@v1
-      - action : add-labels@v1
-        args:
-          labels: ['docs-merged']
-  mark_tests:
-    if:
-      - {{ checks.change.is.tests_only }}
-    run: 
-      - action : add-labels@v1
-        args:
-          labels: ['tests']          
-  mark_complex_pr:
-    if:
-      - {{ checks.complexity.by.many_files or checks.complexity.by.review_time }}
+      - {{ checks.changes.in.ui }}
     run:
-      - action : add-labels@v1
+      - action: add-reviewers@v1
         args:
-          labels: ['complex-pr']
+          reviewers: [orielz]
+  # changes to services API goes to the backend team lead
+  set_backend_review:
+    if:
+      - {{ checks.changes.in.api }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [yeela]
