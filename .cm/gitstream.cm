@@ -10,6 +10,6 @@ automations:
       - {{ checks.change_in_k6 }}
     run: 
       - action : approve@v1
-      - action : add-label@v1
+      - action : add-labels@v1
         args:
-          label: k6-change
+          labels: [k6-change]
