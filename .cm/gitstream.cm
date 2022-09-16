@@ -1,35 +1,13 @@
-# -*- mode: yaml -*-
-
 manifest:
   version: 1.0
-
-# Define condition under the `checks` section, each check consists of
-# an expression. The checks results are evalauated and used as conditions 
-# for the next section `automations`. 
-# Checks expressions are wrapped with double curly braces and includes a
-# context variable like `files` and filter like `length`.
-# Filters are essentially functions that can be applied to variables. They 
-# are called with a pipe operator (|) and can take arguments.
 checks:
-  complexity:
-    is:
-      small: {{ files | length <= 3 }}
-  change:
-    in:
-      # conditions based on file path
-      k6: {{ files | isEveryInListRegex('k6\/services\/') }}
-  
-
-# The `automations` section include the list of automation that applies 
-# for the repo in which gitStream is installed. 
-# Each autaomtion has `if` key with a list of the necessary condtions and
-# a `run` key with a list of all actions. All the listed condtions need to  
-# pass in order for the following actions to be executed.
+  small: {{ files | length <= 3 }}
+  change_in_k6: {{ files | isEveryInListRegex('k6\/services\/') }}
 automations:
-  mark_formatting:
+  approve_small_change_in_k6:
     if:
-      - {{ checks.complexity.is.small }}
-      - {{ checks.change.in.k6 }}
+      - {{ checks.small }}
+      - {{ checks.change_in_k6 }}
     run: 
       - action : approve@v1
       - action : add-label@v1
