@@ -9,6 +9,10 @@
 clear
 prompt
 pause
+pause
+pause
+pause
+pause
 
 # say hello world after input
 
