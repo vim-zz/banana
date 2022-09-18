@@ -33,7 +33,7 @@ automations:
     run: 
       - action: add-labels@v1
         args:
-          labels: ['formatting']
+          labels: ['/:\ formatting']
   mark_docs:
     if:
       - {{ checks.change.is.docs_only }}
