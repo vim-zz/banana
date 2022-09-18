@@ -58,4 +58,4 @@ automations:
     run:
       - action : add-labels@v1
         args:
-          labels: [ "ofer" ]
+          labels: [ {{ checks.sizes | length }} ]
