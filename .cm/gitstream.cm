@@ -20,6 +20,10 @@ checks:
       formatting_only: {{ source.diff.files | allFormattingChange }}
       docs_only: {{ files | allDocs }}
       tests_only: {{ files | allTests }}
+  sizes:
+    - {size: small, pass: {{ branch.diff.size <= 10 }} }
+    - {size: medium, pass: {{ branch.diff.size > 10 and branch.diff.size <= 100 }} }
+    - {size: large, pass: {{ branch.diff.size > 100 }} }
   
 # The `automations` section include the list of automation that applies 
 # for the repo in which gitStream is installed. 
@@ -50,8 +54,8 @@ automations:
           labels: ['tests']          
   mark_complex_pr:
     if:
-      - {{ checks.complexity.by.many_files or checks.complexity.by.review_time }}
+      - {{ true }}
     run:
       - action : add-labels@v1
         args:
-          labels: ['complex-pr']
+          labels: {{ checks.sizes | selectattr("pass") | first.size }}
