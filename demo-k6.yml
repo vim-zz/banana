@@ -1,0 +1,30 @@
+- !clear
+- !wait {msec: 1000}
+- !prompt {color: green, text:  '/:\'}
+
+- !write {msec: 20, text: "Small changes in k6 test direcotry gets automatically reviewed"}
+- !wait {msec: 2000}
+- !erase {msec: 20, amount: 2000}
+- !wait {msec: 1000}
+- !write {msec: 20, text: "cat .cm/gitstream.cm"}
+- !execute {line: cat .cm/gitstream.cm}
+- !wait {msec: 500}
+
+- !write {msec: 20, text: 'echo "# test..." >> src/k6/services/file.js'}
+- !execute {line: sh -c 'echo "# test..." >> src/k6/services/file.js'}
+- !wait {msec: 200}
+- !write {msec: 20, text: 'echo "# config..." >> src/k6/services/config.json'}
+- !execute {line: sh -c 'echo "# config..." >> src/k6/services/config.json'}
+- !wait {msec: 200}
+
+- !write {msec: 20, text: 'git checkout -b k6demo1'}
+- !execute {line: git checkout -b k6demo1}
+- !wait {msec: 50}
+- !write {msec: 20, text: 'git add src/k6/services && git commit -m "changes to k6 tests"'}
+- !execute {line: git add src/k6/services}
+- !wait {msec: 50}
+- !execute {line: git commit -m "changes to k6 tests"}
+- !wait {msec: 50}
+- !write {msec: 20, text: 'git push'}
+- !execute {line: git push}
+- !wait {msec: 50}
