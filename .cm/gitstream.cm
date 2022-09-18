@@ -58,4 +58,4 @@ automations:
     run:
       - action : add-labels@v1
         args:
-          labels: {{ checks.sizes | selectattr('pass') | map(attribute='size') | first }}
+          labels: {{ checks.sizes | selectattr('pass') | first }}
