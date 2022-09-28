@@ -7,7 +7,6 @@
 # 3. pause for input
 
 clear
-prompt
 pause
 
 # say hello world after input
