@@ -20,6 +20,9 @@ automations:
       - action: require-reviewers@v1
         args:
           reviewers: ['ShakedZrihen']
+      - action: require-reviewers@v1
+        args:
+          reviewers: ['yeelali14']
       - action: add-labels@v1
         args:
           labels: ['has-docs']
