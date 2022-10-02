@@ -4,49 +4,11 @@ manifest:
   version: 1.0
 
 automations:
-  mark_formatting:
-    # the `if` key has a list of conditions
+  contribution:
     if:
-      - {{ source.diff.files | allFormattingChange }}
-    run: 
-      - action: approve@v1
-      - action: add-labels@v1
-        args:
-          labels: ['formatting']
-  mark_docs:
-    if:
-      - {{ files | isSomeInListRegex('.*\\.md$|.*\\.txt$') }}
-    run: 
-      - action: require-reviewers@v1
-        args:
-          reviewers: ['ShakedZrihen']
-      - action: require-reviewers@v1
-        args:
-          reviewers: ['yeelali14']
-      - action: add-labels@v1
-        args:
-          labels: ['has-docs']
-  mark_complex_pr:
-    if:
-      - {{ branch | estimatedReviewTime >= 20 }}
+      - {{ true }}
     run:
-      - action: add-labels@v1
-        args:
-          labels: ['long-review']
-  approve_prints:
-    if:
-      - {{ source.diff.files | filterFileDiffRegex('^\\+') | filterFileDiffRegex('\\S+') | isEveryLineInFileDiffRegex('^\\+.*console\\.log') }}
-      - {{ source.diff.files | filterFileDiffRegex('^\\-') | filterFileDiffRegex('\\S+') | isEveryLineInFileDiffRegex('^\\+.*console\\.log') }}
-    run:
-      - action: approve@v1
-      - action: add-labels@v1
-        args:
-          labels: ['only-prints']
-  catch_deprecated:
-    if:
-      - {{ source.diff.files | isSomeLineInFileDiffRegex('oldCall\\(') }}
-    run:
-      - action: request-changes@v1
+      - action: add-comment@v1
         args:
           comment: |
-            Deprecated API used `oldCall`, use `newCall` instead
+            vim-zz contributed {{ repo.contributors | selectattr('vim-zz') }} commits to this repo
