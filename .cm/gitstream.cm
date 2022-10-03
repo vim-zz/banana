@@ -6,9 +6,9 @@ manifest:
 automations:
   contribution:
     if:
-      - {{ true }}
+      - {{ source.diff.files | reject(attr='new_file', regex='package-lock\\.json$') | isFormattingChange }}
     run:
       - action: add-comment@v1
         args:
           comment: |
-            vim-zz contributed {{ repo.contributors | selectattr('vim-zz') }} commits to this repo
+            formatting change (ignore lock)
