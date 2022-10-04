@@ -27,6 +27,10 @@ on:
           description: Optional resolver token for resulver service
           required: false
           default: ''
+      debug_mode:
+          description: 'Run parser in debug mode'
+          required: false
+          default: true
 
 jobs:
   continuous-merge-rules:
@@ -45,3 +49,4 @@ jobs:
           installation_id: ${{ github.event.inputs.installation_id }}
           resolver_url: ${{ github.event.inputs.resolver_url }}
           resolver_token: ${{ github.event.inputs.resolver_token }}
+          debug_mode: true
