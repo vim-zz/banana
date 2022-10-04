@@ -18,7 +18,7 @@
 // code
 // code
 // code
-// code
+console.log
 // code
 // code
 // code BIG!!! more than 20 lines
