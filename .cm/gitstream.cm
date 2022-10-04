@@ -65,8 +65,8 @@ automations:
             additions: {{ calculate.additions }} 
             deletions: {{ calculate.deletions }}
             ratio: {{ calculate.additions / (calculate.additions + calculate.deletions) }}
-            dump adds: {{ branch.diff.files_metadata | map(attr='additions') | dump }}
-            clean adds: {{ branch.diff.files_metadata | map(attr='additions') | replace("\n", "") | replace(",", "") }}
+            adds: {{ branch.diff.files_metadata | map(attr='additions') }}
+            dels: {{ branch.diff.files_metadata | map(attr='deletions') }}
       # - action: approve@v1
   
   mark_long_review:
