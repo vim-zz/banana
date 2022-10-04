@@ -49,26 +49,6 @@ automations:
         args:
           labels: ['docs-changes']
       # - action: approve@v1
-  
-  tests_safe_changes:
-    if:
-      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
-      # the substring `test` or `spec` in the file path or file name.
-      - {{ files | allTests }}
-    run: 
-      - action: add-labels@v1
-        args:
-          labels: ['tests-changes']
-      - action: add-comment@v1
-        args:
-          comment: |
-            additions: {{ calculate.additions }} 
-            deletions: {{ calculate.deletions }}
-            ratio: {{ calculate.additions / (calculate.additions + calculate.deletions) }}
-            adds: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-            dels: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-      # - action: approve@v1
-  
   mark_long_review:
     if:
       # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
@@ -79,7 +59,26 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['long-review']
+            
+  tests_safe_changes:
+    if:
+      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
+      # the substring `test` or `spec` in the file path or file name.
+      - {{ files | allTests }}
+      - {{ changes.ratio > 0.8 }}
+    run: 
+      - action: add-labels@v1
+        args:
+          labels: ['tests-changes']
+      - action: add-comment@v1
+        args:
+          comment: |
+            ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
+            adds: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+            dels: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+      # - action: approve@v1
 
-calculate:
+changes:
   additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
   deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
