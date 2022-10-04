@@ -17,11 +17,15 @@
 // code
 // code
 // code
+
+console.log
+
 // code
 // code
 // code
 // code
 // code BIG!!! more than 20 lines
 adding 1 line
+   console.log
 adding 2 line
 adding 3 line
