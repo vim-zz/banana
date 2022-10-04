@@ -55,11 +55,16 @@ automations:
       # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
       # the substring `test` or `spec` in the file path or file name.
       - {{ files | allTests }}
-      - {{ calculate.additions / calculate.deletions > 0.8 }}
     run: 
       - action: add-labels@v1
         args:
           labels: ['tests-changes']
+      - action: add-comment@v1
+        args:
+          comment: |
+            additions: {{ calculate.additions }} 
+            deletions: {{ calculate.deletions }}
+            ratio: {{ calculate.additions / (calculate.additions + calculate.deletions) }}
       # - action: approve@v1
   
   mark_long_review:
