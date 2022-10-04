@@ -59,7 +59,15 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['long-review']
-            
+
+  prints_changes:
+    if: 
+      - {{ source.diff.files | matchDiffLines(regex='^\\+.*console\\.log', ignoreWhiteSpaces=true) | every }}
+    run: 
+      - action: add-labels@v1
+        args:
+          labels: ['prints-changes']
+
   tests_safe_changes:
     if:
       # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
