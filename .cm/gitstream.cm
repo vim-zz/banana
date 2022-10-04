@@ -65,7 +65,7 @@ automations:
             additions: {{ calculate.additions }} 
             deletions: {{ calculate.deletions }}
             ratio: {{ calculate.additions / (calculate.additions + calculate.deletions) }}
-            adds: {{ branch.diff.files_metadata | map(attr='additions' | sum) }}
+            adds: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
             dels: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
       # - action: approve@v1
   
@@ -81,5 +81,5 @@ automations:
           labels: ['long-review']
 
 calculate:
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | replace("\n", "") | replace(",", "") | sum }}
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | replace("\n", "") | replace(",", "") | sum }}
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
