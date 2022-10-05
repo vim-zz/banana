@@ -62,7 +62,7 @@ automations:
 
   prints_changes:
     if: 
-      - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log|^[^+-].*', ignoreWhiteSpaces=true) | every }}
+      - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log', ignoreWhiteSpaces=true) | every }}
     run: 
       - action: add-labels@v1
         args:
