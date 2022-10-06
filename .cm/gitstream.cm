@@ -3,6 +3,11 @@
 manifest:
   version: 1.0
 
+changes:
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
+
 # The `automations` section includes a list of automation that applies 
 # to the repository in which gitStream is installed. Each automation has an 
 # `if` key with a list of the necessary assertions, as well as a `run` key with a
@@ -86,7 +91,13 @@ automations:
             dels: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
       # - action: approve@v1
 
-changes:
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
+  notify_on_authentication:
+    if:
+      - {{ files | match(term='src/modules/authentication') | some }}    
+    run: 
+      - action: add-reviewers@v1
+        args:
+          reviewers: [vim-zz]
+      - action: add-labels@v1
+        args:
+          labels: ['authentication']
