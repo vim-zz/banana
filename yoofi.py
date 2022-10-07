@@ -1,1 +1,3 @@
 banana
+
+  logger.info("ok") 
