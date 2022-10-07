@@ -89,6 +89,18 @@ automations:
           labels: ['prints-changes']
       - action: approve@v1
 
+  debug:
+    if: 
+      - true
+    run: 
+      - action: add-comment@v1
+        args:
+          comment: |
+            py? {{ files | match(regex='\\.py$') | dump }}
+            ln? {{ files | length }}
+            lg? {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.(trace|debug|info|warn|error)', ignoreWhiteSpaces=true) }}
+            lg2? {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.info', ignoreWhiteSpaces=true) }}
+
   tests_safe_changes:
     if:
       # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
