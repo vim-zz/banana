@@ -1,6 +1,5 @@
 mango
 
-logger.info("ok")
 
 sadas
 banana
