@@ -65,14 +65,6 @@ automations:
         args:
           labels: ['long-review']
 
-  # prints_changes:
-  #   if: 
-  #     - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log', ignoreWhiteSpaces=true) | every }}
-  #   run: 
-  #     - action: add-labels@v1
-  #       args:
-  #         labels: ['prints-changes']
-
   # for JavaScript
   prints_changes_in_js:
     if: 
@@ -83,7 +75,7 @@ automations:
       - action: add-labels@v1
         args:
           labels: ['prints-changes']
-    - action: approve@v1
+      - action: approve@v1
 
   # for Python
   prints_changes_in_py:
@@ -95,7 +87,7 @@ automations:
       - action: add-labels@v1
         args:
           labels: ['prints-changes']
-    - action: approve@v1
+      - action: approve@v1
 
   tests_safe_changes:
     if:
