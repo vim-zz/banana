@@ -65,13 +65,37 @@ automations:
         args:
           labels: ['long-review']
 
-  prints_changes:
+  # prints_changes:
+  #   if: 
+  #     - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log', ignoreWhiteSpaces=true) | every }}
+  #   run: 
+  #     - action: add-labels@v1
+  #       args:
+  #         labels: ['prints-changes']
+
+  # for JavaScript
+  prints_changes_in_js:
     if: 
+      - {{ files | match(regex='\\.js$|\\.ts$') | every }}
+      - {{ files | length == 1 }}
       - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log', ignoreWhiteSpaces=true) | every }}
     run: 
       - action: add-labels@v1
         args:
           labels: ['prints-changes']
+    - action: approve@v1
+
+  # for Python
+  prints_changes_in_py:
+    if: 
+      - {{ files | match(regex='\\.py$') | every }}
+      - {{ files | length == 1 }}
+      - {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.(trace|debug|info|warn|error)', ignoreWhiteSpaces=true) | every }}
+    run: 
+      - action: add-labels@v1
+        args:
+          labels: ['prints-changes']
+    - action: approve@v1
 
   tests_safe_changes:
     if:
