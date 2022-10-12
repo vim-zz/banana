@@ -1,33 +1,27 @@
 # -*- mode: yaml -*-
-
+​
 manifest:
   version: 1.0
-
-changes:
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
-
+​
 # The `automations` section includes a list of automation that applies 
 # to the repository in which gitStream is installed. Each automation has an 
 # `if` key with a list of the necessary assertions, as well as a `run` key with a
 # list of all actions. All the listed assertions need to pass in order 
 # for the following actions to be executed (there is AND relation between conditions).
-
+​
 # Each automation under the `automations` section is independent of the others. 
 # Every time a PR is opened or changed, the automation's conditions are evaluated (the `if`). 
 # The actions under `run` are executed one by one if all the conditions pass. 
-
+​
 # Conditions consists of an expression, which are wrapped with double curly braces, and 
 # includes a context variable like `files` and filter functions like `length`. Filters 
 # functions are essentially functions that can be applied to context variables. They are 
-# called with a pipe operator (|) and can take arguments. Read more on 
-# [Filter functions page](https://linear-b.github.io/gitstream-mkdocs/23_gitstream-filters/).
-
+# called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
+​
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  formatting_safe_changes:
+  spam_formatting_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
     if:
@@ -38,94 +32,28 @@ automations:
     run: 
       # When the changes are validated as formatting only, you can help to speed up the review 
       # by adding a label that marks it accordingly.
-      - action: add-labels@v1
+      - action: add-label@v1
         args:
-          labels: ['formatting-changes']
-      # You can uncomment the following action to get gitStream can even automatically approve 
-      # such PRs to save reviewers time for such changes.
-      # - action: approve@v1
-  
-  docs_safe_changes:
+          label: 'SPAM?'
+          color: '#FD9701'
+​
+  spam_docs_changes:
     if:
       # Given the PR files changes, check that only documents were changed.
       - {{ files | allDocs }}
     run: 
-      - action: add-labels@v1
+      - action: add-label@v1
         args:
-          labels: ['docs-changes']
-      # - action: approve@v1
-  mark_long_review:
+          label: 'SPAM?'
+          color: '#FD9701'
+  
+  spam_images_changes:
     if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime >= 20 }}
+      # Check for every changed file if is a document file. The allImages filter checks for
+      # common file extensions used for graphics.
+      - {{ files | allImages }}
     run:
-      - action : add-labels@v1
+      - action: add-label@v1
         args:
-          labels: ['long-review']
-
-  # for JavaScript
-  prints_changes_in_js:
-    if: 
-      - {{ files | match(regex='\\.js$|\\.ts$') | every }}
-      - {{ files | length == 1 }}
-      - {{ source.diff.files | matchDiffLines(regex='^[+-].*console\\.log', ignoreWhiteSpaces=true) | every }}
-    run: 
-      - action: add-labels@v1
-        args:
-          labels: ['prints-changes']
-      - action: approve@v1
-
-  # for Python
-  prints_changes_in_py:
-    if: 
-      - {{ files | match(regex='\\.py$') | every }}
-      - {{ files | length == 1 }}
-      - {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.(trace|debug|info|warn|error)', ignoreWhiteSpaces=true) | every }}
-    run: 
-      - action: add-labels@v1
-        args:
-          labels: ['prints-changes']
-      - action: approve@v1
-
-  debug:
-    if: 
-      - true
-    run: 
-      - action: add-comment@v1
-        args:
-          comment: |
-            py? {{ files | match(regex='\\.py$') | dump }}
-            ln? {{ files | length }}
-            lg? {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.(trace|debug|info|warn|error)', ignoreWhiteSpaces=true) }}
-            lg2? {{ source.diff.files | matchDiffLines(regex='^[+-].*logger\\.info', ignoreWhiteSpaces=true) }}
-
-  tests_safe_changes:
-    if:
-      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
-      # the substring `test` or `spec` in the file path or file name.
-      - {{ files | allTests }}
-      - {{ changes.ratio > 0.8 }}
-    run: 
-      - action: add-labels@v1
-        args:
-          labels: ['tests-changes']
-      - action: add-comment@v1
-        args:
-          comment: |
-            ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
-            adds: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-            dels: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-      # - action: approve@v1
-
-  notify_on_authentication:
-    if:
-      - {{ files | match(term='src/modules/authentication') | some }}    
-    run: 
-      - action: add-reviewers@v1
-        args:
-          reviewers: [vim-zz]
-      - action: add-labels@v1
-        args:
-          labels: ['authentication']
+          label: 'SPAM?'
+          color: '#FD9701'
