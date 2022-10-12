@@ -7,7 +7,6 @@
 # 3. pause for input
 
 clear
-
 # say hello world after input
 display "Hello World."
 prompt
