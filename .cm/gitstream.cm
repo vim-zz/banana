@@ -21,7 +21,7 @@ manifest:
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  spam_formatting_changes:
+  formatting_safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
     if:
@@ -34,23 +34,38 @@ automations:
       # by adding a label that marks it accordingly.
       - action: add-label@v1
         args:
-          label: 'SPAM?'
-          color: '#FD9701'
+          label: 'formatting-changes'
+          color: '#33A450'
+      # You can uncomment the following action to get gitStream can even automatically approve 
+      # such PRs to save reviewers time for such changes.
+      # - action: approve@v1
 
-  spam_docs_changes:
+  docs_safe_changes:
     if:
       # Given the PR files changes, check that only documents were changed.
       - {{ files | allDocs }}
     run: 
       - action: add-label@v1
         args:
-          label: 'doc'
-          color: '#1212fe'
-      - action: add-reviewers@v1
-        args:
-          reviewers: ['vim-zz']
+          label: 'docs-changes'
+          color: '#33A450'
+      - action: approve@v1
 
-  spam_images_changes:
+  tests_safe_changes:
+    if:
+      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
+      # the substring `test` or `spec` in the file path or file name.
+      - {{ files | allTests }}
+      # Checking `changes.ratio` which is calculated below
+      - {{ changes.ratio > 0.8 }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'tests-changes'
+          color: '#33A450'
+      - action: approve@v1
+
+  images_safe_changes:
     if:
       # Check for every changed file if is a document file. The allImages filter checks for
       # common file extensions used for graphics.
@@ -58,17 +73,41 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: 'SPAM?'
-          color: '#FD9701'
+          label: 'images-changes'
+          color: '#33A450'      
+      - action: approve@v1
 
-  notify:
+  mark_long_review:
+    if:
+      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
+      # based on a statistical model. Review that takes more than 20 minutes is considered 
+      # bad practice and therefore marked accordingly.
+      - {{ branch | estimatedReviewTime >= 20 }}
+      - {{ files | length >= 10  }}
+    run:
+      - action : add-label@v1
+        args:
+          label: 'long-review'
+          color: '#EB4A39'
+          
+  notify_on_auth:
     if:
        - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}    
     run: 
       - action: add-reviewers@v1
         args:
-          reviewers: [yeelali14]
+          reviewers: [omarcovitch]
       - action: add-label@v1
         args:
           label: 'authentication'
-          color: '#ddd123'
+          color: '#FCBC1E'
+
+# You can add more sections to the .cm file to place more logic, and use it in your automations
+# The following logic `ratio` result is used in the automation above by checking `changes.ratio`
+changes:
+  # Sum all the line added/edited in the PR
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  # Sum all the line removed in the PR
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+  # Calculate the ratio to check if it is about new code
+  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
