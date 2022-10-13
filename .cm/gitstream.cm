@@ -67,7 +67,7 @@ automations:
      run: 
        - action: add-reviewers@v1
          args:
-           reviewers: [omarcovitch]
+           reviewers: [yeelali14]
        - action: add-labels@v1
          args:
            labels: ['authentication']
