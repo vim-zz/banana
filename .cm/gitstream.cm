@@ -70,29 +70,3 @@ automations:
         args:
           label: 'images'
       - action: approve@v1
-
-  mark_long_review:
-    if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime >= 20 }}
-      - {{ files | length >= 10  }}
-    run:
-      - action : add-label@v1
-        args:
-          label: 'long-review'
-          color: '#D2222D'
-
-  mark_short_review:
-    if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime <= 5 }}
-      - {{ files | length <= 2  }}
-    run:
-      - action : add-label@v1
-        args:
-          label: 'short-review'
-          color: '#238823'
