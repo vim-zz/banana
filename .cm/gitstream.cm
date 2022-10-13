@@ -88,20 +88,19 @@ automations:
       - action : add-label@v1
         args:
           label: 'long-review'
-          color: '#D2222D'
-
-  mark_short_review:
+          color: '#EB4A39'
+          
+  notify_on_auth:
     if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime <= 5 }}
-      - {{ files | length <= 2  }}
-    run:
-      - action : add-label@v1
+       - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}    
+    run: 
+      - action: add-reviewers@v1
         args:
-          label: 'short-review'
-          color: '#238823'
+          reviewers: [yeelali14]
+      - action: add-label@v1
+        args:
+          label: 'authentication'
+          color: '#FCBC1E'
 
 # You can add more sections to the .cm file to place more logic, and use it in your automations
 # The following logic `ratio` result is used in the automation above by checking `changes.ratio`
