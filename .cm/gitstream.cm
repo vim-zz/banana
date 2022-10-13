@@ -109,7 +109,7 @@ automations:
     run: 
       - action: add-reviewers@v1
         args:
-          reviewers: [yellali14]
+          reviewers: [yeelali14]
       - action: add-label@v1
         args:
           label: 'authentication'
