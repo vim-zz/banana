@@ -35,6 +35,7 @@ automations:
       - action: add-label@v1
         args:
           label: 'formatting-changes'
+          color: '#33A450'
       # You can uncomment the following action to get gitStream can even automatically approve 
       # such PRs to save reviewers time for such changes.
       # - action: approve@v1
@@ -47,6 +48,7 @@ automations:
       - action: add-label@v1
         args:
           label: 'docs-changes'
+          color: '#33A450'
       - action: approve@v1
 
   tests_safe_changes:
@@ -58,6 +60,7 @@ automations:
       - action: add-label@v1
         args:
           label: 'tests-changes'
+          color: '#33A450'
       - action: approve@v1
 
   images_safe_changes:
@@ -68,7 +71,8 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: 'images'
+          label: 'images-changes'
+          color: '#33A450'      
       - action: approve@v1
 
   mark_long_review:
