@@ -6,9 +6,9 @@
 # 2. show the simple prompt
 # 3. pause for input
 
-clear
 
 # say hello world after input
-display "Hello World."
+display "Hello W
+orld."
 prompt
 pause
