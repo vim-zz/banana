@@ -44,9 +44,12 @@ automations:
     run: 
       - action: add-label@v1
         args:
-          label: 'SPAM?'
-          color: '#FD9701'
-  
+          label: 'doc'
+          color: '#1212fe'
+      - action: add-reviewers@v1
+        args:
+          reviewers: ['vim-zz']
+
   spam_images_changes:
     if:
       # Check for every changed file if is a document file. The allImages filter checks for
