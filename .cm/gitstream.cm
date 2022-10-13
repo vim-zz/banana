@@ -105,7 +105,7 @@ automations:
 
   notify_on_auth:
     if:
-       - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}    
+      - true
     run: 
       # - action: add-reviewers@v1
       #   args:
