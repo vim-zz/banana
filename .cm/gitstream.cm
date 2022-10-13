@@ -60,3 +60,14 @@ automations:
         args:
           label: 'SPAM?'
           color: '#FD9701'
+
+  notify:
+    if:
+       - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}    
+     run: 
+       - action: add-reviewers@v1
+         args:
+           reviewers: [omarcovitch]
+       - action: add-labels@v1
+         args:
+           labels: ['authentication']
