@@ -3,6 +3,13 @@
 manifest:
   version: 1.0
 
+config:
+  ignore_files:
+    - 'yarn.lock'
+    - 'package-lock.json'
+    - 'openapi.json'
+    - 'ui/src/**/*Model.d.ts'
+
 # The `automations` section includes a list of automation that applies 
 # to the repository in which gitStream is installed. Each automation has an 
 # `if` key with a list of the necessary assertions, as well as a `run` key with a
