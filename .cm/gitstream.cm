@@ -21,7 +21,7 @@ manifest:
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  spam_formatting_changes:
+  formatting_safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
     if:
@@ -34,23 +34,33 @@ automations:
       # by adding a label that marks it accordingly.
       - action: add-label@v1
         args:
-          label: 'SPAM?'
-          color: '#FD9701'
+          label: 'formatting-changes'
+      # You can uncomment the following action to get gitStream can even automatically approve 
+      # such PRs to save reviewers time for such changes.
+      # - action: approve@v1
 
-  spam_docs_changes:
+  docs_safe_changes:
     if:
       # Given the PR files changes, check that only documents were changed.
       - {{ files | allDocs }}
     run: 
       - action: add-label@v1
         args:
-          label: 'doc'
-          color: '#1212fe'
-      - action: add-reviewers@v1
-        args:
-          reviewers: ['vim-zz']
+          label: 'docs-changes'
+      - action: approve@v1
 
-  spam_images_changes:
+  tests_safe_changes:
+    if:
+      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
+      # the substring `test` or `spec` in the file path or file name.
+      - {{ files | allTests }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'tests-changes'
+      - action: approve@v1
+
+  images_safe_changes:
     if:
       # Check for every changed file if is a document file. The allImages filter checks for
       # common file extensions used for graphics.
@@ -58,17 +68,31 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: 'SPAM?'
-          color: '#FD9701'
+          label: 'images'
+      - action: approve@v1
 
-  notify:
+  mark_long_review:
     if:
-       - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}    
-    run: 
-      - action: add-reviewers@v1
+      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
+      # based on a statistical model. Review that takes more than 20 minutes is considered 
+      # bad practice and therefore marked accordingly.
+      - {{ branch | estimatedReviewTime >= 20 }}
+      - {{ files | length >= 10  }}
+    run:
+      - action : add-label@v1
         args:
-          reviewers: [yeelali14]
-      - action: add-label@v1
+          label: 'long-review'
+          color: '#D2222D'
+
+  mark_short_review:
+    if:
+      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
+      # based on a statistical model. Review that takes more than 20 minutes is considered 
+      # bad practice and therefore marked accordingly.
+      - {{ branch | estimatedReviewTime <= 5 }}
+      - {{ files | length <= 2  }}
+    run:
+      - action : add-label@v1
         args:
-          label: 'authentication'
-          color: '#ddd123'
+          label: 'short-review'
+          color: '#238823'
