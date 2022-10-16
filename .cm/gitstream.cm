@@ -93,7 +93,7 @@ automations:
     run:
       - action : add-label@v1
         args:
-          label: "ETR {{ estimatedReviewTime }} min"
+          label: "ETR {{ branch | estimatedReviewTime }} min"
           color: '#D2222D'
 
   mark_short_review:
@@ -105,7 +105,7 @@ automations:
     run:
       - action : add-label@v1
         args:
-          label: "ETR {{ estimatedReviewTime }} min"
+          label: "ETR {{ branch | estimatedReviewTime }} min"
           color: '#238823'
 
   notify_on_auth:
