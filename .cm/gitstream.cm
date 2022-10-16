@@ -89,12 +89,11 @@ automations:
       # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
       # based on a statistical model. Review that takes more than 20 minutes is considered 
       # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime >= 20 }}
-      - {{ files | length >= 10  }}
+      - {{ branch | estimatedReviewTime >= 15 }}
     run:
       - action : add-label@v1
         args:
-          label: 'long-review'
+          label: "ETR {{ branch | estimatedReviewTime }} min"
           color: '#D2222D'
 
   mark_short_review:
@@ -102,12 +101,11 @@ automations:
       # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
       # based on a statistical model. Review that takes more than 20 minutes is considered 
       # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime <= 5 }}
-      - {{ files | length <= 2  }}
+      - {{ branch | estimatedReviewTime < 15 }}
     run:
       - action : add-label@v1
         args:
-          label: 'short-review'
+          label: "ETR {{ branch | estimatedReviewTime }} min"
           color: '#238823'
 
   notify_on_auth:
