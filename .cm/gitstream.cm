@@ -90,8 +90,8 @@ automations:
     run:
       - action : add-label@v1
         args:
-          label: "Review time {{ branch | estimatedReviewTime }} min"
-          color: {{ '#D2222D' if (branch | estimatedReviewTime >= 15) else '#238823' }}
+          label: "Review\\: {{ branch | estimatedReviewTime }} min"
+          color: {{ 'D2222D' if (branch | estimatedReviewTime >= 15) else '238823' }}
 
   notify_on_auth:
     if:
