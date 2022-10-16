@@ -28,89 +28,11 @@ config:
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  formatting_safe_changes:
-    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
-    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
-    if:
-      # Given the PR code changes, check that only formatting changes were made 
-      - {{ source.diff.files | isFormattingChange }}
-    # `run` key has a list of actions, which are executed one by one whenever the automation 
-    # conditions are met. 
-    run: 
-      # When the changes are validated as formatting only, you can help to speed up the review 
-      # by adding a label that marks it accordingly.
-      - action: add-label@v1
-        args:
-          label: 'formatting-changes'
-          color: '#33A450'
-      # You can uncomment the following action to get gitStream can even automatically approve 
-      # such PRs to save reviewers time for such changes.
-      # - action: approve@v1
-
-  docs_safe_changes:
-    if:
-      # Given the PR files changes, check that only documents were changed.
-      - {{ files | allDocs }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'docs-changes'
-          color: '#33A450'
-      - action: approve@v1
-
-  tests_safe_changes:
-    if:
-      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
-      # the substring `test` or `spec` in the file path or file name.
-      - {{ files | allTests }}
-      # Checking `changes.ratio` which is calculated below
-      - {{ changes.ratio > 0.8 }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'tests-changes'
-          color: '#33A450'
-      - action: approve@v1
-
-  images_safe_changes:
-    if:
-      # Check for every changed file if is a document file. The allImages filter checks for
-      # common file extensions used for graphics.
-      - {{ files | allImages }}
-    run:
-      - action: add-label@v1
-        args:
-          label: 'images-changes'
-          color: '#33A450'      
-      - action: approve@v1
-
-  etr:
+  estimated_time_to_review:
     if:
       - true
     run:
       - action : add-label@v1
         args:
-          label: "{{ branch | estimatedReviewTime }} min review"
-          color: {{ 'E94637' if (branch | estimatedReviewTime >= 20) else ('FBBD10' if (branch | estimatedReviewTime >= 5) else '36A853') }}
-
-  notify_on_auth:
-    if:
-      - {{ files | match(list=['OAuthHandler.js', 'TokenHandler.js', 'token.service.js']) | some }}
-    run: 
-      - action: add-reviewers@v1
-        args:
-          reviewers: [yeelali14]
-      - action: add-label@v1
-        args:
-          label: 'authentication'
-          color: '#FCBC1E'
-
-# You can add more sections to the .cm file to place more logic, and use it in your automations
-# The following logic `ratio` result is used in the automation above by checking `changes.ratio`
-changes:
-  # Sum all the line added/edited in the PR
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-  # Sum all the line removed in the PR
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-  # Calculate the ratio to check if it is about new code
-  ratio: {{ changes.additions / (changes.additions + changes.deletions) }}
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
