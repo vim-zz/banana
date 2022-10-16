@@ -84,29 +84,14 @@ automations:
           color: '#33A450'      
       - action: approve@v1
 
-  mark_long_review:
+  etr:
     if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime >= 15 }}
+      - true
     run:
       - action : add-label@v1
         args:
-          label: "ETR {{ branch | estimatedReviewTime }} min"
-          color: '#D2222D'
-
-  mark_short_review:
-    if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime < 15 }}
-    run:
-      - action : add-label@v1
-        args:
-          label: "ETR {{ branch | estimatedReviewTime }} min"
-          color: '#238823'
+          label: "Review time {{ branch | estimatedReviewTime }} min"
+          color: {{ '#D2222D' if (branch | estimatedReviewTime >= 15) else '#238823' }}
 
   notify_on_auth:
     if:
