@@ -52,7 +52,7 @@ automations:
       # - action: approve@v1
 
   {% for item in deprecated %}
-  catch_deprecated_components:
+  catch_deprecated_components_{{ loop.index }}:
     if:
       - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
     run:
