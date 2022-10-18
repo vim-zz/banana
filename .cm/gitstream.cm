@@ -34,37 +34,41 @@ automations:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
     if:
-      - {{ is.docs or is.tests }}
-    run: 
-      - action: add-labels@v1
-        args:
-          labels: ['safe-changes']
-      - action: approve@v1
-
-  formatting_changes:
-    if:
       # Given the PR code changes, check that only formatting changes were made 
       - {{ is.formatting or is.docs or is.tests }}
+    # `run` key has a list of actions, which are executed one by one whenever the automation 
+    # conditions are met. 
     run: 
-      - action: add-labels@v1
+      # When the changes are validated as formatting only, you can help to speed up the review 
+      # by adding a label that marks it accordingly.
+      - action: add-label@v1
         args:
-          labels: ['formatting']
-      # - action: approve@v1
+          label: 'safe-changes'
+      # You can uncomment the following action to get gitStream can even automatically approve 
+      # such PRs to save reviewers time for such changes.
+      - action: approve@v1
 
-  {% for item in deprecated %}
-  catch_deprecated_components_{{ loop.index }}:
+  pr_bot:
     if:
-      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
+      - {{ branch.name | includes(term="pr-bot-v") }}
+      - {{ branch.author | includes(term="flosports-deploy") }}
+    run:
+      - action: approve@v1
+      - action: add-label@v1
+        args:
+          label: "pr-bot"
+      - action: merge@v1
+        args:
+          wait_for_all_checks: true
+
+  auto_approve_triggers:
+    if:
+      - {{ branch.name | includes(term="triggers") }}
     run:
       - action: add-label@v1
         args:
-          label: 'deprecated-component-in-use'
-          color: '#FF0000'
-      - action: request-changes@v1
-        args:
-          comment: |
-            `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
-  {% endfor %}
+          label: "triggers"
+      - action: approve@v1
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
@@ -72,11 +76,3 @@ is:
   formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
-
-deprecated:
-  - regex: 'dudaDu'
-    old: ContentCard
-    new: Card
-  - regex: 'callElvis'
-    old: Elvis
-    new: Gaga
