@@ -19,14 +19,64 @@ manifest:
 # called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
 
 automations:
-  pr_bot:
+  # This is the name of the review automation. You can use whatever name, a meaningful name 
+  # will help to identify it in the future. Each automation name in this file should be unique.
+  estimated_time_to_review:
     if:
-      - {{ branch.author | match(term="flosports-deploy") }}
+      - true
     run:
-      - action: approve@v1
+      - action : add-label@v1
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+  safe_changes:
+    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
+    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
+    if:
+      - {{ is.docs or is.tests }}
+    run: 
       - action: add-labels@v1
         args:
-          labels: ["pr-bot"]
-      - action: merge@v1
+          labels: ['safe-changes']
+      - action: approve@v1
+
+  formatting_changes:
+    if:
+      # Given the PR code changes, check that only formatting changes were made 
+      - {{ is.formatting or is.docs or is.tests }}
+    run: 
+      - action: add-labels@v1
         args:
-          wait_for_all_checks: true
+          labels: ['formatting']
+      # - action: approve@v1
+
+  {% for item in deprecated %}
+  catch_deprecated_components:
+    if:
+      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'deprecated-component-in-use'
+          color: '#FF0000'
+      - action: request-changes@v1
+        args:
+          comment: |
+            `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
+  {% endfor %}
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+is:
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
+
+deprecated:
+  - regex: 'import .* ContentCard .* from .@duda-co\\/ui'
+    old: ContentCard
+    new: Card
+  - regex: 'callElvis'
+    old: Elvis
+    new: Gaga
