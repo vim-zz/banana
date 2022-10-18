@@ -74,7 +74,7 @@ is:
   tests: {{ files | allTests }}
 
 deprecated:
-  - regex: 'import .* ContentCard .* from .@duda-co\\/ui'
+  - regex: 'dudaDu'
     old: ContentCard
     new: Card
   - regex: 'callElvis'
