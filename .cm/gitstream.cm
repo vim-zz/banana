@@ -48,27 +48,6 @@ automations:
       # such PRs to save reviewers time for such changes.
       - action: approve@v1
 
-  pr_bot:
-    if:
-      - {{ branch.name | includes(term="pr-bot-v") }}
-      - {{ branch.author | match(term="flosports-deploy") }}
-    run:
-      - action: approve@v1
-      - action: add-labels@v1
-        args:
-          labels: ["pr-bot"]
-      - action: merge@v1
-        args:
-          wait_for_all_checks: true
-
-  auto_approve_triggers:
-    if:
-      - {{ branch.name | match(term="triggers") }}
-    run:
-      - action: add-labels@v1
-        args:
-          labels: ["triggers"]
-      - action: approve@v1
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
