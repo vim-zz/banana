@@ -49,7 +49,7 @@ automations:
       - action: approve@v1
   pr_bot:
     if:
-      - true
+      - {{ branch.name | includes(term="pr-bot-v") }}
     run:
       - action: approve@v1
       - action: add-labels@v1
