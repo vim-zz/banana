@@ -1,4 +1,4 @@
-// import ContentCard from .@duda-co/ui 
+// import dudaDu
 
 const http = require('http');
 
