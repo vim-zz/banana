@@ -18,9 +18,19 @@ manifest:
 # functions are essentially functions that can be applied to context variables. They are 
 # called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
 
-{% import ".cm/ignore_files.jinja" as ignore_files %}
 config:
-  ignore_files: [{{ ignore_files.list }}]
+  ignore_files:
+    - 'yarn.lock'
+    - 'package-lock.json'
+    - 'openapi.json'
+    - 'constants.py'
+    - 'constants.ts'
+    - 'constants.js'
+    - 'ui/src/**/*Model.d.ts'
+    - 'agent/aws/java/src/main/java/cn/events/*'
+    - 'base/java/cn/events/*'
+    - '*_pb2.pyi'
+    - '*.pb.go'
 
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
@@ -104,8 +114,11 @@ automations:
   
   double_review:
     if:
-      - {{ files | match(regex='agent\\/') | some }}
+      - {{ files | match(regex=r/agent\//) | some }}
     run:
+      - action: add-labels@v1
+        args:
+          labels: ['AGENT']
       - action: set-required-approvals@v1
         args:
           reviewers: 2
