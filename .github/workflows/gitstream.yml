@@ -35,6 +35,7 @@ on:
 jobs:
   continuous-merge-rules:
     timeout-minutes: 5
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: gitStream workflow automation
     steps:
