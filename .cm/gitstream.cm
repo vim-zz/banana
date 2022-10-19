@@ -20,7 +20,7 @@ manifest:
 
 {% import "ignore_files.jinja" as ignore_files %}
 config:
-  ignore_files: ignore_files.list
+  ignore_files: [{{ ignore_files.list }}]
 
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
