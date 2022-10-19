@@ -18,19 +18,9 @@ manifest:
 # functions are essentially functions that can be applied to context variables. They are 
 # called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
 
+{% import "ignore_files.yaml" as ignore_files %}
 config:
-  ignore_files:
-    - 'yarn.lock'
-    - 'package-lock.json'
-    - 'openapi.json'
-    - 'constants.py'
-    - 'constants.ts'
-    - 'constants.js'
-    - 'ui/src/**/*Model.d.ts'
-    - 'agent/aws/java/src/main/java/cn/events/*'
-    - 'base/java/cn/events/*'
-    - '*_pb2.pyi'
-    - '*.pb.go'
+  ignore_files: ignore_files.files
 
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
