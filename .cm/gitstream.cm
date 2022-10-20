@@ -114,11 +114,8 @@ automations:
   
   double_review:
     if:
-      - {{ files | match(regex=r/agent\//) | some }}
+      - {{ files | match(regex='agent\\/') | some }}
     run:
-      - action: add-labels@v1
-        args:
-          labels: ['AGENT']
       - action: set-required-approvals@v1
         args:
           reviewers: 2
@@ -130,6 +127,73 @@ automations:
       - action: add-reviewers@v1
         args:
           reviewers: [MishaKav, Moshemo]
+
+  github_files_review:
+    if:
+      - {{ files | match(regex='.github\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [MishaKav]
+
+  cn_customer_review:
+    if:
+      - {{ files | match(regex='customer\\/cn-customer\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [ManuelNemirovsky]
+
+  contrast_deploy_review:
+    if:
+      - {{ files | match(regex='_utils\\/contrast_deploy\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [ManuelNemirovsky]
+
+  api_docs_review:
+    if:
+      - {{ files | match(list=['oas3.yml', 'openapi.json']) | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [Moshemo]
+
+  inspector_review:
+    if:
+      - {{ files | match(regex='agent\\/inspector\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [stasez]
+
+  gateway_review:
+    if:
+      - {{ files | match(regex='gateway\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [aviadhhh]
+  
+  e2e_review:
+    if:
+      - {{ files | reject(term='version.txt') | match(regex='e2e\\/') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [ChenAlon]
+
+  cft_review:
+    if:
+      - {{ files | match(regex='resources/app/functions/accounts/agent_cf_template.yml') | some }}
+      - {{ files | match(regex='resources/app/functions/accounts/cross_account_role_template.yml') | some }}
+      - {{ files | match(regex='resources/app/functions/accounts/xrays_rest_add_account.yaml') | some }}
+      - {{ files | match(regex='resources/app/functions/accounts/sls.yml') | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [4ppsec, spaglipa]
 
 # This list includes the deprecated items
 deprecated:
