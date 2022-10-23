@@ -20,6 +20,7 @@ manifest:
 
 config:
   ignore_files:
+    - '.cm/gitstream.cm'
     - 'yarn.lock'
     - 'package-lock.json'
     - 'openapi.json'
@@ -44,7 +45,6 @@ automations:
       - action: add-label@v1
         args:
           label: 'deprecated-component'
-          color: '#FF0000'
       - action: request-changes@v1
         args:
           comment: |
@@ -126,7 +126,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [MishaKav, Moshemo]
+          reviewers: ['vim-zz']
 
   github_files_review:
     if:
@@ -134,7 +134,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [MishaKav]
+          reviewers: ['vim-zz']
 
   cn_customer_review:
     if:
@@ -142,7 +142,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [ManuelNemirovsky]
+          reviewers: ['vim-zz']
 
   contrast_deploy_review:
     if:
@@ -150,7 +150,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [ManuelNemirovsky]
+          reviewers: ['vim-zz']
 
   api_docs_review:
     if:
@@ -158,15 +158,15 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [Moshemo]
+          reviewers: ['vim-zz']
 
   inspector_review:
     if:
-      - {{ files | match(regex='agent\\/inspector\\/') | some }}
+      - {{ files | reject(term='version.txt') | match(regex='agent\\/inspector\\/') | some }}
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [stasez]
+          reviewers: ['vim-zz']
 
   gateway_review:
     if:
@@ -186,14 +186,17 @@ automations:
 
   cft_review:
     if:
-      - {{ files | match(regex='resources/app/functions/accounts/agent_cf_template.yml') | some }}
-      - {{ files | match(regex='resources/app/functions/accounts/cross_account_role_template.yml') | some }}
-      - {{ files | match(regex='resources/app/functions/accounts/xrays_rest_add_account.yaml') | some }}
-      - {{ files | match(regex='resources/app/functions/accounts/sls.yml') | some }}
+      - {{ files | match(list=cft_templates_files) | some }}
     run:
       - action: add-reviewers@v1
         args:
           reviewers: [4ppsec, spaglipa]
+
+cft_templates_files:
+  - resources/app/functions/accounts/agent_cf_template.yml
+  - resources/app/functions/accounts/cross_account_role_template.yml
+  - resources/app/functions/accounts/sls.yml
+  - resources/app/functions/accounts/xrays_rest_add_account.yaml
 
 # This list includes the deprecated items
 deprecated:
