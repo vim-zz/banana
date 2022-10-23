@@ -186,18 +186,17 @@ automations:
 
   cft_review:
     if:
-      - {{ files | match(list=cft_templates_files.list) | some }}
+      - {{ files | match(list={{ cft_templates_files }}) | some }}
     run:
       - action: add-reviewers@v1
         args:
           reviewers: [4ppsec, spaglipa]
 
 cft_templates_files:
-  list:
-    - resources/app/functions/accounts/agent_cf_template.yml
-    - resources/app/functions/accounts/cross_account_role_template.yml
-    - resources/app/functions/accounts/sls.yml
-    - resources/app/functions/accounts/xrays_rest_add_account.yaml
+  - resources/app/functions/accounts/agent_cf_template.yml
+  - resources/app/functions/accounts/cross_account_role_template.yml
+  - resources/app/functions/accounts/sls.yml
+  - resources/app/functions/accounts/xrays_rest_add_account.yaml
 
 # This list includes the deprecated items
 deprecated:
