@@ -186,16 +186,16 @@ automations:
 
   cft_review:
     if:
-      - {{ files | match(list=cft_templates_files) | some }}
+      - {{ cft_templates_files | match(term='a') | some }}
     run:
       - action: add-reviewers@v1
         args:
           reviewers: ['vim-zz']
 
 cft_templates_files:
-  - 'app.js'
-  - 'bpp.js' 
-  - 'cpp.js' 
+  - a 
+  - b 
+  - c 
 
 # This list includes the deprecated items
 deprecated:
