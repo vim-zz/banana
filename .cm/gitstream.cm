@@ -186,7 +186,7 @@ automations:
 
   cft_review:
     if:
-      - {{ files | match(list={{ cft_templates_files }}) | some }}
+      - {{ files | match(list= cft_templates_files ) | some }}
     run:
       - action: add-reviewers@v1
         args:
