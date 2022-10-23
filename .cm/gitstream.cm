@@ -184,18 +184,6 @@ automations:
         args:
           reviewers: ['vim-zz']
 
-  cft_review:
-    if:
-      - {{ cft_templates_files | match(term='a') | some }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: ['vim-zz']
-
-cft_templates_files:
-  - a 
-  - b 
-  - c 
 
 # This list includes the deprecated items
 deprecated:
