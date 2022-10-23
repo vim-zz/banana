@@ -5,4 +5,5 @@ http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'}); 
   res.end('Hello World!');
 })
+Types.ONBOARDING_COMPLETED
 .listen(8080);
