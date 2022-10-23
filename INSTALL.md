@@ -5,7 +5,6 @@
 3. reboot!
 4. start
 
-# Install
 
 ```
 npm install
