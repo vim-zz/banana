@@ -186,13 +186,15 @@ branch: 1
         args:
           reviewers: ['vim-zz']
 
-  cft_review:
+  banana_automation:
     if:
-      - {{ banana | length > 0 }}
+      - true
     run:
-      - action: add-reviewers@v1
+      - action: add-comment@v1
         args:
-          reviewers: ['vim-zz']
+          comment: |
+            BANANA {{ banana }}
+            DEPRECATED {{ deprecated }}
 
 banana:
   - a 
