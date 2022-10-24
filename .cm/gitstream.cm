@@ -100,8 +100,6 @@ automations:
           labels: ['images']
       - action: approve@v1
 
-branch: 1
-
   mark_long_review:
     if:
       # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
