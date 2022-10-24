@@ -99,7 +99,9 @@ automations:
         args:
           labels: ['images']
       - action: approve@v1
-  
+
+branch: 1
+
   mark_long_review:
     if:
       # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
@@ -184,6 +186,18 @@ automations:
         args:
           reviewers: ['vim-zz']
 
+  cft_review:
+    if:
+      - {{ banana | length > 0 }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: ['vim-zz']
+
+banana:
+  - a 
+  - b 
+  - c 
 
 # This list includes the deprecated items
 deprecated:
