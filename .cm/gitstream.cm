@@ -191,6 +191,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
+            expression {{ files | match(list=cft_templates_files) | dump }}
             CFT_TEMPLATES_FILES {{ cft_templates_files | dump }}
             DEPRECATED {{ deprecated | dump }}
 
