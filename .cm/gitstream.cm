@@ -97,17 +97,17 @@ automations:
             `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
   {% endfor %}
   
-  calc:
-    etr: {{ branch | estimatedReviewTime }}
-  is:
-    formatting: {{ source.diff.files | isFormattingChange }}
-    docs: {{ files | allDocs }}
-    tests: {{ files | allTests }}
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+is:
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
 
-  deprecated:
-    - regex: 'import .* ContentCard .* from .@duda-co\\/ui'
-      old: ContentCard
-      new: Card
-    - regex: 'import .* Flex *. from .*_layout'
-      old: Flex
-      new: use_css_instead
+deprecated:
+  - regex: 'import .* ContentCard .* from .@duda-co\\/ui'
+    old: ContentCard
+    new: Card
+  - regex: 'import .* Flex *. from .*_layout'
+    old: Flex
+    new: use_css_instead
