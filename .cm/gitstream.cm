@@ -105,9 +105,9 @@ is:
   tests: {{ files | allTests }}
 
 deprecated:
-  - regex: 'import .* ContentCard .* from .@duda-co\\/ui'
+  - regex: r/import .* ContentCard .* from .@duda-co\/ui/
     old: ContentCard
     new: Card
-  - regex: 'import .* Flex *. from .*_layout'
+  - regex: r/^[+]import .* Flex .* from .*_\/layout/
     old: Flex
     new: use_css_instead
