@@ -1,6 +1,5 @@
 // yalla!
-
-banana
+import Flex from _/layout
 
 const http = require('http');
 
