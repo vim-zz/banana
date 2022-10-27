@@ -97,6 +97,19 @@ automations:
             `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
   {% endfor %}
   
+  xyz:
+    if:
+      - {{ source.diff.files | matchDiffLines(regex=r/^[+].*import.*Flex.*from.*_\/layout/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'deprecated'
+          color: '#0000FF'
+      - action: request-changes@v1
+        args:
+          comment: |
+            component is deprecated, use instead
+
 calc:
   etr: {{ branch | estimatedReviewTime }}
 is:
