@@ -105,21 +105,9 @@ is:
   tests: {{ files | allTests }}
 
 deprecated:
-  - regex: r/import .* ContentCard .* from .@duda-co\/ui/
-    old: ContentCard
-    new: Card
-  - regex: r/^[+]import.*Flex.*from.*_\/layout/
+  - regex: '^[+].*import.*Flex.*from.*_/layout'
     old: Flex
-    new: use_css_instead1
-  - regex: r/^[+]import.*Flex.*from/
+    new: string
+  - regex: r/^[+].*import.*Flex.*from.*_\/layout/
     old: Flex
-    new: use_css_instead2
-  - regex: r/^[+]import.*Flex/
-    old: Flex
-    new: use_css_instead3
-  - regex: r/^[+]import/
-    old: Flex
-    new: use_css_instead4
-  - regex: r/import/
-    old: Flex
-    new: use_css_instead5
+    new: regex
