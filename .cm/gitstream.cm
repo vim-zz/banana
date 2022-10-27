@@ -110,4 +110,16 @@ deprecated:
     new: Card
   - regex: r/^[+]import.*Flex.*from.*_\/layout/
     old: Flex
-    new: use_css_instead
+    new: use_css_instead1
+  - regex: r/^[+]import.*Flex.*from/
+    old: Flex
+    new: use_css_instead2
+  - regex: r/^[+]import.*Flex/
+    old: Flex
+    new: use_css_instead3
+  - regex: r/^[+]import/
+    old: Flex
+    new: use_css_instead4
+  - regex: r/import/
+    old: Flex
+    new: use_css_instead5
