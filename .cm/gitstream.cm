@@ -108,6 +108,6 @@ deprecated:
   - regex: r/import .* ContentCard .* from .@duda-co\/ui/
     old: ContentCard
     new: Card
-  - regex: r/^[+]import .* Flex .* from .*_\/layout/
+  - regex: r/^[+]import.*Flex.*from.*_\/layout/
     old: Flex
     new: use_css_instead
