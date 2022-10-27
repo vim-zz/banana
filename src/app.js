@@ -1,4 +1,4 @@
-import Flex from _layout;
+import Flex from _/layout;
 
 const http = require('http');
 
