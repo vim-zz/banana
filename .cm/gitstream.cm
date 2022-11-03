@@ -21,58 +21,6 @@ manifest:
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  formatting_safe_changes:
-    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
-    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
-    if:
-      # Given the PR code changes, check that only formatting changes were made 
-      - {{ source.diff.files | isFormattingChange }}
-    # `run` key has a list of actions, which are executed one by one whenever the automation 
-    # conditions are met. 
-    run: 
-      # When the changes are validated as formatting only, you can help to speed up the review 
-      # by adding a label that marks it accordingly.
-      - action: add-label@v1
-        args:
-          label: 'formatting-changes'
-      # You can uncomment the following action to get gitStream can even automatically approve 
-      # such PRs to save reviewers time for such changes.
-      # - action: approve@v1
-
-  docs_safe_changes:
-    if:
-      # Given the PR files changes, check that only documents were changed.
-      - {{ files | allDocs }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'docs-changes'
-      - action: approve@v1
-
-  tests_safe_changes:
-    if:
-      # Given the PR files changes, check that only tests were changed. The allTests filter checks for 
-      # the substring `test` or `spec` in the file path or file name.
-      - {{ files | allTests }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'tests-changes'
-      - action: approve@v1
-
-  mark_long_review:
-    if:
-      # gitStream estimatedReviewTime filter calculates the estimated review time in minutes
-      # based on a statistical model. Review that takes more than 20 minutes is considered 
-      # bad practice and therefore marked accordingly.
-      - {{ branch | estimatedReviewTime >= 20 }}
-      - {{ files | length >= 10  }}
-    run:
-      - action : add-label@v1
-        args:
-          label: 'long-review'
-          color: '#D2222D'
-
   estimated_time_to_review:
     if:
       - true
@@ -81,6 +29,24 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+  safe_changes:
+    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
+    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
+    if:
+      # Given the PR code changes, check that only formatting changes were made 
+      - {{ is.formatting or is.docs or is.tests }}
+    # `run` key has a list of actions, which are executed one by one whenever the automation 
+    # conditions are met. 
+    run: 
+      # When the changes are validated as formatting only, you can help to speed up the review 
+      # by adding a label that marks it accordingly.
+      - action: add-label@v1
+        args:
+          label: 'safe-changes'
+      # You can uncomment the following action to get gitStream can even automatically approve 
+      # such PRs to save reviewers time for such changes.
+      - action: approve@v1
 
   {% for item in deprecated %}
   catch_deprecated_components_{{ loop.index }}:
@@ -97,18 +63,6 @@ automations:
             `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
   {% endfor %}
   
-  xyz:
-    if:
-      - {{ source.diff.files | matchDiffLines(regex=r/^[+].*import.*Flex.*from.*_\/layout/) | some }}
-    run:
-      - action: add-label@v1
-        args:
-          label: 'deprecated'
-          color: '#0000FF'
-      - action: request-changes@v1
-        args:
-          comment: |
-            component is deprecated, use instead
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
@@ -118,9 +72,9 @@ is:
   tests: {{ files | allTests }}
 
 deprecated:
-  - regex: '^[+].*import.*Flex.*from.*_/layout'
-    old: Flex
-    new: string
-  - regex: r/^[+].*import.*Flex.*from.*_\/layout/
-    old: Flex
-    new: regex
+  - regex: 'callingElvis'
+    old: callingElvis
+    new: callingGaga
+  - regex: 'anotherOne'
+    old: anotherOne
+    new: anotherTwo
