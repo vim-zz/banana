@@ -30,6 +30,16 @@ automations:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
+  code_expert:
+    if:
+      - true
+    run:
+      - action : add-comment@v1
+        args:
+          comment: |
+            `repo`: {{ repo | dump | safe }}
+
+
   safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
