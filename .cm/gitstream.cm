@@ -30,15 +30,27 @@ automations:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
-  code_expert:
+  junior:
     if:
-      - true
+      - {{ repo.author_age < 21 and repo.age >= 21 }}
     run:
+      - action: add-label@v1
+        args:
+          label: 'by-junior'
+          color: '#FBBD10'
       - action : add-comment@v1
         args:
           comment: |
             `repo`: {{ repo | dump | safe }}
 
+  no_tests:
+    if:
+      - {{ files | match(regex=r/test/) | nope }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'missing-tests'
+          color: '#E94637'
 
   safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
