@@ -8,5 +8,4 @@
 
 # say hello world after input
 display "Hello World."
-prompt
 pause

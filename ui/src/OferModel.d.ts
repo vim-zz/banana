@@ -7,16 +7,12 @@ lorem OferModel
 lorem OferModel 
 lorem OferModel 
 lorem OferModel 
+
 lorem OferModel 
 lorem OferModel 
 lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
+lorem OferModel asdfdffds
+lorem OferModel dfdsfs
 lorem OferModel 
 lorem OferModel 
 lorem OferModel 
