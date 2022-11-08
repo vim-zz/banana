@@ -45,7 +45,7 @@ automations:
 
   no_tests:
     if:
-      - {{ files | match(regex=r/test/) | nope }}
+      - {{ files | match(regex=r/(test|spec)/) | nope }}
     run: 
       - action: add-label@v1
         args:
