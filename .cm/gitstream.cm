@@ -68,7 +68,9 @@ automations:
           label: 'safe-changes'
       # You can uncomment the following action to get gitStream can even automatically approve 
       # such PRs to save reviewers time for such changes.
-      - action: approve@v1
+      - action: merge@v1
+        args:
+          rebase_on_merge: true
 
   {% for item in deprecated %}
   catch_deprecated_components_{{ loop.index }}:
