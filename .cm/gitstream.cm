@@ -19,86 +19,27 @@ manifest:
 # called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
 
 automations:
-  # This is the name of the review automation. You can use whatever name, a meaningful name 
-  # will help to identify it in the future. Each automation name in this file should be unique.
-  estimated_time_to_review:
+  {% for item in table_name %}
+  catch_table_update_{{ loop.index }}:
     if:
-      - true
-    run:
-      - action : add-label@v1
-        args:
-          label: "{{ calc.etr }} min review"
-          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-
-  junior:
-    if:
-      - {{ repo.author_age < 21 and repo.age >= 21 }}
+      - {{ source.diff.files | matchDiffLines(term=item.table) | some }}
     run:
       - action: add-label@v1
         args:
-          label: 'by-junior'
-          color: '#FBBD10'
-      - action : add-comment@v1
+          label: 'table-update'
+          color: '#0D72FF'
+      - action: add-comment@v1
         args:
           comment: |
-            `repo`: {{ repo | dump | safe }}
-
-  no_tests:
-    if:
-      - {{ files | match(regex=r/(test|spec)/) | nope }}
-    run: 
-      - action: add-label@v1
+            `{{ item.table }}` is updated and requires `{{ item.reviewer }}` approval
+      - action: require-reviewers@v1
         args:
-          label: 'missing-tests'
-          color: '#E94637'
-
-  safe_changes:
-    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
-    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
-    if:
-      # Given the PR code changes, check that only formatting changes were made 
-      - {{ is.formatting or is.docs or is.tests }}
-    # `run` key has a list of actions, which are executed one by one whenever the automation 
-    # conditions are met. 
-    run: 
-      # When the changes are validated as formatting only, you can help to speed up the review 
-      # by adding a label that marks it accordingly.
-      - action: add-label@v1
-        args:
-          label: 'safe-changes'
-      # You can uncomment the following action to get gitStream can even automatically approve 
-      # such PRs to save reviewers time for such changes.
-      - action: merge@v1
-        args:
-          rebase_on_merge: true
-
-  {% for item in deprecated %}
-  catch_deprecated_components_{{ loop.index }}:
-    if:
-      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
-    run:
-      - action: add-label@v1
-        args:
-          label: 'deprecated-component-in-use'
-          color: '#FF0000'
-      - action: request-changes@v1
-        args:
-          comment: |
-            `{{ item.old }}` component is deprecated, use `{{ item.new }}` instead
+          reviewers: [{{ item.reviewer }}]
   {% endfor %}
   
 
-calc:
-  etr: {{ branch | estimatedReviewTime }}
-is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
-
-deprecated:
-  - regex: 'callingElvis'
-    old: callingElvis
-    new: callingGaga
-  - regex: 'anotherOne'
-    old: anotherOne
-    new: anotherTwo
+table_name:
+  - table: 'requisition'
+    reviewer: AnkurUserName
+  - table: 'another_table'
+    reviewer: anotherUserName
