@@ -40,6 +40,6 @@ automations:
 
 table_name:
   - table: 'requisition'
-    reviewer: AnkurUserName
+    reviewer: ShakedZrihen
   - table: 'another_table'
-    reviewer: anotherUserName
+    reviewer: yeelali14
