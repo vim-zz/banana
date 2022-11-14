@@ -22,7 +22,7 @@ automations:
   {% for item in table_name %}
   catch_table_update_{{ loop.index }}:
     if:
-      - {{ source.diff.files | matchDiffLines(term=item.table) | some }}
+      - {{ source.diff.files | matchDiffLines(regex=item.table) | some }}
     run:
       - action: add-label@v1
         args:
