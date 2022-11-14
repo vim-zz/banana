@@ -36,7 +36,7 @@ automations:
             `{{ item.table }}` is detected and requires `{{ item.reviewer }}` approval
       - action: add-reviewers@v1
         args:
-          reviewers: [{{ item.reviewer }}]
+          reviewers: [ {{ item.reviewer }} ]
   {% endfor %}
 
   estimated_time_to_review:
@@ -75,7 +75,9 @@ is:
   tests: {{ files | allTests }}
 
 table_name:
-  - table: 'update testtable1'
+  - table: r/update.*requisition/
+    reviewer: ShakedZrihen
+  - table: r/update.*testtable1/
     reviewer: LayeekPashaST
-  - table: 'update testTable2'
+  - table: r/update.*testTable2/
     reviewer: simransinghST
