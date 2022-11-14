@@ -32,6 +32,9 @@ automations:
         args:
           comment: |
             `{{ item.table }}` is updated and requires `{{ item.reviewer }}` approval
+      - action: add-reviewers@v1
+        args:
+          reviewers: [{{ item.reviewer }}]
       - action: require-reviewers@v1
         args:
           reviewers: [{{ item.reviewer }}]
@@ -40,6 +43,6 @@ automations:
 
 table_name:
   - table: 'requisition'
-    reviewer: ShakedZrihen
+    reviewer: AnkurUserName
   - table: 'another_table'
-    reviewer: yeelali14
+    reviewer: anotherUserName
