@@ -19,34 +19,26 @@ manifest:
 # called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
 
 automations:
-  # This is the name of the review automation. You can use whatever name, a meaningful name
-  # will help to identify it in the future. Each automation name in this file should be unique.
-  {% for item in table_name %}
-  catch_table_update_{{ loop.index }}:
-    if:
-      - {{ source.diff.files | matchDiffLines(regex=item.table) | some }}
-    run:
-      - action: add-label@v1
-        args:
-          label: 'table-update'
-          color: '#0D72FF'
-      - action: add-comment@v1
-        args:
-          comment: |
-            `{{ item.table }}` is detected and requires `{{ item.reviewer }}` approval
-      - action: add-reviewers@v1
-        args:
-          reviewers: [ {{ item.reviewer }} ]
-  {% endfor %}
-
   estimated_time_to_review:
-    if:
+    if: 
       - true
     run:
-      - action : add-label@v1
+      - action : add-comment@v1
         args:
-          label: "{{ calc.etr }} min review"
-          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+          comment: |
+            code additons {{ code_additions }}
+            code deletions {{ code_deletions }}
+
+code_additions: {{ branch.diff.files_metadata | filter(attr=file, list=CODE_FILES) | map(attr=additions) | sum }}
+code_deletions: {{ branch.diff.files_metadata | filter(attr=file, list=CODE_FILES) | map(attr=deletions) | sum }}
+
+CODE_FILES: [
+  'scala','sh','m', 'cs', 'dart', 'ex','exs', 'go', 'groovy', 'h', 'html', 
+  'java', 'js', 'jsx', 'kt', 'py', 'rb', 'snap', 'sql', 'swift', 'tf', 'ts', 
+  'tsx','c','cpp','erb', 'gradle', 'graphql','Makefile','clj', 'rs'
+]
+
+WEB_FILES: ['cshtml', 'twig', 'css','html', 'php', 'scsss','vue','haml' ,'less']
 
  # safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
