@@ -26,6 +26,6 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            files_metadata {{ branch.diff.files_metadata }}
             files_metadata json {{ branch.diff.files_metadata | dump | safe }}
+            a {{ branch.diff.files_metadata | map(attr=additions) | sum }}
 
