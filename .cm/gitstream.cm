@@ -26,9 +26,6 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            code additons {{ code_additions }}
-            code deletions {{ branch.diff.files_metadata | dump | safe }}
+            files_metadata {{ branch.diff.files_metadata }}
+            files_metadata json {{ branch.diff.files_metadata | dump | safe }}
 
-code_additions: {{ branch.diff.files_metadata }}
-
-CODE_FILES: ['.scala', '.sh', '.m', '.cs', '.dart', '.ex', '.exs', '.go', '.groovy', '.h', '.html', '.java', '.js', '.jsx', '.kt', '.py', '.rb', '.snap', '.sql', '.swift', '.tf', '.ts', '.tsx', '.c', '.cpp', '.erb', '.gradle', '.graphql', '.Makefile', '.clj', '.rs' ]
