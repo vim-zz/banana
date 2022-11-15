@@ -29,6 +29,6 @@ automations:
             FILES_METADATA json {{ branch.diff.files_metadata | dump | safe }}
             MAP {{ branch.diff.files_metadata | map(attr='additions') | dump | safe }}
             SUM {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-            FILTER {{ branch.diff.files_metadata | map(attr='additions') | filter(attr=file, list=['.cs', '.js']) | dump | safe }}
-            SUM {{ branch.diff.files_metadata | map(attr='additions') | filter(attr=file, list=['.cs', '.js']) | sum }}
+            FILTER {{ branch.diff.files_metadata | map(attr='additions') | filter(attr='file', list=['.cs', '.js']) | dump | safe }}
+            SUM {{ branch.diff.files_metadata | map(attr='additions') | filter(attr='file', list=['.cs', '.js']) | sum }}
 
