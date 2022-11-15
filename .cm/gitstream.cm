@@ -29,7 +29,7 @@ automations:
             code additons {{ code_additions }}
             code deletions {{ code_deletions }}
 
-code_additions: {{ branch.diff.files_metadata | map(attr=additions) }}
+code_additions: {{ branch.diff.files_metadata | map(attr=additions) | dump | safe }}
 code_deletions: {{ branch.diff.files_metadata | map(attr=deletions) | sum }}
 
 CODE_FILES: ['.scala', '.sh', '.m', '.cs', '.dart', '.ex', '.exs', '.go', '.groovy', '.h', '.html', '.java', '.js', '.jsx', '.kt', '.py', '.rb', '.snap', '.sql', '.swift', '.tf', '.ts', '.tsx', '.c', '.cpp', '.erb', '.gradle', '.graphql', '.Makefile', '.clj', '.rs' ]
