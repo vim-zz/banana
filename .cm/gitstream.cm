@@ -23,7 +23,7 @@ automations:
     if: 
       - true
     run:
-      - action : add-comment@v1
+      - action: add-comment@v1
         args:
           comment: |
             code additons {{ code_additions }}
@@ -32,10 +32,5 @@ automations:
 code_additions: {{ branch.diff.files_metadata | filter(attr=file, list=CODE_FILES) | map(attr=additions) | sum }}
 code_deletions: {{ branch.diff.files_metadata | filter(attr=file, list=CODE_FILES) | map(attr=deletions) | sum }}
 
-CODE_FILES: [
-  'scala','sh','m', 'cs', 'dart', 'ex','exs', 'go', 'groovy', 'h', 'html', 
-  'java', 'js', 'jsx', 'kt', 'py', 'rb', 'snap', 'sql', 'swift', 'tf', 'ts', 
-  'tsx','c','cpp','erb', 'gradle', 'graphql','Makefile','clj', 'rs'
-]
+CODE_FILES: [.scala, .sh, .m, .cs, .dart, .ex,.exs, .go, .groovy, .h, .html, .java, .js, .jsx, .kt, .py, .rb, .snap, .sql, .swift, .tf, .ts, .tsx, .c, .cpp, .erb, .gradle, .graphql, .Makefile, .clj, .rs ]
 
-WEB_FILES: ['cshtml', 'twig', 'css','html', 'php', 'scsss','vue','haml' ,'less']
