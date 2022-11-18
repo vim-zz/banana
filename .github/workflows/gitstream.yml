@@ -24,24 +24,23 @@ on:
           description: the resolver url to pass results to
           required: true
       resolver_token:
-          description: Optional resolver token for resulver service
+          description: Optional resolver token for resolver service
           required: false
           default: ''
       debug_mode:
-          description: 'Run parser in debug mode'
-          required: false
-          default: true
+        default: true
+concurrency:
+  group: vlidate-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  continuous-merge-rules:
+  gitStream:
     timeout-minutes: 5
-    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: gitStream workflow automation
     steps:
       - name: Evaluate Rules
-        # uses: linear-b/gitstream-github-action@v1
-        uses: linear-b/gitstream-github-action@yeela
+        uses: linear-b/gitstream-github-action@stage
         id: rules-engine
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
