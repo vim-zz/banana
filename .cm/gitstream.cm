@@ -46,3 +46,5 @@ automations:
           comment: |
             PR json {{ pr | dump | safe }}
 
+calc:
+  etr: {{ branch | estimatedReviewTime }}
