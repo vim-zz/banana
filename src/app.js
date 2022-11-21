@@ -12,6 +12,7 @@ const server = http.createServer((req, res) => {
   const reg = /hello/;
   const x = `${txt} is ${typeof txt} ${reg} is ${typeof reg}`;
   console.log(x);
+
   res.end("hi");
 });
 

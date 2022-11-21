@@ -36,7 +36,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [ShakedZrihen]
+          reviewers: [ShakedZrihen, 'vim-zz']
   code_files:
     if:
       - true
