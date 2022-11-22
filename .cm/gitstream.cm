@@ -30,5 +30,15 @@ automations:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
+  senior_review:
+    if:
+      - true
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [popeye, olive]
+
+
+
 calc:
   etr: {{ branch | estimatedReviewTime }}
