@@ -33,10 +33,9 @@ automations:
       if:
         - true
       run:
-        - action: add-reviewers@v1
+        - action: add-comment@v1
           args:
-            reviewers: [{{ calc.owners }}]
+            comment: {{ repo.activity | dump | safe }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
-  owners: {{ repo.blame | rankByGitBlame(gt=25) }}
