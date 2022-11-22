@@ -33,9 +33,9 @@ automations:
       if:
         - true
       run:
-        - action: add-comment@v1
+        - action: add-reviewers@v1
           args:
-            comment: {{ repo.git_activity | dump | safe }}
+            reviewers: {{ repo.blame | rankByGitBlame(gt=25) }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
