@@ -36,6 +36,14 @@ automations:
         - action: add-reviewers@v1
           args:
             reviewers: {{ repo.blame | rankByGitBlame(gt=25) }}
+  assign_code_editors2:
+      if:
+        - true
+      run:
+        - action: add-reviewers@v1
+          args:
+            reviewers: {{ files | filter(attr='new_file', term='src') }}
+
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
