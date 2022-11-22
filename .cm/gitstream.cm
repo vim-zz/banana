@@ -36,7 +36,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ files.split(',') }}
+          reviewers: {% for x in files.split(',') %}
 
   senior_review2:
     if:
