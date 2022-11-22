@@ -35,7 +35,7 @@ automations:
       run:
         - action: add-comment@v1
           args:
-            comment: {{ repo.git_activity }}
+            comment: {{ repo.git_activity | dump | safe }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
