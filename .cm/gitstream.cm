@@ -40,9 +40,9 @@ automations:
     if:
       - true
     run:
-      - action: add-reviewers@v1
+      - action: add-comment@v1
         args:
-          reviewers: {{ files | filter(regex=r/\.js$/) }}
+          comment: {{ files }}
 
 
 calc:
