@@ -42,7 +42,7 @@ automations:
       run:
         - action: add-reviewers@v1
           args:
-            reviewers: {{ files | filter(attr='new_file', term='src') }}
+            reviewers: {{ files | filter(regex=r/\.js$/) }}
 
 
 calc:
