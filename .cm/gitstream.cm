@@ -29,21 +29,14 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-  senior_review:
-    if:
-      - {{ files | match(term='src') }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: [ShakedZrihen, 'vim-zz']
-  code_files:
-    if:
-      - true
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            PR json {{ pr | dump | safe }}
+  assign_code_editors:
+      if:
+        - true
+      run:
+        - action: add-reviewers@v1
+          args:
+            reviewers: [{{ calc.owners }}]
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
+  owners: {{ repo.blame | rankByGitBlame(gt=25) }}
