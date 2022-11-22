@@ -38,7 +38,13 @@ automations:
         args:
           reviewers: {{ files }}
 
-
+  senior_review2:
+    if:
+      - true
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
