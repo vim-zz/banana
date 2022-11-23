@@ -19,6 +19,15 @@ manifest:
 # Test
 
 automations:
+  no_tests:
+    if:
+      - {{ files | match(regex=r/(test|spec)/) | nope }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'missing-tests'
+          color: '#E94637'
+
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
   estimated_time_to_review:
