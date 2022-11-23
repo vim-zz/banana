@@ -28,4 +28,4 @@ automations:
     run:
       - action: add-labels@v1
         args:
-          lables: [blue, red]
+          labels: [blue, red]
