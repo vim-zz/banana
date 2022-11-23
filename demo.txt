@@ -12,10 +12,7 @@ prompt
 pause
 
 lorem	
-lorem	
-lorem	
-lorem	
-lorem	
+lo
 lorem	
 lorem	
 lorem	
