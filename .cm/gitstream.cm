@@ -21,29 +21,11 @@ manifest:
 automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
-  estimated_time_to_review:
-    if:
-      - true
-    run:
-      - action : add-label@v1
-        args:
-          label: "{{ calc.etr }} min review"
-          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-  senior_review:
-    if:
-      - {{ files | match(term='src') }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: [ShakedZrihen, 'vim-zz']
+
   code_files:
     if:
       - true
     run:
-      - action: add-comment@v1
+      - action: add-labels@v1
         args:
-          comment: |
-            PR json {{ pr | dump | safe }}
-
-calc:
-  etr: {{ branch | estimatedReviewTime }}
+          lables: [blue, red]
