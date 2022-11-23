@@ -22,10 +22,18 @@ automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
 
-  code_files:
+  share_knowledge:
     if:
       - true
     run:
-      - action: add-labels@v1
+      - action: add-reviewers@v1
         args:
-          labels: {{ pr.approvals }}
+          reviewers: {{ repo | rankByGitBlame(lt=50) | random }}
+
+  assign_contributor:
+   if:
+     - true
+   run:
+     - action: add-reviewers@v1
+       args:
+         reviewers: {{ repo | rankByGitBlame(gt=50) | random }}
