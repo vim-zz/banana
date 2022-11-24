@@ -13,7 +13,6 @@ automations:
             pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }}
 
   {% for item in teams %}
-  # Automation names should be unique, therefore the iteration number postfix
   add_reviewer_{{ loop.index }}:
     if:
       - {{ pr.author | includes(list=item.members) }}
@@ -21,11 +20,14 @@ automations:
       - action: add-label@v1
         args:
           label: {{ item.name }}
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ item.name }}
   {% endfor %}
 
 
 teams:
-  - name: supernova 
+  - name: bananas 
     members: [vim-zz, KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
-  - name: 'shinobi-team'
-    members: ['SumanRoy-ST', 'udaygajavalli-st', 'pabbathisaigirish-st']
+  - name: shinobi-team
+    members: [SumanRoy-ST', udaygajavalli-st, pabbathisaigirish-st]
