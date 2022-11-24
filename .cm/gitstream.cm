@@ -22,18 +22,10 @@ automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
 
-  {% for item in teams %}
-  add_team_as_reviewer{{ loop.index }}:
+  add_team_as_reviewer_1:
     if:
-      - {{ pr.author | match(list=item.members) | some }}
+      - {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) | some }}
     run:
       - action: add-label@v1 
         args:
-          label: {{ item.name }}
-  {% endfor %}
-
-teams:
-  - name: supernova 
-    members: ['vim-zz', 'KennethVaughanST', 'AnkurAgarwalST', 'aarushiguptasT']
-  - name: 'shinobi-team' 
-    members: ['SumanRoy-ST', 'udaygajavalli-st', 'pabbathisaigirish-st']
+          label: supernova
