@@ -10,4 +10,4 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            pr.author: {{ pr.author }}
+            pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }} | some }}
