@@ -22,10 +22,15 @@ automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
 
+automations:
   add_team_as_reviewer_1:
     if:
-      - {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) | some }}
+      - true
     run:
-      - action: add-label@v1 
+      - action: add-comment@v1
         args:
-          label: supernova
+          comment: |
+            pr.author: {{ pr.author }}
+            includes: {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) }}
+            some: {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) | some }}
+
