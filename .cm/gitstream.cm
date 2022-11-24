@@ -22,18 +22,18 @@ automations:
   # This is the name of the review automation. You can use whatever name, a meaningful name 
   # will help to identify it in the future. Each automation name in this file should be unique.
 
-  share_knowledge:
+  {% for item in teams %}
+  add_team_as_reviewer{{ loop. index }}:
     if:
-      - true
+      - {{ pr.author | match(list=item.members) | some }}
     run:
-      - action: add-reviewers@v1
+      - action: add-label@v1 
         args:
-          reviewers: {{ repo | rankByGitBlame(lt=50) | random }}
+          label: {{ item.name }}
+  {% endfor %}
 
-  assign_contributor:
-   if:
-     - true
-   run:
-     - action: add-reviewers@v1
-       args:
-         reviewers: {{ repo | rankByGitBlame(gt=50) | random }}
+teams:
+  - name: supernova 
+    members: [KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
+  - name: shinobi-team 
+    members: [SumanRoy-ST, udaygajavalli-st, pabbathisaigirish-st]
