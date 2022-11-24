@@ -11,5 +11,3 @@ automations:
         args:
           comment: |
             pr.author: {{ pr.author }}
-            includes: {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) }}
-            some: {{ pr.author | includes(list=['vim-zz', 'KennethVaughanST']) | some }}
