@@ -26,6 +26,6 @@ automations:
 
 teams:
   - name: supernova 
-    members: ['vim-zz', KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
+    members: [vim-zz, KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
   - name: 'shinobi-team'
     members: ['SumanRoy-ST', 'udaygajavalli-st', 'pabbathisaigirish-st']
