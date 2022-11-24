@@ -22,7 +22,7 @@ automations:
           label: {{ item.name }}
       - action: add-reviewers@v1
         args:
-          reviewers: {{ item.name }}
+          team_reviewers: {{ item.name }}
   {% endfor %}
 
 
