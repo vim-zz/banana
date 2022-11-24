@@ -23,7 +23,7 @@ automations:
   # will help to identify it in the future. Each automation name in this file should be unique.
 
   {% for item in teams %}
-  add_team_as_reviewer{{ loop. index }}:
+  add_team_as_reviewer{{ loop.index }}:
     if:
       - {{ pr.author | match(list=item.members) | some }}
     run:
@@ -34,6 +34,6 @@ automations:
 
 teams:
   - name: supernova 
-    members: [vim-zz, KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
-  - name: shinobi-team 
-    members: [SumanRoy-ST, udaygajavalli-st, pabbathisaigirish-st]
+    members: ['vim-zz', 'KennethVaughanST', 'AnkurAgarwalST', 'aarushiguptasT']
+  - name: 'shinobi-team' 
+    members: ['SumanRoy-ST', 'udaygajavalli-st', 'pabbathisaigirish-st']
