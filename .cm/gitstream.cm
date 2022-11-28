@@ -5,7 +5,16 @@ manifest:
 automations:
   add_team_as_reviewer_1:
     if:
-       - { { files | length > 0 } }
+       - {{ files | length > 0 }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }}
+
+  add_team_as_reviewer_1:
+    if:
+       - {{ files | length > 0 }}
     run:
       - action: add-comment@v1
         args:
