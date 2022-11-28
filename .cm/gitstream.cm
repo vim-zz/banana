@@ -8,17 +8,23 @@ automations:
        - true
     run:
       - action: add-comment@v1
-        args:
-          comments: |
-            pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }}
 
-
-automations:
-  add_team_as_reviewer_2:
+  {% for item in teams %}
+  add_reviewer_{{ loop.index }}:
     if:
-       - true
+      - {{ pr.author | includes(list=item.members) }}
     run:
-      - action: add-comment@v1
+      - action: add-label@v1
         args:
-          comments: |
-            pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }}
+          label: {{ item.name }}
+      - action: add-reviewers@v1
+        args:
+          team_reviewers: {{ item.name }}
+  {% endfor %}
+
+
+teams:
+  - name: bananas 
+    members: [vim-zz, KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
+  - name: shinobi-team
+    members: [SumanRoy-ST', udaygajavalli-st, pabbathisaigirish-st]
