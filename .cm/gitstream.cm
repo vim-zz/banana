@@ -5,7 +5,7 @@ manifest:
 automations:
   add_team_as_reviewer_1:
     if:
-       - { { true }}
+       - { { files | length > 0 } }
     run:
       - action: add-comment@v1
         args:
