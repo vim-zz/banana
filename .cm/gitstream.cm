@@ -3,7 +3,7 @@ manifest:
   version: 1.0
 
 automations:
-  add_team_as_reviewer_1:
+      add_team_as_reviewer_1:
     if:
        - true
     run:
