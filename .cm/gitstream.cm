@@ -2,13 +2,14 @@
 manifest:
   version: 1.0
 
+automations:
   add_team_as_reviewer_1:
     if:
        - true
     run:
       - action: add-comment@v1
         args:
-          comment: |
+          comments: |
             pr.author: {{ pr.author | includes(list=['vim-zz', 'thing']) }}
 
   {% for item in teams %}
