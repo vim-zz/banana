@@ -3,14 +3,14 @@ manifest:
   version: 1.0
 
 automations:
-  add_team_as_reviewer_1:
+  check_uncheck:
     if:
       - true
     run:
       - action: add-comment@v1
         args:
           comment: |
-            unchecked? {{ pr.description | includes(regex=r/^- \[\s+\]/) }}
+            unchecked? {{ pr.description | includes(regex=r/\[\s+\]/) }}
 
   {% for item in teams %}
   add_reviewer_{{ loop.index }}:
