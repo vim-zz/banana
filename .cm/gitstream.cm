@@ -10,7 +10,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            unchecked? {{ pr.description | includes(regex=r/^- \[\s+\]/) | some }}
+            unchecked? {{ pr.description | includes(regex=r/^- \[\s+\]/) }}
 
   {% for item in teams %}
   add_reviewer_{{ loop.index }}:
