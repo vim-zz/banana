@@ -12,22 +12,12 @@ automations:
           comment: |
             unchecked? {{ pr.description | includes(regex=r/^- \[\s+\]/) | some }}
 
-  {% for item in teams %}
-  add_reviewer_{{ loop.index }}:
+  labales:
     if:
-      - {{ pr.author | includes(list=item.members) }}
+      - true
     run:
-      - action: add-label@v1
+      - action: add-labels@v1
         args:
-          label: {{ item.name }}
-      - action: add-reviewers@v1
-        args:
-          team_reviewers: {{ item.name }}
-  {% endfor %}
+          labels: abc,def,gfe,banana
 
 
-teams:
-  - name: bananas 
-    members: [vim-zz, KennethVaughanST, AnkurAgarwalST, aarushiguptasT]
-  - name: shinobi-team
-    members: [SumanRoy-ST', udaygajavalli-st, pabbathisaigirish-st]
