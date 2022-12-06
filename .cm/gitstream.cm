@@ -3,9 +3,6 @@ manifest:
   version: 1.0
 
 automations:
-  add_team_as_reviewer_1:
-    if:
-      - true
   explain_blame:
     if:
       - true
