@@ -10,8 +10,6 @@
 display "Hello World."
 prompt
 pause
-
-lorem	
 lorem	
 lorem	
 lorem	
