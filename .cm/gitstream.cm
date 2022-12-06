@@ -6,11 +6,14 @@ automations:
   add_team_as_reviewer_1:
     if:
       - true
+  explain_blame:
+    if:
+      - true
     run:
       - action: add-comment@v1
         args:
           comment: |
-            unchecked? {{ pr.description | includes(regex=r/^- \[\s+\]/) | some }}
+            "{{ repo | explainRankByGitBlame(gt=10) | dump }}"
 
   labales:
     if:
