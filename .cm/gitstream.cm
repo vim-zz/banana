@@ -36,11 +36,11 @@ config:
 automations:
   double_review:
     if:
-      - {{ files | filter(list=agent_ignore_files) | match(regex='agent\\/') | isMyIp }}
+      - true
     run:
-      - action: set-required-approvals@v1
+      - action: add-label@v1
         args:
-          approvals: 2
+          label: [lalala]
 
 agent_ignore_files:
   - version.txt
