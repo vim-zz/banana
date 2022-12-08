@@ -32,12 +32,11 @@ config:
     - 'agent/aws/java/src/main/java/cn/events/*'
     - 'base/java/cn/events/*'
     - '*_pb2.pyi'
-    - '*.pb.go'
 
 automations:
   double_review:
     if:
-      - {{ files | filter(list=agent_ignore_files) | match(regex='agent\\/') | some }}
+      - {{ files | filter(list=agent_ignore_files) | match(regex='agent\\/') | isMyIp }}
     run:
       - action: set-required-approvals@v1
         args:
