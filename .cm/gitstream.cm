@@ -44,6 +44,19 @@ automations:
             pr.general_comments {{ pr.general_comments | dump | safe }}
             pr.line_comments {{ pr.general_comments | dump | safe }}
 
+  explain_blame_test:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            rankByGitBlame: {{ repo | rankByGitBlame(gt=10) }}
+      - action: add-comment@v1
+        args:
+          comment: |
+            rankByGitActivity: {{ repo | rankByGitActivity(gt=10, weeks=12) }}
+
 agent_ignore_files:
   - version.txt
   - version_azure_plugin.txt
