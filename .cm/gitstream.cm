@@ -36,7 +36,7 @@ config:
 automations:
   PR_title_must_contain_jira_id:
     if:
-      - {{ pr.title | match(regex=r/^(\w\w\w|\w\w\w\w)-\d+(\s|-|_)+(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)(\w|\W)$/) | nope }}
+      - {{ pr.title | match(regex=r/^(\w\w\w|\w\w\w\w)-\d+(\s|-|_)+.............................../) | nope }}
     run:
       - action: request-changes@v1 
         args:
