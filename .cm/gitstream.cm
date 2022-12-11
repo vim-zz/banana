@@ -36,12 +36,13 @@ config:
 automations:
   PR_title_must_contain_jira_id:
     if:
-      - {{ pr.title | match(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_)+(\w|\W){20,}$/) | nope }}
+      - true
     run:
-      - action: request-changes@v1 
+      - action: add-comment@v1 
         args:
           comment: |
-            PR title must contain a valid Jira tkt id.
+            pr.general_comments {{ pr.general_comments | dump | safe }}
+            pr.line_comments {{ pr.general_comments | dump | safe }}
 
 agent_ignore_files:
   - version.txt
