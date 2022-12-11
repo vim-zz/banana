@@ -41,8 +41,9 @@ automations:
       - action: add-comment@v1 
         args:
           comment: |
+            pr.description {{ pr.description | dump | safe }}
             pr.general_comments {{ pr.general_comments | dump | safe }}
-            pr.line_comments {{ pr.general_comments | dump | safe }}
+            pr.line_comments {{ pr.line_comments | dump | safe }}
 
 agent_ignore_files:
   - version.txt
