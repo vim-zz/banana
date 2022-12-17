@@ -13,6 +13,5 @@ automations:
           label: "missing-jira"
           color: 'F6443B'
 
-
 has:
   jira_ticket: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{20,}$/) }}
