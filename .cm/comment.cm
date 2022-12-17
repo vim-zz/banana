@@ -6,7 +6,7 @@ manifest:
 automations:
   check_lgtm:
     if:
-      - {{ pr.general_comments | filter(attr='content', regex=r/^(l|L)(g|G)(t|T)(m|M)$/) | some }}
+      - {{ pr.general_comments | filter(attr='content', regex=r/^(l|L)(g|G)(t|T)(m|M)$/)/ | some }}
     run:
       - action: add-label@v1
         args:
