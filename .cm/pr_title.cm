@@ -4,14 +4,15 @@ manifest:
   version: 1.0
 
 automations:
-  check_lgtm:
+  jira_ticket:
     if:
-	  - {{ not has.jira_ticket }}
+      - {{ not has.jira_ticket }}
     run:
       - action: add-label@v1
         args:
-          label: missing-jira
-          color: '#F6443B'
+          label: "missing-jira"
+          color: 'F6443B'
+
 
 has:
   jira_ticket: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{20,}$/) }}
