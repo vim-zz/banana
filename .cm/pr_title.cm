@@ -1,0 +1,14 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  check_lgtm:
+    if:
+	  - {{ pr.title | includes(regex=r/^\[\w{3,4}-\d{1,6}\](\s|-|_).{20,}$/) == false }}
+    run:
+      - action: add-label@v1
+        args:
+          label: missing-jira
+          color: '#F6443B'
