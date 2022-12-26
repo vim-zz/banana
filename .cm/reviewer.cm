@@ -1,0 +1,19 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  jira_ticket:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            blame: {{ calc.blame }}
+            active: {{ calc.active }}
+            rankByBoth: {{ calc.blame | filter(list=calc.active) }}
+calc:
+  blame: {{ repo | rankByGitBlame(gt=10) }}
+  active: {{ repo | rankByGitActivity(gt=10, weeks=24) }}
