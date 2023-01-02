@@ -6,7 +6,7 @@ manifest:
 automations:
   the_right_reviewer:
     if: 
-      - {{ calc.reviewers | length > 0 }}
+      - true
     run:
       - action: add-reviewers@v1
         args:
