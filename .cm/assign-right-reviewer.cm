@@ -8,13 +8,10 @@ automations:
     if: 
       - true
     run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: {{ calc.reviewers }}
       - action: add-comment@v1
         args:
           comment: |
-            {{ repo | explainRankByGitBlame(gt=20) }}
-
-calc:
-  reviewers: {{ repo | rankByGitBlame(gt=20) }}
+            {{ repo | explainRankByGitBlame(gt=25) }}
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
