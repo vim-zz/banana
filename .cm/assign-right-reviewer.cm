@@ -1,0 +1,20 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  the_right_reviewer:
+    if: 
+      - {{ calc.reviewers | length > 0 }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ calc.reviewers }}
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainRankByGitBlame(gt=20) }}
+
+calc:
+  reviewers: {{ repo | rankByGitBlame(gt=20) }}
