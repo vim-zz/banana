@@ -25,8 +25,8 @@ automations:
             deletions: {{ is.deletions }}
             one_add: {{ is.one_add }}
             one_del: {{ is.one_del }}
-            one_line: {{ is.one_line }}
-            all: {{ is.all }}
+            one_line(1): {{ is.one_line }}
+            one_line(2): {{ one_big_calc.all }}
 
 
 is:
@@ -39,4 +39,6 @@ is:
   one_add: {{ additions | int == 1 }}
   one_del: {{ deletions | int <= 1 }}
   one_line: {{ (additions | int <= 1) and (deletions | int <= 1) }}
-  all: {{ (branch.diff.files_metadata | map(attr='additions') | sum <= 1) +  (branch.diff.files_metadata | map(attr='deletions') | sum <=1) }}
+
+one_big_calc:  
+  one_line: {{ (branch.diff.files_metadata | map(attr='additions') | sum <= 1) and (branch.diff.files_metadata | map(attr='deletions') | sum <=1) }}
