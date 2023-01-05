@@ -35,6 +35,6 @@ is:
   # Sum all the line removed in the PR
   deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
   # Calculate the ratio to check if it is about new code
-  one_add: {{ additions == 1 }}
-  one_del: {{ deletions == 1 }}
-  one_line: {{ (additions <= 1) and (deletions <= 1) }}
+  one_add: {{ additions | int == 1 }}
+  one_del: {{ deletions | int <= 1 }}
+  one_line: {{ (additions | int <= 1) and (deletions | int <= 1) }}
