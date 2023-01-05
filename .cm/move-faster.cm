@@ -23,6 +23,8 @@ automations:
             one_file: {{ is.one_file }}
             additions: {{ is.additions }}
             deletions: {{ is.deletions }}
+            one_add: {{ is.one_add }}
+            one_del: {{ is.one_del }}
             one_line: {{ is.one_line }}
 
 
@@ -33,4 +35,6 @@ is:
   # Sum all the line removed in the PR
   deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
   # Calculate the ratio to check if it is about new code
+  one_add: {{ additions <= 1 }}
+  one_del: {{ deletions <= 1 }}
   one_line: {{ (additions <= 1) and (deletions <= 1) }}
