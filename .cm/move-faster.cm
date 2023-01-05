@@ -26,7 +26,7 @@ automations:
             one_add: {{ is.one_add }}
             one_del: {{ is.one_del }}
             one_line(1): {{ is.one_line }}
-            one_line(2): {{ one_big_calc.all }}
+            one_line(2): {{ one_big_calc.one_line }}
 
 
 is:
