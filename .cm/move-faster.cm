@@ -13,6 +13,19 @@ automations:
           label: 'single-line'
       - action: approve@v1
 
+  debug:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            one_file: {{ is.one_file }}
+            additions: {{ is.additions }}
+            deletions: {{ is.deletions }}
+            one_line: {{ is.one_line }}
+
+
 is:
   one_file: {{ files | length == 1 }}
   # Sum all the line added/edited in the PR
