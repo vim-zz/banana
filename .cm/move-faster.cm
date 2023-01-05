@@ -6,9 +6,18 @@ manifest:
 automations:
   approve_1_line:
     if:
-      - {{ branch.diff.size == 1 }}
+      - {{ is.one_file and is.one_line }}
     run:
       - action: add-label@v1
         args:
           label: 'single-line'
       - action: approve@v1
+
+is:
+  one_file: {{ files | length == 1 }}
+  # Sum all the line added/edited in the PR
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  # Sum all the line removed in the PR
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+  # Calculate the ratio to check if it is about new code
+  one_line: {{ additions <= 1 and deletions <= 1 }}
