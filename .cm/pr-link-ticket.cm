@@ -12,7 +12,6 @@ automations:
         args:
           comment: |
           Please add Jira ticket to PR title.
-          PR title is {{ pr.title }}
           
 has:
   jira_ticket: {{ pr.title | includes(regex=r/^(Revert ")?\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{25,}$/) }}
