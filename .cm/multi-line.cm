@@ -1,0 +1,16 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  test_ml:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            1st line
+            2nd line
+            3rd line
