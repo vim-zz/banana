@@ -1,0 +1,18 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  test_ml:
+    if:
+      - {{ not has.jira_ticket }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+          Please add Jira ticket to PR title.
+          PR title: {{ pr.title }}
+          
+has:
+  jira_ticket: {{ pr.title | includes(regex=r/^(Revert ")?\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{25,}$/) }}
