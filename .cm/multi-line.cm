@@ -11,6 +11,4 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            1st line
-            2nd line
-            3rd line
+            {{ source.diff.files | map(attr='new_file') | dump | safe }}
