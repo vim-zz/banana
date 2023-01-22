@@ -6,9 +6,9 @@ manifest:
 automations:
   test_ml:
     if:
-      - true
+      - {{ source.diff.files | map(attr='new_file') | match(term='/dev/null') | some }}
     run:
       - action: add-comment@v1
         args:
           comment: |
-            {{ source.diff.files | map(attr='new_file') | dump | safe }}
+            deleted file
