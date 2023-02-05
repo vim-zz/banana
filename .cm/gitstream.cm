@@ -6,7 +6,7 @@ manifest:
 automations:
   double_review:
     if:
-      - {{ files | allDocs }}
+      - {{ (files | allDocs) and (files | match(regex=r/requirements\/dev\.txt$/) | nope ) }}
     run:
       - action: add-label@v1
         args:
