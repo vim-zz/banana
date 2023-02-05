@@ -1,0 +1,13 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  double_review:
+    if:
+      - {{ files | allDocs }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'docs'
