@@ -11,3 +11,14 @@ automations:
       - action: add-label@v1
         args:
           label: 'docs'
+  git_blame:
+    if:
+      - true
+    run:
+      - action: add-label@v1
+        args:
+          label: blame-debug
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainRankByGitBlame(gt=10) }}
