@@ -1,24 +1,19 @@
 # -*- mode: yaml -*-
-
-manifest:
-  version: 1.0
-
 automations:
-  double_review:
+  {% for item in deprecated %}
+  catch_deprecated_components_{{ loop.index }}:
     if:
-      - {{ files | allDocs }}
+      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
     run:
       - action: add-label@v1
         args:
-          label: 'docs'
-  git_blame:
-    if:
-      - true
-    run:
-      - action: add-label@v1
-        args:
-          label: blame-debug
-      - action: add-comment@v1
+          label: 'deprecated-component'
+      - action: request-changes@v1
         args:
           comment: |
-            {{ repo | explainRankByGitBlame(gt=10) }}
+            `{{ item.regex }}` is deprecated, use `EventType` from `constants.py/constants.ts[js]`
+  {% endfor %}
+
+deprecated:
+  - regex: r/^[+].*Types.EVENT_REQUESTED/
+  - regex: r/^[+].*eventRequested\/v1/
