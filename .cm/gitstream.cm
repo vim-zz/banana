@@ -1,4 +1,8 @@
 # -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
 automations:
   {% for item in deprecated %}
   catch_deprecated_components_{{ loop.index }}:
