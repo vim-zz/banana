@@ -17,7 +17,7 @@ checks:
       services: true
   change:
     is:
-      formatting_only: {{ source.diff.files | allFormattingChange }}
+      formatting_only: true
   filetypes:
     is:
       docs: {{ files | allDocs }}
