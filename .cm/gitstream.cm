@@ -65,7 +65,6 @@ automations:
     if:
       - {{ branch | estimatedReviewTime >= 30 }}
       - {{ files | length >= 10 }}
-      - {{ files | match(list=['container','decodecx','decodetranscript,'liveapp','uploadMedia','videoapp']) | some }}
     run:
       - action: set-required-approvals@v1
         args:
