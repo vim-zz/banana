@@ -30,7 +30,7 @@ checks:
 automations:
   label_deprecated_pr:
     if:
-      - {{ checks.deprecated.in.resource_manager or checks.deprecated.in.managers or checks.deprecated.in.repositories }}
+      - {{ checks.deprecated.in.resource_manager }}
     run:
       - action : add-labels@v1
         args:
