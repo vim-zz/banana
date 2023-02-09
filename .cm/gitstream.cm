@@ -35,17 +35,3 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['deprecated']
-  mark_formatting:
-    if:
-      - {{ checks.change.is.formatting_only }}
-    run:
-      - action : add-labels@v1
-        args:
-          labels: ['formatting-only']
-  mark_docs:
-    if:
-      - {{ checks.filetypes.is.docs }}
-    run:
-      - action : add-labels@v1
-        args:
-          labels: ['docs-only']
