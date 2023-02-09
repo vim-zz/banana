@@ -8,6 +8,6 @@ automations:
     if:
       - true
     run:
-      - action : add-labels@v1
+      - action: add-label@v1
         args:
-          labels: ['deprecated']
+          label: 'banana'
