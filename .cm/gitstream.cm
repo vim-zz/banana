@@ -3,111 +3,52 @@
 manifest:
   version: 1.0
 
+# Define condition under the `checks` section, each check consists of
+# an expression. The checks results are evalauated and used as conditions
+# for the next section `automations`.
+# Checks expressions are wrapped with double curly braces and includes a
+# context variable like `files` and filter like `length`.
+# Filters are essentially functions that can be applied to variables. They
+# are called with a pipe operator (|) and can take arguments.
+checks:
+  deprecated:
+    in:
+      resource_manager: {{ files | filter(regex=r/app\/ResourceManager\//) | length > 0 }}
+      managers: {{ files | filter(regex=r/app\/Managers\//) | length > 0 }}
+      repositories: {{ files | filter(regex=r/app\/Repositories\//) | length > 0 }}
+      services: {{ files | filter(regex=r/app\/Services\//) | length > 0 }}
+  change:
+    is:
+      formatting_only: {{ source.diff.files | allFormattingChange }}
+  filetypes:
+    is:
+      docs: {{ files | allDocs }}
 
-
-# The `automations` section includes a list of automation that applies
-# to the repository in which gitStream is installed. Each automation has an
-# `if` key with a list of the necessary assertions, as well as a `run` key with a
-# list of all actions. All the listed assertions need to pass in order
-# for the following actions to be executed (there is AND relation between conditions).
-
-
-
-# Each automation under the `automations` section is independent of the others.
-# Every time a PR is opened or changed, the automation's conditions are evaluated (the `if`).
-# The actions under `run` are executed one by one if all the conditions pass.
-
-
-
-# Conditions consists of an expression, which are wrapped with double curly braces, and
-# includes a context variable like `files` and filter functions like `length`. Filters
-# functions are essentially functions that can be applied to context variables. They are
-# called with a pipe operator (|) and can take arguments. Read more on https://docs.gitstream.cm
-
-
-
+# The `automations` section include the list of automation that applies
+# for the repo in which gitStream is installed.
+# Each automation has `if` key with a list of the necessary condtions and
+# a `run` key with a list of all actions. All the listed condtions need to
+# pass in order for the following actions to be executed.
 automations:
-  # This is the name of the review automation. You can use whatever name, a meaningful name
-  # will help to identify it in the future. Each automation name in this file should be unique.
-  estimated_time_to_review:
+  label_deprecated_pr:
     if:
-      - true
+      - {{ checks.deprecated.in.resource_manager or checks.deprecated.in.managers or checks.deprecated.in.repositories }}
     run:
-      - action: add-label@v1
+      - action : add-labels@v1
         args:
-          label: "{{ calc.etr }} min review"
-          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-
-
-
- # If contributor is new to repo there will be minimum 2 reviewers
-  junior:
+          labels: ['deprecated']
+  mark_formatting:
     if:
-      - {{ repo.author_age < 30 and (repo.age - repo.author_age) >= 30 }}
+      - {{ checks.change.is.formatting_only }}
     run:
-      - action: add-label@v1
+      - action : add-labels@v1
         args:
-          label: 'first-weeks'
-          color: '#FBBD10'
-      - action : add-comment@v1
-        args:
-          comment: |
-            During your first 30 days, your team lead will be assigned to review your PRs.
-      - action: add-reviewers@v1
-        args:
-          reviewers: [ajit-kumar-Converz,kartikachauhan9]
-
-
-
- # if code change is more than 100 lines
-  # two Approval is required
-  double_review:
+          labels: ['formatting-only']
+  mark_docs:
     if:
-      - {{ branch | estimatedReviewTime >= 30 }}
-      - {{ files | length >= 10 }}
-      - {{ files | match(list=['container','decodecx','decodetranscript','liveapp','uploadMedia','videoapp']) | some }}
+      - {{ checks.filetypes.is.docs }}
     run:
-      - action: set-required-approvals@v1
+      - action : add-labels@v1
         args:
-          approvals: 2
-
-
-
- # Any production and staging rollout will be review by management
-  senior_review:
-    if:
-     - {{ branch.name | match(list=['master']) | match(regex=r/release-staging\//) }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          team_reviewers: [management_reviewer]
-
-
-
-  safe_changes:
-    # The `if` key has a list of conditions, each condition is specified as a Jinja expression
-    # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
-    if:
-      # Given the PR code changes, check that only formatting changes were made
-      - {{ is.formatting or is.docs or is.tests }}
-    # `run` key has a list of actions, which are executed one by one whenever the automation
-    # conditions are met.
-    run:
-      # When the changes are validated as formatting only, you can help to speed up the review
-      # by adding a label that marks it accordingly.
-      - action: add-label@v1
-        args:
-          label: 'safe-changes'
-      # You can uncomment the following action to get gitStream can even automatically approve
-      # such PRs to save reviewers time for such changes.
-      # - action: approve@v1
-
-
-
-
-calc:
-  etr: {{ branch | estimatedReviewTime }}
-is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
+          labels: ['docs-only']
+          
