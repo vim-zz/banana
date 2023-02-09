@@ -13,10 +13,10 @@ manifest:
 checks:
   deprecated:
     in:
-      resource_manager: {{ files | filter(regex=r/app\/ResourceManager\//) | length > 0 }}
-      managers: {{ files | filter(regex=r/app\/Managers\//) | length > 0 }}
-      repositories: {{ files | filter(regex=r/app\/Repositories\//) | length > 0 }}
-      services: {{ files | filter(regex=r/app\/Services\//) | length > 0 }}
+      resource_manager: {{ files | match(regex=r/app\/ResourceManager\//) | some }}
+      managers: {{ files | match(regex=r/app\/Managers\//) | some }}
+      repositories: {{ files | match(regex=r/app\/Repositories\//) | some }}
+      services: {{ files | match(regex=r/app\/Services\//) | some }}
   change:
     is:
       formatting_only: {{ source.diff.files | allFormattingChange }}
@@ -51,4 +51,3 @@ automations:
       - action : add-labels@v1
         args:
           labels: ['docs-only']
-          
