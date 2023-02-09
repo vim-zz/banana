@@ -11,10 +11,10 @@ manifest:
 checks:
   deprecated:
     in:
-      resource_manager: {{ files | match(regex=r/app\/ResourceManager\//) | some }}
-      managers: {{ files | match(regex=r/app\/Managers\//) | some }}
-      repositories: {{ files | match(regex=r/app\/Repositories\//) | some }}
-      services: {{ files | match(regex=r/app\/Services\//) | some }}
+      resource_manager: true
+      managers: true
+      repositories: true
+      services: true
   change:
     is:
       formatting_only: {{ source.diff.files | allFormattingChange }}
