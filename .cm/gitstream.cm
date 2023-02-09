@@ -7,8 +7,6 @@ manifest:
 # an expression. The checks results are evalauated and used as conditions
 # for the next section `automations`.
 # Checks expressions are wrapped with double curly braces and includes a
-# context variable like `files` and filter like `length`.
-# Filters are essentially functions that can be applied to variables. They
 # are called with a pipe operator (|) and can take arguments.
 checks:
   deprecated:
