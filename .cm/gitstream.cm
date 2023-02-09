@@ -12,15 +12,6 @@ checks:
   deprecated:
     in:
       resource_manager: true
-      managers: true
-      repositories: true
-      services: true
-  change:
-    is:
-      formatting_only: true
-  filetypes:
-    is:
-      docs: {{ files | allDocs }}
 
 # The `automations` section include the list of automation that applies
 # for the repo in which gitStream is installed.
