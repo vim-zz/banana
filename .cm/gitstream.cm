@@ -84,7 +84,7 @@ automations:
 
 
 
- safe_changes:
+  safe_changes:
     # The `if` key has a list of conditions, each condition is specified as a Jinja expression
     # in a double curly braces. Expressions are evaluated by gitStream on a PR when triggered.
     if:
