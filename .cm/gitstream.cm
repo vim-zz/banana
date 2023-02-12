@@ -3,49 +3,40 @@
 manifest:
   version: 1.0
 
-# Define condition under the `checks` section, each check consists of
-# an expression. The checks results are evalauated and used as conditions
-# for the next section `automations`.
-# Checks expressions are wrapped with double curly braces and includes a
-# are called with a pipe operator (|) and can take arguments.
-checks:
-  deprecated:
-    in:
-      resource_manager: {{ files | match(regex=r/app\/ResourceManager\//) | some }}
-      managers: {{ files | match(regex=r/app\/Managers\//) | some }}
-      repositories: {{ files | match(regex=r/app\/Repositories\//) | some }}
-      services: {{ files | match(regex=r/app\/Services\//) | some }}
-  change:
-    is:
-      formatting_only: {{ source.diff.files | allFormattingChange }}
-  filetypes:
-    is:
-      docs: {{ files | allDocs }}
-
-# The `automations` section include the list of automation that applies
-# for the repo in which gitStream is installed.
-# Each automation has `if` key with a list of the necessary condtions and
-# a `run` key with a list of all actions. All the listed condtions need to
-# pass in order for the following actions to be executed.
 automations:
-  label_deprecated_pr:
+  estimated_time_to_review:
     if:
-      - {{ checks.deprecated.in.resource_manager or checks.deprecated.in.managers or checks.deprecated.in.repositories }}
+      - true
     run:
-      - action : add-labels@v1
+      - action: add-label@v1
         args:
-          labels: ['deprecated']
-  mark_formatting:
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+  safe_changes:
     if:
-      - {{ checks.change.is.formatting_only }}
-    run:
-      - action : add-labels@v1
+      - {{ is.formatting or is.docs or is.tests }}
+    run: 
+      - action: add-label@v1
         args:
-          labels: ['formatting-only']
-  mark_docs:
-    if:
-      - {{ checks.filetypes.is.docs }}
+          label: 'safe-changes'
+      # - action: approve@v1
+
+  the_right_reviewer:
+    if: 
+      - true
     run:
-      - action : add-labels@v1
+      - action: add-comment@v1
         args:
-          labels: ['docs-only']
+          comment: |
+            {{ repo | explainRankByGitBlame(gt=25) }}
+      # - action: add-reviewers@v1
+      #   args:
+      #     reviewers: {{ repo | rankByGitBlame(gt=25) }}
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+is:
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
