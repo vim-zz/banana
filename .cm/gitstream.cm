@@ -6,11 +6,28 @@ manifest:
 automations:
    approve_non_blacklist:
     if:
-      - {{ files | match(regex=blacklist) | nope }}
+      - {{ files | match(list=blacklist) | nope }}
     run: 
       - action: add-label@v1
         args:
-          label: 'non_blacklist'
-          color: '#DF9C04'
+          label: 'non-blacklist'
+          color: '#8AFF3A'
+      - action: approve@v1
 
-blacklist: r/^(ui|src)\//
+blacklist: 
+  - ui
+  - src
+
+sensitive:
+  - procedures/acon-flowflex-covid-flu/
+  - procedures/acon-flowflex-covid19-hometest/
+  - procedures/binax-forward/
+  - procedures/binax-govt/
+  - procedures/binaxExpress/
+  - procedures/binaxnow/
+  - procedures/nih-binax-otc/
+  - procedures/strep/
+  - procedures/teco-teststrip-uti/
+  - procedures/nih-self-service/
+  - procedures/nih-self-service-nt2t/
+  - procedures/resources/
