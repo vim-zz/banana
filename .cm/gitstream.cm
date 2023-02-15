@@ -4,15 +4,6 @@ manifest:
   version: 1.0
 
 automations:
-  check:
-    if:
-      - true
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            here: {{ [oferaffias] | match(list=[ofer]) | some }} 
-            no sensitive: {{ files | match(list=sensitive) | nope }}
   approve_non_sensitive:
     if:
       - {{ files | match(list=sensitive) | nope }}
@@ -24,15 +15,5 @@ automations:
       - action: approve@v1
 
 sensitive:
-  - procedures/acon-flowflex-covid-flu/
-  - procedures/acon-flowflex-covid19-hometest/
-  - procedures/binax-forward/
-  - procedures/binax-govt/
-  - procedures/binaxExpress/
-  - procedures/binaxnow/
-  - procedures/nih-binax-otc/
-  - procedures/strep/
-  - procedures/teco-teststrip-uti/
-  - procedures/nih-self-service/
-  - procedures/nih-self-service-nt2t/
-  - procedures/resources/
+  - src/k6/services
+  - src/api_services
