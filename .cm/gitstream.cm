@@ -4,19 +4,24 @@ manifest:
   version: 1.0
 
 automations:
-   approve_non_blacklist:
+  check:
     if:
-      - {{ files | match(list=blacklist) | nope }}
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            here: {{ [oferaffias] | match(list=[ofer]) | some }} 
+            no sensitive: {{ files | match(list=sensitive) | nope }}
+  approve_non_sensitive:
+    if:
+      - {{ files | match(list=sensitive) | nope }}
     run: 
       - action: add-label@v1
         args:
-          label: 'non-blacklist'
-          color: '#8AFF3A'
+          label: 'non-sensitive'
+          color: '#2CA44E'
       - action: approve@v1
-
-blacklist: 
-  - ui
-  - src
 
 sensitive:
   - procedures/acon-flowflex-covid-flu/
