@@ -6,13 +6,11 @@ manifest:
 automations:
    approve_non_blacklist:
     if:
-      - {{ files | match(list=blacklist) | nope }}
+      - {{ files | match(regex=blacklist) | nope }}
     run: 
       - action: add-label@v1
         args:
           label: 'non_blacklist'
           color: '#DF9C04'
 
-blacklist:
-  - src
-  - ui
+blacklist: r/^(ui|src)\//
