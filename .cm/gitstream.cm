@@ -4,16 +4,14 @@ manifest:
   version: 1.0
 
 automations:
-  approve_non_sensitive:
+  base_image_change:
     if:
-      - {{ files | match(list=sensitive) | nope }}
-    run: 
+      - {{ source.diff.files | filter(attr='new_file', regex=r/.*Dockerfile.*/) | matchDiffLines(regex=r/FROM/) | some }}
+    run:
       - action: add-label@v1
         args:
-          label: 'non-sensitive'
-          color: '#2CA44E'
-      - action: approve@v1
-
-sensitive:
-  - src/k6/services
-  - src/api_services
+          label: 'docker-base-image'
+          color: '#E9BF60'
+      - action: add-reviewer@v1
+        args:
+          team_reviewers: ['app-sec']
