@@ -3,6 +3,10 @@
 manifest:
   version: 1.0
 
+config:
+  admin:
+    users: [vim-zz]
+
 automations:
   approve_non_sensitive:
     if:
