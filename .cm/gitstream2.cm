@@ -14,12 +14,12 @@ automations:
     run: 
       - action: add-label@v1
         args:
-          label: 'non-sensitive'
+          label: 'non-sensitive-2'
           color: '#2CA44E'
       - action: add-comment@v1
         args:
           commnet: |
-            non-sensitive
+            non-sensitive-2
 
 sensitive:
   - src/k6/services
