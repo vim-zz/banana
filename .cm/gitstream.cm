@@ -15,7 +15,7 @@ automations:
       - action: add-label@v1
         args:
           label: 'non-sensitive'
-          color: '#2CA44E'
+          color: '#2CBB4E'
       - action: approve@v1
 
 sensitive:
