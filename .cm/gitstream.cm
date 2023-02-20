@@ -5,7 +5,7 @@ manifest:
 
 config:
   admin:
-    users: [EladKohavi]
+    users: [vim-zz]
 
 automations:
   approve_non_sensitive:
