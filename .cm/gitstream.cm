@@ -5,7 +5,7 @@ manifest:
 
 config:
   admin:
-    users: [vim-zz]
+    users: [EladKohavi]
 
 automations:
   approve_non_sensitive:
@@ -16,10 +16,7 @@ automations:
         args:
           label: 'non-sensitive'
           color: '#2CA44E'
-      - action: add-comment@v1
-        args:
-          comment: |
-            non-sensitive
+      - action: approve@v1
 
 sensitive:
   - src/k6/services
