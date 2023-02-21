@@ -1,4 +1,4 @@
-# Foodbar 1
+# Foodbar
 
 Foobar is a Python library for dealing with word pluralization.
 
