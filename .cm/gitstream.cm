@@ -8,15 +8,23 @@ config:
     users: [EladKohavi]
 
 automations:
-  approve_non_sensitive:
+  gen_comment:
     if:
-      - {{ files | match(list=sensitive) | nope }}
+      - true
     run: 
-      - action: add-label@v1
+      - action: add-comment@v1
         args:
-          label: 'non-sensitive'
-          color: '#2CB441'
-      - action: approve@v1
+          comment: |
+            GENERAL {{ pr.general_comments | dump | safe }}
+  inline_comment:
+    if:
+      - true
+    run: 
+      - action: add-comment@v1
+        args:
+          comment: |
+            GENERAL {{ pr.line_comments | dump | safe  }}
+
 
 sensitive:
   - src/k6/services
