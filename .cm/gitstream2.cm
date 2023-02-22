@@ -3,24 +3,15 @@
 manifest:
   version: 1.0
 
-config:
-  admin:
-    users: [vim-zz]
-
 automations:
-  approve_non_sensitive:
+  no_tests:
     if:
-      - {{ files | match(list=sensitive) | nope }}
+      - {{ is.no_tests and not (is.only_dep) }}
     run: 
       - action: add-label@v1
         args:
-          label: 'non-sensitive-2'
-          color: '#2CA44E'
-      - action: add-comment@v1
-        args:
-          comment: |
-            non-sensitive-2
-
-sensitive:
-  - src/k6/services
-  - src/api_services
+          label: 'missing-tests'
+          color: '#E94637'
+is:
+  no_tests: {{ files | match(regex=r/(test|spec)/) | nope }}
+  only_dep: {{ files | match(regex=r/(package.json|yarn.lock|go.mod|go.sum)/) | every }}
