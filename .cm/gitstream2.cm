@@ -4,6 +4,16 @@ manifest:
   version: 1.0
 
 automations:
+  debug:
+    if:
+      - true
+    run: 
+      - action: add-comment@v1
+        args:
+          comment: |
+            no_tests {{ files | match(regex=r/(test|spec)/) | dump | safe }}
+            only_dep {{ files | match(regex=r/(package.json|yarn.lock|go.mod|go.sum)/) | dump | safe }}
+
   no_tests:
     if:
       - {{ is.no_tests and not (is.only_dep) }}
