@@ -1,4 +1,4 @@
 {
     "nested": {"two" : 2},
-    "key": "one"
+    "key": "one",,
 }
