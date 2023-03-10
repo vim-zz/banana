@@ -172,3 +172,4 @@ is:
   tests: {{ files | allTests }}
   asset: {{ files | match(regex=r/\.(png|svg|gif)$/) | every }}
   ui: {{ files | match(regex=r/\.(css|scss|html|blade|htm)$/) | every }}
+
