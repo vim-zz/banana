@@ -109,7 +109,7 @@ automations:
         args:
           approvals: 2
 
-   vodde_partner_coverage:
+  vodde_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vodafonede\//) | every }}
     run:
@@ -124,7 +124,7 @@ automations:
         args:
           approvals: 2
 
-    voduk_partner_coverage:
+  voduk_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vodafoneuk-media\//) | every }}
     run:
@@ -139,7 +139,7 @@ automations:
         args:
           approvals: 2
 
-    verizon_partner_coverage:
+  verizon_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vzh\//) | every }}
     run:
