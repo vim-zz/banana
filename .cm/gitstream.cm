@@ -109,7 +109,7 @@ automations:
         args:
           approvals: 2
 
-   vodde_partner_coverage:
+  vodde_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vodafonede\//) | every }}
     run:
@@ -124,7 +124,7 @@ automations:
         args:
           approvals: 2
 
-    voduk_partner_coverage:
+  voduk_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vodafoneuk-media\//) | every }}
     run:
@@ -139,7 +139,7 @@ automations:
         args:
           approvals: 2
 
-    verizon_partner_coverage:
+  verizon_partner_coverage:
     if:
       - {{ files | match(regex=r/src\/integrator\/vzh\//) | every }}
     run:
@@ -162,6 +162,15 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+          
+  explain_expert_reviewer:
+    if: 
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainExpertReviewer(gt=10) }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
@@ -172,3 +181,4 @@ is:
   tests: {{ files | allTests }}
   asset: {{ files | match(regex=r/\.(png|svg|gif)$/) | every }}
   ui: {{ files | match(regex=r/\.(css|scss|html|blade|htm)$/) | every }}
+ry }}
