@@ -4,6 +4,156 @@ manifest:
   version: 1.0
 
 automations:
+  # Case 1: Auto Approval
+  reformatting change:
+    if:
+      - {{ is.formatting or is.docs or is.tests or is.asset }}
+    run:
+      - action: approve@v1
+      - action: add-label@v1
+        args:
+          label: "GitStream Safe Approval"
+          color: '#00e500'
+  # Case 2: UI Tweaks
+  is_it_ui:
+    if:
+      - {{ is.ui }}
+    run:
+      - action: approve@v1
+      - action: add-label@v1
+        args:
+          label: "UI Changes"
+        color: '#FBBD10'
+      - action: add-reviewers@v1
+        args:
+          reviewers: [miniviolet, wezlar]
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+  # Case 3: Minor/Complex Code Changes
+  single_review:
+    if:
+      - {{ branch | estimatedReviewTime <= 20 }}
+      - {{ files | length <= 10 }}
+      - {{ files | match(regex=r/src\//) | some }}
+    run:
+      - action: set-required-approvals@v1
+        args:
+          approvals: 1
+      - action: require-reviewers@v1
+        args:
+          reviewers: [Jnnybrrn, eych]
+  double_review:
+    if:
+      - {{ branch | estimatedReviewTime >= 20 }}
+      - {{ files | length >= 10 }}
+      - {{ files | match(regex=r/src\//) | some }}
+    run:
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+      - action: require-reviewers@v1
+        args:
+          reviewers: [Jnnybrrn, eych]
+
+  # Case 5: Automatic Change Requests
+  catch_deprecated:
+    if:
+      - {{ source.diff.files | matchDiffLines(regex=r/^[+].*qualification\(/) | some }}
+    run:
+      - action: request-changes@v1
+        args:
+          comment: "You have used deprecated API `oldFetch`, use `newFetch` instead."
+
+  # Case 6: Show Affected Partners
+  multiple_partner_coverage:
+    if:
+      - {{ files | match(term='src/') | some }}
+      - {{ files | match(term='src/integrator') | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "A1"
+          color: '#ff0000'
+      - action: add-label@v1
+        args:
+          label: "VODDE"
+          color: '#ff0000'
+      - action: add-label@v1
+        args:
+          label: "VODBB"
+          color: '#ff0000'
+      - action: add-label@v1
+        args:
+          label: "VZH"
+          color: '#ff0000'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+  a1_partner_coverage:
+    if:
+      - {{ files | match(regex=r/src\/integrator\/a1\//) | every  }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "A1"
+          color: '#ff0000'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+   vodde_partner_coverage:
+    if:
+      - {{ files | match(regex=r/src\/integrator\/vodafonede\//) | every }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "VODDE"
+          color: '#ff0000'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+    voduk_partner_coverage:
+    if:
+      - {{ files | match(regex=r/src\/integrator\/vodafoneuk-media\//) | every }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "VODBB"
+          color: '#ff0000'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+    verizon_partner_coverage:
+    if:
+      - {{ files | match(regex=r/src\/integrator\/vzh\//) | every }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "VZH"
+          color: '#ff0000'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
   estimated_time_to_review:
     if:
       - true
@@ -13,16 +163,6 @@ automations:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
-  approve_safe_changes:
-    if:
-      - {{ is.formatting or is.docs or is.tests or is.asset }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'safe-changes'
-      - action: approve@v1
-
-
 calc:
   etr: {{ branch | estimatedReviewTime }}
 
@@ -30,4 +170,5 @@ is:
   formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
-  asset: {{ files | match(regex=r/\.(png|svg|gif|css)$/) | every }}
+  asset: {{ files | match(regex=r/\.(png|svg|gif)$/) | every }}
+  ui: {{ files | match(regex=r/\.(css|scss|html|blade|htm)$/) | every }}
