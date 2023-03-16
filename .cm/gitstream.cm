@@ -31,7 +31,7 @@
       ]
     }
   }, 
-  "is"" {
+  "is" {
     formatting: {{ source.diff.files | isFormattingChange }},
     docs: {{ files | allDocs }},
     tests: {{ files | allTests }},
