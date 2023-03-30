@@ -6,7 +6,7 @@ manifest:
 automations:
   jira_ticket:
     if:
-      - {{ not has.jira_ticket }}
+      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
     run:
       - action: add-label@v1
         args:
@@ -14,4 +14,5 @@ automations:
           color: 'F6443B'
 
 has:
-  jira_ticket: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{20,}$/) }}
+  jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
+  jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
