@@ -14,6 +14,14 @@ automations:
           label: "missing-jira"
           color: 'F6443B'
 
+  special:
+    if:
+      - {{ pr.labels | match(term='ping') }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "pong"
+          color: '0062F8'
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
