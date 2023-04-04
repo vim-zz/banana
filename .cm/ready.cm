@@ -7,7 +7,7 @@ manifest:
 automations:
   jira_ticket:
     if:
-      - {{ pr.description | includes(regex=r/^- \[ \]/) | some }}
+      - {{ pr.description | match(regex=r/^- \[ \]/) | some }}
     run:
       - action: add-label@v1
         args:
