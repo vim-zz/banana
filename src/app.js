@@ -1,6 +1,6 @@
 const http = require('http');
 
-const hostname = '127.0.0.1';
+const hostname = '127.0.0.2';
 const port = 3000;
 
 // hello 
@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/plain');
 
   const txt = "hello";
-  const reg = /hello/;
+  const reg = /hello;
   const x = `${txt} is ${typeof txt} ${reg} is ${typeof reg}`;
   console.log(x)
   res.end("hi");
