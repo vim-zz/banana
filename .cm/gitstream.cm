@@ -11,8 +11,17 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: "missing-jira"
+          label: "DCF5-docs-missing"
           color: 'F6443B'
+
+  no_tests:
+    if:
+      - {{ files | match(regex=r/[^a-zA-Z0-9](spec|test|tests)[^a-zA-Z0-9]/) | nope }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'SOC2-CC8.1-tests-missing'
+          color: '#E94637'
 
   special:
     if:
@@ -22,6 +31,7 @@ automations:
         args:
           label: "pong"
           color: '0062F8'
+
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
