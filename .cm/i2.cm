@@ -3,14 +3,14 @@ manifest:
   version: 1.0
 automations:
   # Adds a label for the estimated time to review based on complexity of the change
-   estimated_time_to_review:
-     if:
-       - true
-     run:
-       - action: add-label@v1
-         args:
-           label: "{{ calc.etr }} min review"
-           color: {{ 'F01804' if (calc.etr >= 20) else ('F1D20E' if (calc.etr >= 5) else '36A853') }}
+  estimated_time_to_review:
+    if:
+      - true
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ 'F01804' if (calc.etr >= 20) else ('F1D20E' if (calc.etr >= 5) else '36A853') }}
   # Recommends and selects a reviewer based on who has previously worked on that code
   the_right_reviewer:
     if:
@@ -30,11 +30,11 @@ automations:
     run:
       - action: add-label@v1
         args:
-           label: 'terraform change'
-           color: {{ '8717A5' }}
+          label: 'terraform change'
+          color: {{ '8717A5' }}
       - action: add-reviewers@v1
         args:
-           reviewers: ['sebas-ingka', 'b-lazem']
+          reviewers: ['sebas-ingka', 'b-lazem']
   # Add renovate label for auto merge and labelling
   # If it safe you can enable the auto merge
   renovate:
