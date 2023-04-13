@@ -51,7 +51,7 @@ automations:
 #        args:
 #          wait_for_all_checks: true
 #          squash_on_merge: true
- calc:
+# calc:
 #   etr: {{ branch | estimatedReviewTime }}
 is:
   terraform: {{ files | match(regex=r/(.*\.(tf|tf\.json)$)/) | some }}
