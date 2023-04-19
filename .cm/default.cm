@@ -25,17 +25,6 @@ automations:
           comment: |
             {{ repo | explainCodeExperts(gt=10) }}
             
-  close_ui_changes_by_non_ui:
-    if:
-      - {{ files | match(regex=r/src\/views/) | some }}
-      - {{ pr.author_teams | match(term='ui-team') | nope }}
-    run:
-      - action: add-comment@v1
-        args: 
-          comment: |
-            Please contact a member of `ui-team` team if you need to make changes to files in `src/views`
-      - action: close@v1
-            
 # The next function calculates the estimated time to review and makes it available in the automation above.
 calc:
   etr: {{ branch | estimatedReviewTime }}
