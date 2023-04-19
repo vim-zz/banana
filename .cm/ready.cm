@@ -13,3 +13,15 @@ automations:
         args:
           label: "incomplete-step"
           color: 'F6443B'
+
+  assign_previous_contributors:
+    if:
+      - {{ not pr.draft }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainRankByGitBlame(gt=25) | dump | safe }}
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | rankByGitBlame(gt=25) }}
