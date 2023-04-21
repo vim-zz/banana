@@ -10,12 +10,10 @@
 display "Hello World."
 prompt
 pause
- addStyles(asdsad)
 lorem	
 lorem	
 lorem	
 lorem	
- addStyles(asdsad)
 lorem	
 lorem	
 lorem	
