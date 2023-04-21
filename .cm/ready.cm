@@ -17,7 +17,7 @@ automations:
   {% for item in deprecated %}
   catch_deprecated_components_{{ loop.index }}:
     if:
-      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
+      - {{ source.diff.files | matchDiffLines(regex=['^[+].*', item.regex] | join) | some }}
     run:
       - action: add-label@v1
         args:
@@ -36,7 +36,7 @@ deprecated:
   - regex: r/translateByKey\(/
     old: translateByKey
     new: formatMessage
-  - regex: r/^[+].*addStyles\(/
+  - regex: r/addStyles\(/
     old: addStyles
     new: SASS in a separate file ([Component name].scss)
   - regex: r/addNotificationsFromQuery/
