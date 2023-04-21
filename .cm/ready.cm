@@ -13,3 +13,35 @@ automations:
         args:
           label: "incomplete-step"
           color: 'F6443B'
+
+  {% for item in deprecated %}
+  catch_deprecated_components_{{ loop.index }}:
+    if:
+      - {{ source.diff.files | matchDiffLines(regex=item.regex) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'deprecated-component'
+          color: '#FF0000'
+      - action: add-comment@v1
+        args:
+          comment: |
+            Usage `{{ item.old }}` is deprecated please use `{{ item.new }}` instead
+  {% endfor %}
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+deprecated:
+  - regex: r/translateByKey\(/
+    old: translateByKey
+    new: formatMessage
+  - regex: r/addStyles\(/
+    old: addStyles
+    new: SASS in a separate file ([Component name].scss)
+  - regex: r/addNotificationsFromQuery/
+    old: addNotificationsFromQuery
+    new: UI/hooks/useGetNotificationsFromQuery
+  - regex: r/from 'enzyme'/
+    old: Enzyme
+    new: testing-utils/testingLibrary
