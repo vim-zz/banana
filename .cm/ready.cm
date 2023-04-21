@@ -1,5 +1,8 @@
 # -*- mode: yaml -*-
 
+{% macro concat(lhs, rgs) -%}
+{{ [lhs, rhs] | join }}
+{%- endmacro %}
 
 manifest:
   version: 1.0
@@ -45,7 +48,3 @@ deprecated:
   - regex: r/from 'enzyme'/
     old: Enzyme
     new: testing-utils/testingLibrary
-
-{% macro concat(lhs, rgs) -%}
-{{ [lhs, rhs] | join }}
-{%- endmacro %}
