@@ -15,6 +15,7 @@ lorem
 lorem	
 lorem	
 lorem	
+ addStyles(asdsad)
 lorem	
 lorem	
 lorem	
