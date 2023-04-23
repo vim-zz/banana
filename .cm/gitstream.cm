@@ -32,6 +32,15 @@ automations:
           label: "pong"
           color: '0062F8'
 
+  code_experts:
+    if: 
+      - {{ pr.labels | match(term='suggest-reviewer') }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainCodeExperts(gt=10) }}
+
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
