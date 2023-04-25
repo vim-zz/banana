@@ -3,4 +3,4 @@ config:
 
 
 
-  ce-cd:supported_regions: us-east-2
+  ce-cd:supported_regions: us-east-1
