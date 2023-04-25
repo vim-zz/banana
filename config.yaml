@@ -1,6 +1,4 @@
 config:
-  aws:region: us-east-2
+  aws:region: us-east-1
 
-
-
-  ce-cd:supported_regions: us-east-1
+  ce-cd:supported_regions: us-east-2
