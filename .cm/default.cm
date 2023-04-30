@@ -26,7 +26,7 @@ automations:
   #          {{ repo | explainCodeExperts(gt=10) }}
 
   safe_changes:
-    if
+    if:
       - {{ is.formatting or is.docs or is.tests }}
     run: 
       - action: add-label@v1
