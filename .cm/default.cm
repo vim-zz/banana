@@ -4,8 +4,17 @@
 manifest:
   version: 1.0
 automations:
+  # Adds a label whether its a bug or feature
+  bug_label:
+    if:
+      - {{ branch.name | includes('bug') }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "bug"
+          color: '#E94637'
   # Add a label that indicates how many minutes it will take to review the PR.
-  estimated_time_to_review: 
+  estimated_time_to_review:
     if:
       - true
     run:
@@ -14,34 +23,16 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-  ## Post a comment that lists the best experts for the files that were modified.
-  #code_experts:
-  #  if: 
-  #    - true
-  #  run:
-  #    - action: add-comment@v1
-  #    # More info about explainCodeExperts: https://docs.gitstream.cm/filter-functions/#explaincodeexperts
-  #      args:
-  #        comment: |
-  #          {{ repo | explainCodeExperts(gt=10) }}
-
-  safe_changes:
+  # Post a comment that lists the best experts for the files that were modified.
+  code_experts:
     if:
-      - {{ is.formatting or is.docs or is.tests }}
-    run: 
-      - action: add-label@v1
+      - true
+    run:
+      - action: add-comment@v1
+      # More info about explainCodeExperts: https://docs.gitstream.cm/filter-functions/#explaincodeexperts
         args:
-          label: 'safe-changes'
-      - action: approve@v1
-
-# To simplify the automation, this calculation is placed under a unique YAML key.
-# The result is is assigned to `is.formatting`, `is.docs` and `is.tests` which is 
-# used in the automation above. You can add as many keys as you like.
-is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
-            
+          comment: |
+            {{ repo | explainCodeExperts(gt=10) }}
 # The next function calculates the estimated time to review and makes it available in the automation above.
 calc:
   etr: {{ branch | estimatedReviewTime }}
