@@ -22,8 +22,8 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            pr.status {{ pr.status }}
-            pr.requested_changes {{ pr.requested_changes }}
+            pr.status == OPEN {{ pr.status }} ? {{ pr.status == OPEN }}
+            pr.requested_changes | length {{ pr.requested_changes }} ? {{ {{ pr.requested_changes | length }}
   
   requested_changes:
     if:
