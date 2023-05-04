@@ -14,16 +14,16 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
-  ## Post a comment that lists the best experts for the files that were modified.
-  #code_experts:
-  #  if: 
-  #    - true
-  #  run:
-  #    - action: add-comment@v1
-  #    # More info about explainCodeExperts: https://docs.gitstream.cm/filter-functions/#explaincodeexperts
-  #      args:
-  #        comment: |
-  #          {{ repo | explainCodeExperts(gt=10) }}
+  
+  requested_changes:
+    if:
+      - {{ pr.status == open }}
+      - {{ pr.requested_changes | length > 0 }}
+    run:
+      - action: add-label@v1
+        args:
+          label: '🚨 Changes requested'
+          color: '#EC560D'
 
   safe_changes:
     if:
