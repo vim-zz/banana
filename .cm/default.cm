@@ -23,7 +23,7 @@ automations:
         args:
           comment: |
             pr.status == OPEN {{ pr.status }} ? {{ pr.status == OPEN }}
-            pr.requested_changes | length {{ pr.requested_changes }} ? {{ {{ pr.requested_changes | length }}
+            pr.requested_changes | length {{ pr.requested_changes }} ? {{ pr.requested_changes | length }}
   
   requested_changes:
     if:
