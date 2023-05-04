@@ -14,6 +14,16 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+  debug:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            pr.status {{ pr.status }}
+            pr.requested_changes {{ pr.requested_changes }}
   
   requested_changes:
     if:
