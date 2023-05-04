@@ -17,7 +17,7 @@ automations:
   
   requested_changes:
     if:
-      - {{ pr.status == open }}
+      - {{ pr.status == OPEN }}
       - {{ pr.requested_changes | length > 0 }}
     run:
       - action: add-label@v1
