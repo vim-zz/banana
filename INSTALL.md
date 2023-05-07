@@ -7,9 +7,3 @@
 
 # Install
 
-```
-npm install
-```
-
-
-banana
