@@ -22,9 +22,9 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            pr.status == OPEN {{ pr.status }} ? {{ pr.status == 'OPEN' }} {{ pr.status| includes(term='OPEN') }}
+            pr.status == OPEN {{ pr.status }} ? {{ pr.status == 'open' }}
 
-            pr.requested_changes | length {{ pr.requested_changes }} ? {{ pr.requested_changes | length }}
+            pr.requested_changes | length {{ pr.requested_changes | length > 0 }}
   
   requested_changes:
     if:
