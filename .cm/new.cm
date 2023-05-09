@@ -4,24 +4,38 @@
 manifest:
   version: 1.0
 automations:
-  debug:
+  request_product_review:
     if:
-      - true
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            pr.status({{ pr.status }}) == open ? {{ pr.status == 'open' }}
-
-            pr.requested_changes({{ pr.requested_changes}}) | length > 0 ? {{ pr.requested_changes | length > 0 }}
-  
-  requested_changes:
-    if:
-      - {{ pr.status == 'open' }}
-      - {{ pr.requested_changes | length > 0 }}
+      - {{ has.analytics_change }}
     run:
       - action: add-label@v1
         args:
-          label: '🚨 Changes requested'
-          color: '#EC560D'
+          label: Analytics
 
+has:
+  analytics_change: {{ pr.description | includes(regex=r/.*[X].*Analytics.*/) }}
+
+#   debug:
+#     if:
+#       - {{ has.jira_ticket_in_title and has.jira_placeholder_in_desc }}
+#     run:
+#       - action: edit-pr@v1
+#         args:
+#           pr: description
+#           find: {{ pr.description | find(regex=r/atlassian.net\/browse\/(\w{1,}-XXXX)/) }}
+#           replace: {{ pr.title | find(regex=r/^\[?(\w{3,4}-\d{1,6})\]?(\s|-|_).{1,}$/) }}
+
+
+#   requested_changes:
+#     if:
+#       - {{ pr.status == 'open' }}
+#       - {{ pr.requested_changes | length > 0 }}
+#     run:
+#       - action: add-label@v1
+#         args:
+#           label: '🚨 Changes requested'
+#           color: '#EC560D'
+
+# has:
+#   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
+#   jira_placeholder_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-XXXX/) }}
