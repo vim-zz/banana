@@ -1,0 +1,16 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations: 
+  request_product_review:
+    if:
+      - {{ has.analytics_change }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [vim-zz]
+
+has:
+  analytics_change: {{ pr.description | includes(regex=r/.*[X].*Analytics.*/) }}
