@@ -6,6 +6,8 @@
 # dsa
 # sadas
 
-def function():
-	print('1')
+def   function():
+
+	print( '1' )
+
 	pass
