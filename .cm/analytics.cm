@@ -5,7 +5,7 @@ manifest:
 
 automations: 
   request_product_review:
-    if:
+    if
       - {{ has.analytics_change }}
     run:
       - action: add-reviewers@v1
