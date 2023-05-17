@@ -6,7 +6,7 @@ manifest:
 automations:
   review_in_progress:
     if:
-      - {{ pr.reviews | map(attr='state') | match(attr='pending') | any }}
+      - {{ pr.reviews | map(attr='state') | match(attr='pending') | some }}
     run: 
       - action: add-label@v1
         args:
