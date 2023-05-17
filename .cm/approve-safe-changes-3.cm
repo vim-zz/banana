@@ -23,7 +23,7 @@ automations:
             pr.reviews[].state {{ pr.reviews | map(attr='state') | dump | safe }}
             pr.reviews[].state == pending {{ pr.reviews | map(attr='state') | match(attr='pending') | dump | safe }}
 
-  estimated_time_to_review: 
+  etr_v2: 
     if:
       - true
     run:
@@ -31,7 +31,7 @@ automations:
       # etr is defined in the last section of this example
         args:
           # description: "gitStream estimates a {{ etr.desc }} review"
-          label: "{{ etr.min }} min review"
+          label: "NEW {{ etr.min }} min review"
           color: {{ etr.color }}
 
 etr:
