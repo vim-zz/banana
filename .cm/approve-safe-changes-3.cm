@@ -11,6 +11,7 @@ automations:
       - action: add-label@v1
         args:
           label: 'review-in-progress'
+
   debug:
     if:
       - true
