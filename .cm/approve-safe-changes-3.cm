@@ -22,3 +22,19 @@ automations:
             pr.reviews {{ pr.reviews | dump | safe }}
             pr.reviews[].state {{ pr.reviews | map(attr='state') | dump | safe }}
             pr.reviews[].state == pending {{ pr.reviews | map(attr='state') | match(attr='pending') | dump | safe }}
+
+  estimated_time_to_review: 
+    if:
+      - true
+    run:
+      - action: add-label@v1
+      # etr is defined in the last section of this example
+        args:
+          # description: "gitStream estimates a {{ etr.desc }} review"
+          label: "{{ etr.min }} min review"
+          color: {{ etr.color }}
+
+etr:
+  min: {{ branch | estimatedReviewTime }}
+  color: {{ 'E94637' if (etr.min >= 20) else ('FBBD10' if (etr.min >= 5) else '36A853') }}
+  # desc: color: {{ 'long' if (etr.min >= 20) else ('average' if (etr.min >= 5) else 'quick') }}
