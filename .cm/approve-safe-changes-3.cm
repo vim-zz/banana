@@ -4,23 +4,20 @@ manifest:
   version: 1.0
 
 automations:
-  safe_changes:
-    # Triggered for any changes to formatting, documentation, or tests
+  review_in_progress:
     if:
-      - {{ is.formatting or is.docs or is.tests }}
-    # Apply a safe change label, approve the PR and explain why in a comment.
+      - {{ pr.reviews | map(attr='state') | match(attr='pending') | some }}
     run: 
       - action: add-label@v1
         args:
-          label: 'safe-change'
-      - action: approve@v1
+          label: 'review-in-progress'
+  debug:
+    if:
+      - true
+    run: 
       - action: add-comment@v1
         args:
           comment: |
-            This PR is considered a safe change and has been automatically approved.
-
-# These custom expressions are used in the safe_changes automation
-is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
+            pr.reviews {{ pr.reviews | dump | safe }}
+            pr.reviews[].state {{ pr.reviews | map(attr='state') | dump | safe }}
+            pr.reviews[].state == pending {{ pr.reviews | map(attr='state') | match(attr='pending') | dump | safe }}
