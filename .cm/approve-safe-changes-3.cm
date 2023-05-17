@@ -4,23 +4,11 @@ manifest:
   version: 1.0
 
 automations:
-  safe_changes:
-    # Triggered for any changes to formatting, documentation, or tests
+
+  identify_first_unsubmitted_comment:
     if:
-      - {{ is.formatting or is.docs or is.tests }}
-    # Apply a safe change label, approve the PR and explain why in a comment.
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'safe-change-1'
-      - action: approve@v1
+       - true
+    run:
       - action: add-comment@v1
         args:
-          comment: |
-            This PR is considered a safe change and has been automatically approved.
-
-# These custom expressions are used in the safe_changes automation
-is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
+          comment: "Hello from action"
