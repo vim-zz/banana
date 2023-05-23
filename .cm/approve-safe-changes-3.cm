@@ -57,23 +57,23 @@ automations:
           comment: |
             This merge has been automatically approved because it only contains changes to tests.
       - action: approve@v1
-  approve_tiny_change:
-    # Triggered for PRs that contain one file and one line.
-    if:
-      - {{ is.one_file and is.one_line }}
-    run:
-      - action: add-label@v1
-        args:
-          label: 'single-line'
-      - action: approve@v1
-      - action: add-comment@v1
-        args:
-          comment: |
-            This PR has been approved because it is only a single line.
+#  approve_tiny_change:
+#    # Triggered for PRs that contain one file and one line.
+#    if:
+#      - {{ is.one_file and is.one_line }}
+#    run:
+#      - action: add-label@v1
+#        args:
+#          label: 'single-line'
+#      - action: approve@v1
+#      - action: add-comment@v1
+#        args:
+#          comment: |
+#            This PR has been approved because it is only a single line.
   approve_python_formatting:
     if:
       - {{ files | extensions | match(list=['py']) | every }}
-      - {{ source.diff.files | isFormattingChange }}
+      - {{ is.formatting }}
     run:
       - action: approve@v1
       - action: add-label@v1
@@ -83,22 +83,22 @@ automations:
         args:
           comment: |
             This PR only contains formatting changes and has been approved.
-  percent_new_code:
-    if:
-      - true
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            This PR is {{ changes.ratio }}% new code.
+#  percent_new_code:
+#    if:
+#      - true
+#    run:
+#      - action: add-comment@v1
+#        args:
+#          comment: |
+#            This PR is {{ changes.ratio }}% new code.
 
-changes:
-  # Sum all the lines added in the PR
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-  # Sum all the line removed in the PR
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-  # Calculate the ratio of new code
-  ratio: {{ (changes.additions / (changes.additions + changes.deletions)) * 100 }}
+#changes:
+#  # Sum all the lines added in the PR
+#  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+#  # Sum all the line removed in the PR
+#  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+#  # Calculate the ratio of new code
+#  ratio: {{ (changes.additions / (changes.additions + changes.deletions)) * 100 }}
 
 # These custom expressions are used in the safe_changes automation
 is:
@@ -106,8 +106,8 @@ is:
   docs: {{ files | allDocs | every }}
   tests: {{ files | allTests | every }}
   image: {{ files | allImages | every }}
-  one_file: {{ files | length == 1 }}
-  one_line: {{ changes.additions - changes.deletions <= 1 }}
+#  one_file: {{ files | length == 1 }}
+#  one_line: {{ changes.additions - changes.deletions <= 1 }}
 
 # The next function calculates the estimated time to review and makes it available in the automation above.
 calc:
