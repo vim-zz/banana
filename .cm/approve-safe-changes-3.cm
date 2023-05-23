@@ -43,8 +43,8 @@ automations:
 
 is:
   formatting: {{ source.diff.files | isFormattingChange | every }}
-  docs: {{ files | allDocs | every }}
-  tests: {{ files | allTests | every }}
-  image: {{ files | allImages | every }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
+  image: {{ files | allImages }}
 calc:
   etr: {{ branch | estimatedReviewTime }}
