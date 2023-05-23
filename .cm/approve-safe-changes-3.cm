@@ -1,40 +1,114 @@
 # -*- mode: yaml -*-
 
+# This example configuration for provides basic automations to get started with gitStream.
+# View the gitStream quickstart for more examples: https://docs.gitstream.cm/quick-start/
 manifest:
   version: 1.0
-
 automations:
-  review_in_progress:
-    if:
-      - {{ pr.reviews | map(attr='state') | match(attr='pending') | some }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'review-in-progress'
-
-  debug:
-    if:
-      - true
-    run: 
-      - action: add-comment@v1
-        args:
-          comment: |
-            pr.reviews {{ pr.reviews | dump | safe }}
-            pr.reviews[].state {{ pr.reviews | map(attr='state') | dump | safe }}
-            pr.reviews[].state == pending {{ pr.reviews | map(attr='state') | match(attr='pending') | dump | safe }}
-
-  etr_v2: 
+  # Add a label that indicates how many minutes it will take to review the PR.
+  estimated_time_to_review:
     if:
       - true
     run:
       - action: add-label@v1
       # etr is defined in the last section of this example
         args:
-          # description: "gitStream estimates a {{ etr.desc }} review"
-          label: "NEW {{ etr.min }} min review"
-          color: {{ etr.color }}
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+  assign_code_experts:
+    # Triggered when someone applies a suggest-reviewer label to a PR.
+    if:
+      - {{ pr.labels | match(term='suggest-reviewer') }}
+    # Identify the best experts to assign for review and post a comment that explains why
+    # More info about code experts
+    # https://docs.gitstream.cm/filter-functions/#codeexperts
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | codeExperts(gt=10) }}
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainCodeExperts(gt=10) }}
+  safe_changes:
+    # Triggered for any changes that only affect formatting, documentation, tests, or images
+    if:
+      - {{ is.formatting or is.docs or is.tests or is.image }}
+    # Apply a safe change label, approve the PR and explain why in a comment.
+    run:
+      - action: add-label@v1
+        args:
+          label: 'safe-change'
+      - action: approve@v1
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR is considered a safe change and has been automatically approved.
+  approve_tests:
+    if:
+      # Triggered for PRs that only include changes to tests
+      - {{ files | allTests }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'tests-only'
+      - action: add-comment@v1
+        args:
+          comment: |
+            This merge has been automatically approved because it only contains changes to tests.
+      - action: approve@v1
+  approve_tiny_change:
+    # Triggered for PRs that contain one file and one line.
+    if:
+      - {{ is.one_file and is.one_line }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'single-line'
+      - action: approve@v1
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR has been approved because it is only a single line.
+  approve_python_formatting:
+    if:
+      - {{ files | extensions | match(list=['py']) | every }}
+      - {{ source.diff.files | isFormattingChange }}
+    run:
+      - action: approve@v1
+      - action: add-label@v1
+        args:
+          label: code-formatting
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR only contains formatting changes and has been approved.
+  percent_new_code:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR is {{ changes.ratio }}% new code.
 
-etr:
-  min: {{ branch | estimatedReviewTime }}
-  color: {{ 'E94637' if (etr.min >= 20) else ('FBBD10' if (etr.min >= 5) else '36A853') }}
-  # desc: color: {{ 'long' if (etr.min >= 20) else ('average' if (etr.min >= 5) else 'quick') }}
+changes:
+  # Sum all the lines added in the PR
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  # Sum all the line removed in the PR
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+  # Calculate the ratio of new code
+  ratio: {{ (changes.additions / (changes.additions + changes.deletions)) * 100 }}
+
+# These custom expressions are used in the safe_changes automation
+is:
+  formatting: {{ source.diff.files | isFormattingChange | every }}
+  docs: {{ files | allDocs | every }}
+  tests: {{ files | allTests | every }}
+  image: {{ files | allImages | every }}
+  one_file: {{ files | length == 1 }}
+  one_line: {{ changes.additions - changes.deletions <= 1 }}
+
+# The next function calculates the estimated time to review and makes it available in the automation above.
+calc:
+  etr: {{ branch | estimatedReviewTime }}
