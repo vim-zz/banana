@@ -1,40 +1,14 @@
-# -*- mode: yaml -*-
-
 manifest:
   version: 1.0
-
 automations:
-  review_in_progress:
-    if:
-      - {{ pr.reviews | map(attr='state') | match(attr='pending') | some }}
-    run: 
-      - action: add-label@v1
-        args:
-          label: 'review-in-progress'
-
-  debug:
-    if:
-      - true
-    run: 
-      - action: add-comment@v1
-        args:
-          comment: |
-            pr.reviews {{ pr.reviews | dump | safe }}
-            pr.reviews[].state {{ pr.reviews | map(attr='state') | dump | safe }}
-            pr.reviews[].state == pending {{ pr.reviews | map(attr='state') | match(attr='pending') | dump | safe }}
-
-  etr_v2: 
+  estimated_time_to_review:
     if:
       - true
     run:
       - action: add-label@v1
-      # etr is defined in the last section of this example
         args:
-          # description: "gitStream estimates a {{ etr.desc }} review"
-          label: "NEW {{ etr.min }} min review"
-          color: {{ etr.color }}
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
-etr:
-  min: {{ branch | estimatedReviewTime }}
-  color: {{ 'E94637' if (etr.min >= 20) else ('FBBD10' if (etr.min >= 5) else '36A853') }}
-  # desc: color: {{ 'long' if (etr.min >= 20) else ('average' if (etr.min >= 5) else 'quick') }}
+calc:
+  etr: {{ branch | estimatedReviewTime }}
