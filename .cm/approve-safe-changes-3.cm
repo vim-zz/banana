@@ -11,12 +11,8 @@ automations:
           color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
 
   assign_code_experts:
-    # Triggered when someone applies a suggest-reviewer label to a PR.
     if:
       - {{ pr.labels | match(term='suggest-reviewer') }}
-    # Identify the best experts to assign for review and post a comment that explains why
-    # More info about code experts
-    # https://docs.gitstream.cm/filter-functions/#codeexperts
     run:
       - action: add-reviewers@v1
         args:
@@ -27,10 +23,8 @@ automations:
             {{ repo | explainCodeExperts(gt=10) }}
 
   safe_changes:
-    # Triggered for any changes that only affect formatting, documentation, tests, or images
     if:
       - {{ is.formatting or is.docs or is.tests or is.image }}
-    # Apply a safe change label, approve the PR and explain why in a comment.
     run:
       - action: add-label@v1
         args:
@@ -42,7 +36,7 @@ automations:
             This PR is considered a safe change and has been automatically approved.
 
 is:
-  formatting: {{ source.diff.files | isFormattingChange | every }}
+  formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
