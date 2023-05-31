@@ -1,0 +1,26 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+changes:
+  is:
+    ui_only: {{ files | match(regex=r/ui\//) | every }}
+    ui_only_fixed: {{ branch.diff.files_metadata | match(attr='file', regex=r/ui\//) | every }}
+
+automations:
+  safe_changes:
+    if:
+      - {{ changes.is.ui_only }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'ui-only'
+  safe_changes_fixed:
+    if:
+      - {{ changes.is.ui_only_fixed }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'ui-only-fixed'
+          
