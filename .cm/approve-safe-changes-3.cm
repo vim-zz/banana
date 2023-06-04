@@ -1,0 +1,16 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  request_ids_dev_nodejs_version:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            1 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | dump | safe }}
+            2 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | dump | safe }}
+            3 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | dump | safe }}
