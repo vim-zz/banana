@@ -6,6 +6,17 @@ manifest:
 automations:
   request_ids_dev_nodejs_version:
     if:
+      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | some }}
+      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | nope }}
+    run:
+      - action: request-changes@v1
+        args:
+          comment: |
+            Updating only `prod-nodejs-layer` prevents running tests on `dev-nodejs-layer`.
+            Please update both `prod-nodejs-layer` and `dev-nodejs-layer` with the same changes.
+
+  debug:
+    if:
       - true
     run:
       - action: add-comment@v1
