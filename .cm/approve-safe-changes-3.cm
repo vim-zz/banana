@@ -6,8 +6,8 @@ manifest:
 automations:
   request_ids_dev_nodejs_version:
     if:
-      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | some }}
-      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | nope }}
+      - {{ version_manifest | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | some }}
+      - {{ version_manifest | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | nope }}
     run:
       - action: request-changes@v1
         args:
@@ -15,13 +15,5 @@ automations:
             Updating only `prod-nodejs-layer` prevents running tests on `dev-nodejs-layer`.
             Please update both `prod-nodejs-layer` and `dev-nodejs-layer` with the same changes.
 
-  debug:
-    if:
-      - true
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            1 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | dump | safe }}
-            2 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | dump | safe }}
-            3 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | dump | safe }}
+local:
+  version_manifest: {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') }}
