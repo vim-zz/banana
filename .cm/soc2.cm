@@ -14,7 +14,7 @@ automations:
         args:
           label: 'DCF155-tests-missing'
           color: '#E94637'
-      - comment: add-comment@v1
+      - action: add-comment@v1
         args:
           comment: |
             SOC2 requires testign every code change.
@@ -31,7 +31,7 @@ automations:
         args:
           label: "DCF5-docs-missing"
           color: 'F6443B'
-      - comment: add-comment@v1
+      - action: add-comment@v1
         args:
           comment: |
             SOC2 requires code review process on every code change.
@@ -46,7 +46,7 @@ automations:
         args:
           label: "DCF5-merge-without-approve"
           color: 'F6443B'
-      - comment: add-comment@v1
+      - action: add-comment@v1
         args:
           comment: |
             SOC2 requires code review process on every code change.
@@ -63,7 +63,7 @@ automations:
         args:
           label: "DCF18-no-vulnerabilities-scanning"
           color: 'F6443B'
-      - comment: add-comment@v1
+      - action: add-comment@v1
         args:
           comment: |
             SOC2 requires vulnerability scanning on every code change.
