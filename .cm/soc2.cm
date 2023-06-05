@@ -57,7 +57,7 @@ automations:
   # Vulnerability Scanning
   DCF18-vulnerability-scanning:
     if:
-      - {{ pr.checks | match(attr='name', list=sec_scanners) | none }}
+      - {{ (pr.checks | length == 0) or (pr.checks | match(attr='name', list=sec_scanners) | none) }}
     run:
       - action: add-label@v1
         args:
