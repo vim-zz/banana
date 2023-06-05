@@ -69,7 +69,6 @@ automations:
             SOC2 requires vulnerability scanning on every code change.
             None of the listed vulnerability scanning tools has checked the PR. 
             _SOC2 ref: CC1.2, CC3.1, CC3.2, CC3.4, CC4.1, CC4.2, CC5.1, CC5.2, CC7.1, CC7.2_
-            Scanning tools: {{ sec_scanners | dump | safe}}
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
@@ -79,11 +78,11 @@ sec_scanners:
   - Jit Security
   - Snyk
 
-  # DCF156 CC8.1 
-  # Production Code Released by Appropriate Personnel
+# DCF156 CC8.1 
+# Production Code Released by Appropriate Personnel
 
-  # DCF6 CC8.1, CC6.1
-  # Production Code Changes Restricted
+# DCF6 CC8.1, CC6.1
+# Production Code Changes Restricted
 
-  # DCF76 A1.1, A1.3
-  # Critical Change Management
+# DCF76 A1.1, A1.3
+# Critical Change Management
