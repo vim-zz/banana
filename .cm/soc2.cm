@@ -55,20 +55,30 @@ automations:
 
   # DCF18 CC1.2, CC3.1, CC3.2, CC3.4, CC4.1, CC4.2, CC5.1, CC5.2, CC7.1, CC7.2 
   # Vulnerability Scanning
-  DCF18-vulnerability-scanning:
+  # DCF18-vulnerability-scanning:
+  #   if:
+  #     - {{ (pr.checks | length == 0) or (pr.checks | match(attr='name', list=sec_scanners) | none) }}
+  #   run:
+  #     - action: add-label@v1
+  #       args:
+  #         label: "DCF18-no-vulnerabilities-scanning"
+  #         color: 'F6443B'
+  #     - action: add-comment@v1
+  #       args:
+  #         comment: |
+  #           SOC2 requires vulnerability scanning on every code change.
+  #           None of the listed vulnerability scanning tools has checked the PR. 
+  #           _SOC2 ref: CC1.2, CC3.1, CC3.2, CC3.4, CC4.1, CC4.2, CC5.1, CC5.2, CC7.1, CC7.2_
+
+  debug:
     if:
-      - {{ (pr.checks | length == 0) or (pr.checks | match(attr='name', list=sec_scanners) | none) }}
+      - true
     run:
-      - action: add-label@v1
-        args:
-          label: "DCF18-no-vulnerabilities-scanning"
-          color: 'F6443B'
       - action: add-comment@v1
         args:
           comment: |
-            SOC2 requires vulnerability scanning on every code change.
-            None of the listed vulnerability scanning tools has checked the PR. 
-            _SOC2 ref: CC1.2, CC3.1, CC3.2, CC3.4, CC4.1, CC4.2, CC5.1, CC5.2, CC7.1, CC7.2_
+            CHECKS {{ pr.checks | dump | safe }}
+
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/^\[?\w{3,4}-\d{1,6}\]?(\s|-|_).{1,}$/) }}
