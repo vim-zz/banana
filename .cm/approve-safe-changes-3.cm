@@ -16,4 +16,4 @@ automations:
             Please update both `prod-nodejs-layer` and `dev-nodejs-layer` with the same changes.
 
 local:
-  version_manifest: {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') }}
+  version_manifest: {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | dump | safe }}
