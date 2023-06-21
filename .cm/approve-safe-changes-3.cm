@@ -62,45 +62,6 @@ automations:
         args:
           label: "{{ calc.time_to_review }} min review"
           color: {{ 'E94637' if (calc.time_to_review >= 20) else ('FBBD10' if (calc.time_to_review >= 5) else '36A853') }}
-  # If the PR changes are medium or large, then code experts will be assigned to review it
-  assign_reviewers_code_experts:
-    if:
-      - {{ is.size.medium or is.size.large }}
-      - {{ not is.author.dependabot }}
-    # Identify the best experts to assign for review and post a comment that explains why
-    # @see https://docs.gitstream.cm/filter-functions/#codeexperts
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: {{ repo | codeExperts(gt=5) | reject(list=constants.inactive_contributors) }}
-          unless_reviewers_set: true
-      - action: add-comment@v1
-        args:
-          comment: |
-            {{ repo | explainCodeExperts(gt=5) }}
-  # If the PR changes are small enough, then a group of reviewers will be assigned instead
-  assign_reviewers_default_reviewer_group:
-    if:
-      - {{ is.size.small }}
-    run:
-      - action: add-reviewers@v1
-        args:
-          reviewers: {{ constants.default_frontend_group }}
-      - action: add-comment@v1
-        args:
-          comment: |
-            {{ repo | explainCodeExperts(gt=5) }}
-  # Automatically approve changes to certain files
-  safe_changes:
-    if:
-      - {{ files | match(list=['.cm/.gitstream.cm']) | every }}
-    # approve the PR and explain why
-    run: 
-      - action: approve@v1
-      - action: add-comment@v1
-        args:
-          comment: |
-            This PR is considered a safe change and has been automatically approved.
 # custom variables/expressions
 calc:
   # high-level filter function to calculate the estimated review time 
