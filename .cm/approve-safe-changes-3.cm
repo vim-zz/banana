@@ -1,27 +1,137 @@
 # -*- mode: yaml -*-
-
+# This configuration is for gitStream. To know more visit: https://docs.gitstream.cm/quick-start/
 manifest:
   version: 1.0
-
 automations:
-  request_ids_dev_nodejs_version:
+  # Flag the author if an appropriate type label isn't present
+  check_label_type:
     if:
-      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | some }}
-      - {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | nope }}
-    run:
-      - action: request-changes@v1
-        args:
-          comment: |
-            Updating only `prod-nodejs-layer` prevents running tests on `dev-nodejs-layer`.
-            Please update both `prod-nodejs-layer` and `dev-nodejs-layer` with the same changes.
-
-  debug:
-    if:
-      - true
+      - {{ not (pr.labels | match(list=constants.labels.type) | some) }}
     run:
       - action: add-comment@v1
         args:
           comment: |
-            1 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | dump | safe }}
-            2 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*prod-nodejs-layer/) | dump | safe }}
-            3 {{ source.diff.files | filter(attr='new_file', term='version_manifest.json') | matchDiffLines(regex=r/^[+].*dev-nodejs-layer/) | dump | safe }}
+            You're missing a label to indicate what kind of change this PR encompasses overall. Choose one of: {{ constants.labels.type | dump | safe }}
+  # Add appropriate label based on scope of changes
+  add_label_scope_app_frontend_web:
+    if:
+      - {{ is.scope.apps.frontend_web }}
+      - {{ pr.labels | match(term=constants.labels.scope.apps.frontend_web) | nope }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ constants.labels.scope.apps.frontend_web }}"
+  add_label_scope_app_frontend_mobile:
+    if:
+      - {{ is.scope.apps.frontend_mobile }}
+      - {{ pr.labels | match(term=constants.labels.scope.apps.frontend_mobile) | nope }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ constants.labels.scope.apps.frontend_mobile }}"
+  add_label_scope_packages_common_components:
+    if:
+      - {{ is.scope.packages.common_components }}
+      - {{ pr.labels | match(term=constants.labels.scope.packages.common_components) | nope }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ constants.labels.scope.packages.common_components }}"
+  add_label_scope_packages_domain:
+    if:
+      - {{ is.scope.packages.domain }}
+      - {{ pr.labels | match(term=constants.labels.scope.packages.domain) | nope }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ constants.labels.scope.packages.domain }}"
+  add_label_scope_packages_formatters:
+    if:
+      - {{ is.scope.packages.formatters }}
+      - {{ pr.labels | match(term=constants.labels.scope.packages.formatters) | nope }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ constants.labels.scope.packages.formatters }}"
+  # Always, add a label that indicates how many minutes it will take to review the PR
+  add_label_estimated_time_to_review:
+    if:
+      - {{ not is.author.dependabot }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ calc.time_to_review }} min review"
+          color: {{ 'E94637' if (calc.time_to_review >= 20) else ('FBBD10' if (calc.time_to_review >= 5) else '36A853') }}
+  # If the PR changes are medium or large, then code experts will be assigned to review it
+  assign_reviewers_code_experts:
+    if:
+      - {{ is.size.medium or is.size.large }}
+      - {{ not is.author.dependabot }}
+    # Identify the best experts to assign for review and post a comment that explains why
+    # @see https://docs.gitstream.cm/filter-functions/#codeexperts
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | codeExperts(gt=5) | reject(list=constants.inactive_contributors) }}
+          unless_reviewers_set: true
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainCodeExperts(gt=5) }}
+  # If the PR changes are small enough, then a group of reviewers will be assigned instead
+  assign_reviewers_default_reviewer_group:
+    if:
+      - {{ is.size.small }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ constants.default_frontend_group }}
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | explainCodeExperts(gt=5) }}
+  # Automatically approve changes to certain files
+  safe_changes:
+    if:
+      - {{ files | match(list=['.cm/.gitstream.cm']) | every }}
+    # approve the PR and explain why
+    run: 
+      - action: approve@v1
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR is considered a safe change and has been automatically approved.
+# custom variables/expressions
+calc:
+  # high-level filter function to calculate the estimated review time 
+  # @see https://docs.gitstream.cm/filter-functions/#estimatedreviewtime
+  time_to_review: {{ branch | estimatedReviewTime }}
+constants:
+  default_frontend_group: ['OBFUSCATED']
+  labels:
+    type: ['feature / enhancement', 'bug', 'chore', 'refactor', 'documentation', 'RFC', 'dependencies']
+    scope:
+      apps:
+        frontend_web: 'App: Frontend'
+        frontend_mobile: 'App: Frontend Mobile'
+      packages:
+        common_components: 'Package: Common Components'
+        domain: 'Package: Domain'
+        formatters: 'Package: Formatters'
+    admin: ['blocked', 'duplicate']
+is:
+  size:
+    small: {{ branch.diff.size < 200 }}
+    medium: {{ branch.diff.size >= 200 and branch.diff.size < 400 }}
+    large: {{ branch.diff.size >= 400 }}
+  author:
+    # if the branch name and the branch author has the word 'dependabot' in it
+    dependabot: {{ (branch.name | includes(term="dependabot")) and (branch.author | includes(term="dependabot")) }}
+  scope:
+    apps:
+      frontend_web: {{ files | match(regex=r/apps\/COMPANY-frontend\//) | some }}
+      frontend_mobile: {{ files | match(regex=r/apps\/frontend-mobile\//) | some }}
+    packages:
+      common_components: {{ files | match(regex=r/packages\/common-components\//) | some }}
+      domain: {{ files | match(regex=r/packages\/domain\//) | some }}
+      formatters: {{ files | match(regex=r/packages\/formatters\//) | some }}
