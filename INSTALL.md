@@ -9,7 +9,5 @@
 
 ```
 npm install
-```
-
 
 banana
