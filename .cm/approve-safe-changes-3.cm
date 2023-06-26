@@ -6,93 +6,9 @@ automations:
   # Flag the author if an appropriate type label isn't present
   check_label_type:
     if:
-      - {{ not (pr.labels | match(list=constants.labels.type) | some) }}
+      - true
     run:
-      - action: add-comment@v1
+      - action: explain-code-experts@v1
         args:
-          comment: |
-            You're missing a label to indicate what kind of change this PR encompasses overall. Choose one of: {{ constants.labels.type | dump | safe }}
-  # Add appropriate label based on scope of changes
-  add_label_scope_app_frontend_web:
-    if:
-      - {{ is.scope.apps.frontend_web }}
-      - {{ pr.labels | match(term=constants.labels.scope.apps.frontend_web) | nope }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ constants.labels.scope.apps.frontend_web }}"
-  add_label_scope_app_frontend_mobile:
-    if:
-      - {{ is.scope.apps.frontend_mobile }}
-      - {{ pr.labels | match(term=constants.labels.scope.apps.frontend_mobile) | nope }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ constants.labels.scope.apps.frontend_mobile }}"
-  add_label_scope_packages_common_components:
-    if:
-      - {{ is.scope.packages.common_components }}
-      - {{ pr.labels | match(term=constants.labels.scope.packages.common_components) | nope }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ constants.labels.scope.packages.common_components }}"
-  add_label_scope_packages_domain:
-    if:
-      - {{ is.scope.packages.domain }}
-      - {{ pr.labels | match(term=constants.labels.scope.packages.domain) | nope }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ constants.labels.scope.packages.domain }}"
-  add_label_scope_packages_formatters:
-    if:
-      - {{ is.scope.packages.formatters }}
-      - {{ pr.labels | match(term=constants.labels.scope.packages.formatters) | nope }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ constants.labels.scope.packages.formatters }}"
-  # Always, add a label that indicates how many minutes it will take to review the PR
-  add_label_estimated_time_to_review:
-    if:
-      - {{ not is.author.dependabot }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ calc.time_to_review }} min review"
-          color: {{ 'E94637' if (calc.time_to_review >= 20) else ('FBBD10' if (calc.time_to_review >= 5) else '36A853') }}
-# custom variables/expressions
-calc:
-  # high-level filter function to calculate the estimated review time 
-  # @see https://docs.gitstream.cm/filter-functions/#estimatedreviewtime
-  time_to_review: {{ branch | estimatedReviewTime }}
-constants:
-  default_frontend_group: ['OBFUSCATED']
-  labels:
-    type: ['feature / enhancement', 'bug', 'chore', 'refactor', 'documentation', 'RFC', 'dependencies']
-    scope:
-      apps:
-        frontend_web: 'App: Frontend'
-        frontend_mobile: 'App: Frontend Mobile'
-      packages:
-        common_components: 'Package: Common Components'
-        domain: 'Package: Domain'
-        formatters: 'Package: Formatters'
-    admin: ['blocked', 'duplicate']
-is:
-  size:
-    small: {{ branch.diff.size < 200 }}
-    medium: {{ branch.diff.size >= 200 and branch.diff.size < 400 }}
-    large: {{ branch.diff.size >= 400 }}
-  author:
-    # if the branch name and the branch author has the word 'dependabot' in it
-    dependabot: {{ (branch.name | includes(term="dependabot")) and (branch.author | includes(term="dependabot")) }}
-  scope:
-    apps:
-      frontend_web: {{ files | match(regex=r/apps\/COMPANY-frontend\//) | some }}
-      frontend_mobile: {{ files | match(regex=r/apps\/frontend-mobile\//) | some }}
-    packages:
-      common_components: {{ files | match(regex=r/packages\/common-components\//) | some }}
-      domain: {{ files | match(regex=r/packages\/domain\//) | some }}
-      formatters: {{ files | match(regex=r/packages\/formatters\//) | some }}
+          gt: 10
+          
