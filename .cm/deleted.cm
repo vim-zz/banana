@@ -23,4 +23,13 @@ automations:
       - action: add-label@v1
         args:
           label: 'ui-only-fixed'
-          
+  show_changed_files:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            THREADS {{ pr.unresolved_threads | dump | safe }}
+
+
