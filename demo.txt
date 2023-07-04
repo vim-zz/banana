@@ -8,7 +8,7 @@
 
 # say hello world after input
 display "Hello World."
-prompt
+promptccxcxc
 pause
  addStyles(asdsad)
 lorem	
