@@ -6,9 +6,10 @@ automations:
   # Add a label that indicates how many minutes it will take to review the PR.
   check_lables: 
     if:
-      - {{ pr.labels | match(list=['Core', 'Mobile', 'UI']) | nope }}
+      -  true
     run:
-      - action: add-label@v1
+      - action: add-comment@v1
       # etr is defined in the last section of this example
         args:
-          label: found-it
+          comment: |
+            checks: {{ pr.checks | dump | safe }}
