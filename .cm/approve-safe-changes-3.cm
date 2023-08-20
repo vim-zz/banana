@@ -3,8 +3,8 @@
 manifest:
   version: 1.0
 
-on:
-  - commit
+# on:
+#  - commit
 
 automations:
   # Flag the author if an appropriate type label isn't present
