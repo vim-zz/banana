@@ -1,0 +1,12 @@
+on:
+  - pr_created
+
+automations:
+  show_changed_files:
+    if:
+      - {{ pr.title | includes(term="banana") }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            banana!
