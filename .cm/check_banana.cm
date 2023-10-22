@@ -1,12 +1,10 @@
-on:
-  - pr_created
 
 automations:
-  show_changed_files:
+  banana_check:
     if:
-      - {{ pr.title | includes(term="banana") }}
+      - true
     run:
-      - action: add-comment@v1
+      - action: add-github-check@v1
         args:
-          comment: |
-            banana!
+          check_name: "Banana in title"
+          conclusion: {{ "success" if (pr.title | includes(regex=r/banana/)) else "failure" }}
