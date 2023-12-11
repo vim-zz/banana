@@ -1,5 +1,5 @@
 module.exports = {
-  bananifySync: (text) => {
+  bananify: (text) => {
     return text.replaceAll('banana', '🍌');
   }
 };
