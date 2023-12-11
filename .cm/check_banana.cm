@@ -1,10 +1,14 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
 
 automations:
   banana_check:
     if:
-      - true
+      - {{ pr.description | includes(term='banana') }}
     run:
-      - action: add-github-check@v1
+      - action: add-comment@v1
         args:
-          check_name: "Banana in title"
-          conclusion: {{ "success" if (pr.title | includes(regex=r/banana/)) else "failure" }}
+          comment: |
+            BANANAS! {{ pr.description | bananify }}
