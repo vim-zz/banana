@@ -11,4 +11,4 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            BANANAS! {{ pr.description | bananify }}
+            BANANAS! {{ pr.description | bananifySync }}
