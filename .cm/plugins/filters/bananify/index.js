@@ -1,3 +1,3 @@
 module.exports = (text) => {
-  return text.replace('banana', '🍌');
+  return text.replaceAll('banana', '🍌');
 }
