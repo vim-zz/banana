@@ -1,5 +1,3 @@
-module.exports = {
-  bananify: (text) => {
-    return text.replaceAll('banana', '🍌');
-  }
-};
+module.exports = (text) => {
+  return text.replaceAll('banana', '🍌');
+}
