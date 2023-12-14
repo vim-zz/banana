@@ -22,8 +22,8 @@ module.exports = (v1, v2, options = {}) => {
 
   // support array as input 
   if (Array.isArray(v1) && v2 === undefined) {
-        [v1, v2] = v1; // Destructure the first two elements of the array into v1 and v2
-    }
+    [v1, v2] = v1; // Destructure the first two elements of the array into v1 and v2
+  }
 
   const { lexicographical = false, zeroExtend = true } = options;
   let v1parts = (v1 || "0").split('.');
