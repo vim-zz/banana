@@ -1,7 +1,8 @@
 /**
  * Compares two software version numbers (e.g., "1.2.1" or "1.2b") and determines the type of version change.
  *
- * The first version to be compared, and the second are passed as argument 1 and 2 or as array of 2 items.
+ * The first version to be compared, and the second are passed as argument 1 and 2 or as array of 2 items. 
+ * When v1 > v2 the it means and upgrade.
  * 
  * The options arument is optional and flags that affect comparison behavior:
  *   lexicographical: (true/[false]) compares each part of the version strings lexicographically instead of naturally; 
@@ -19,7 +20,6 @@
  */
 
 module.exports = (v1, v2, options = {}) => {
-  console.log("BANANA semver", {v1, v2, options});
 
   // support array as input 
   if (Array.isArray(v1) && v2 === undefined) {
