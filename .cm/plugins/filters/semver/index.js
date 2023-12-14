@@ -19,6 +19,7 @@
  */
 
 module.exports = (v1, v2, options = {}) => {
+  console.log("BANANA semver", {v1, v2, options});
 
   // support array as input 
   if (Array.isArray(v1) && v2 === undefined) {
