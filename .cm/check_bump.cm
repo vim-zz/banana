@@ -10,8 +10,8 @@ automations:
     run:
       - action: approve@v1
       - action: add-comment@v1
-         args:
-           comment: |
+        args:
+          comment: |
             Dependabot `minor` version bump are approved automatically.
   bump_patch:
     if:
@@ -20,8 +20,8 @@ automations:
       - action: approve@v1
       - action: merge@v1
       - action: add-comment@v1
-         args:
-           comment: |
+        args:
+          comment: |
             Dependabot `patch` version bump are approved and merged automatically.
 
 bump: {{ pr.description | dependabot_bump | semver }}
