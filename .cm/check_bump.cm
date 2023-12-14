@@ -1,0 +1,14 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  bump_check:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            SEMVER? {{ pr.description | frogbot_bump | semver }}
