@@ -1,5 +1,5 @@
 module.exports = (desc) => {
-  var [_, from, to] = /Bumps.*from (\S+) to (\S+)/.exec(desc);
+  var [_, from, to] = /Bumps.*from ([\d\.]+[A-Za-zαß]*) to ([\d\.]+[A-Za-zαß]*)/.exec(desc);
   // remove trailing dot on to
   console.log("BANANA frog before", {from, to});
   if (to[to.length - 1] === ".") {
