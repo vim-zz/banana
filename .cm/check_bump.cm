@@ -11,4 +11,5 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
+            BUMP? {{ pr.description | frogbot_bump }}
             SEMVER? {{ pr.description | frogbot_bump | semver }}
