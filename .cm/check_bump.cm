@@ -4,12 +4,17 @@ manifest:
   version: 1.0
 
 automations:
-  bump_check:
+  bump_minor:
     if:
-      - true
+      - {{ bump == 'minor' }}
     run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            BUMP? {{ pr.description | frogbot_bump }}
-            SEMVER? {{ pr.description | frogbot_bump | semver }}
+      - action: approve@v1
+  bump_patch:
+    if:
+      - {{ bump == 'patch' }}
+    run:
+      - action: approve@v1
+      - action: merge@v1
+
+
+bump: {{ pr.description | frogbot_bump | semver }}
