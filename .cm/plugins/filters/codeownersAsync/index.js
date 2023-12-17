@@ -2,8 +2,34 @@ const fs = require('fs').promises;
 const ignore = require('./ignore.js');
 
 async function loadCodeownersFile() {
-  const data = await fs.readFile("CODEOWNERS", "utf8");
-  return Buffer.from(data);
+  console.log("PATH", {path: require('path').basename(__dirname)});
+  try {
+    const data = await fs.readFile("CODEOWNERS", "utf8");
+    return Buffer.from(data);
+  } catch (err) {
+    console.log("cant read CODEOWNERS");
+  }
+
+  try {
+    const data = await fs.readFile("./CODEOWNERS", "utf8");
+    return Buffer.from(data);
+  } catch (err) {
+    console.log("cant read ./CODEOWNERS");
+  }
+
+  try {
+    const data = await fs.readFile("/CODEOWNERS", "utf8");
+    return Buffer.from(data);
+  } catch (err) {
+    console.log("cant read /CODEOWNERS");
+  }
+
+  try {
+    const data = await fs.readFile("../../../../CODEOWNERS", "utf8");
+    return Buffer.from(data);
+  } catch (err) {
+    console.log("cant read ../../../../CODEOWNERS");
+  }
 }
 
 function codeownersMapping(data) {
