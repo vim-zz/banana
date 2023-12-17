@@ -1,0 +1,6 @@
+# This is a comment.
+# Each line is a file pattern followed by one or more owners.
+
+*.js  @vim-zz @vimperator-dev
+*.md  @ShakedZrihen @vim-zz
+*.txt @ShakedZrihen @EladKohavi
