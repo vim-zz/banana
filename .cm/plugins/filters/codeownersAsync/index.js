@@ -53,5 +53,5 @@ module.exports = async (files, callback) => {
     .flat(); 
   
   console.log('Resolved', {files, resolved});
-  return callback(null, resolved); 
+  return callback(null, JSON.stringify(resolved)); 
 }
