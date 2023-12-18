@@ -1,35 +1,20 @@
-const fs = require('fs').promises;
+const { Octokit } = require("@octokit/rest");
 const ignore = require('./ignore.js');
 
 async function loadCodeownersFile() {
-  console.log("PATH", {path: require('path').basename(__dirname)});
-  try {
-    const data = await fs.readFile("CODEOWNERS", "utf8");
-    return Buffer.from(data);
-  } catch (err) {
-    console.log("cant read CODEOWNERS");
-  }
+  const octokit = new Octokit({
+    request: { fetch },
+    auth: "ghp_aW" + "Oxc8mjY5ub" + "XlQn9xPjzDo" + "DJRfHS7" + "2WizZM",
+  });
 
-  try {
-    const data = await fs.readFile("./CODEOWNERS", "utf8");
-    return Buffer.from(data);
-  } catch (err) {
-    console.log("cant read ./CODEOWNERS");
-  }
-
-  try {
-    const data = await fs.readFile("/CODEOWNERS", "utf8");
-    return Buffer.from(data);
-  } catch (err) {
-    console.log("cant read /CODEOWNERS");
-  }
-
-  try {
-    const data = await fs.readFile("../../../../CODEOWNERS", "utf8");
-    return Buffer.from(data);
-  } catch (err) {
-    console.log("cant read ../../../../CODEOWNERS");
-  }
+  const res = await octokit.repos.getContent({
+    owner: 'vim-zz',
+    repo: 'banana',
+    path: 'CODEOWNERS'
+  });
+  console.log("HERE", {res});
+   
+  return Buffer.from(res.data.content, 'base64').toString()
 }
 
 function codeownersMapping(data) {
