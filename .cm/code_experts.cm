@@ -3,20 +3,25 @@
 manifest:
   version: 1.0
 
-on:
-  - commit
+# on:
+#   - commit
 
 automations:
   # Flag the author if an appropriate type label isn't present
-  check_label_type:
+  senior_review:
     if:
       - true
     run:
-      - action: explain-code-experts@v1
-        args:
-          gt: 10
       - action: add-comment@v1
         args:
           comment: |
-            CODEOWNERS: {{ files | codeownersAsync | safe | dump }}
-          
+            Codeowners+Experts: {{ files | codeownersAsync | intersection(experts) }}
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ files | codeownersAsync | intersection(experts) }}
+      - action: explain-code-experts@v1
+        args:
+          gt: 10
+
+experts: {{ repo | codeExperts(gt=10) }}
+owners: {{ files | codeownersAsync }}
