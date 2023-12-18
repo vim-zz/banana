@@ -15,10 +15,10 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            Codeowners+Experts: {{ files | codeownersAsync | intersection(experts) }}
+            Codeowners+Experts: {{ files | codeownersAsync | intersection(list=experts) }}
       - action: add-reviewers@v1
         args:
-          reviewers: {{ files | codeownersAsync | intersection(experts) }}
+          reviewers: {{ files | codeownersAsync | intersection(list=experts) }}
       - action: explain-code-experts@v1
         args:
           gt: 10
