@@ -43,12 +43,12 @@ function resolveCodeowner(mapping, file) {
     return match.owners;
 }
 
-module.exports = async (pr, callback) => {
+module.exports = async (files, callback) => {
   const fileData = await loadCodeownersFile();
   const mapping = codeownersMapping(fileData);
-  console.log('PR context', { pr });
+  console.log('FILES context', { files });
   console.log('CODEOWNERS mapping', { mapping });
-  const resolved = pr.files
+  const resolved = files
     .map(f => resolveCodeowner(mapping, f))
     .flat(); 
   

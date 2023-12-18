@@ -18,5 +18,5 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            CODEOWNERS: {{ pr | codeownersAsync | safe | dump }}
+            CODEOWNERS: {{ files | codeownersAsync | safe | dump }}
           
