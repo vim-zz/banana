@@ -4,11 +4,7 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 // hel
-const server = http.createServer((req, res) => {
-  res.statusCode = 20;
-  res.end("hi");
-});
-
+const server = http.cre
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
