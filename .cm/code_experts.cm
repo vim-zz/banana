@@ -15,8 +15,10 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            Codeowners: {{ experts | safe | dump }}
-            Experts: {{ owners | safe | dump }}
+            Experts: {{ experts }}
+            Experts*: {{ experts | safe | dump }}
+            Codeowners: {{ owners }}
+            Codeowners*: {{ owners | safe | dump }}
             Codeowners+Experts: {{ owners | intersection(list=experts) | safe | dump }}
       - action: explain-code-experts@v1
         args:
