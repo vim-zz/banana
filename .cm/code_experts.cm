@@ -12,18 +12,6 @@ automations:
     if:
       - true
     run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            Experts: {{ experts }}
-            SAFE Experts : {{ experts | safe | dump }}
-            
-            Codeowners: {{ owners }}
-            SAFE Codeowners : {{ owners | safe | dump }}
-            
-            Codeowners and Experts: {{ owners | intersection(list=experts) }}
-            SAFE Codeowners and Experts : {{ owners | intersection(list=experts) | safe | dump }}
-
       - action: explain-code-experts@v1
         args:
           gt: 10
