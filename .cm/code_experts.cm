@@ -21,11 +21,11 @@ automations:
             Codeowners: {{ owners }}
             SAFE Codeowners : {{ owners | safe | dump }}
             
-            Codeowners and Experts: {{ owners | intersection(list=experts) }}
-            SAFE Codeowners and Experts : {{ owners | intersection(list=experts) | safe | dump }}
+            Codeowners and Experts: {{ owners | intersection(list=[experts]) }}
+            SAFE Codeowners and Experts : {{ owners | intersection(list=[experts]) | safe | dump }}
 
-            Experts and Codeowners: {{ experts | intersection(list=owners) }}
-            SAFE Experts and Codeowners : {{ experts | intersection(list=owners) | safe | dump }}
+            Experts and Codeowners: {{ experts | intersection(list=[owners]) }}
+            SAFE Experts and Codeowners : {{ experts | intersection(list=[owners]) | safe | dump }}
 
       - action: explain-code-experts@v1
         args:
