@@ -50,8 +50,9 @@ module.exports = async (files, callback) => {
   console.log('CODEOWNERS mapping', { mapping });
   const resolved = files
     .map(f => resolveCodeowner(mapping, f))
-    .flat(); 
+    .flat()
+    .map(u => u.replace(/^@/, "");
   
   console.log('Resolved', {files, resolved});
-  return callback(null, JSON.stringify(resolved)); 
+  return callback(null, resolved);
 }
