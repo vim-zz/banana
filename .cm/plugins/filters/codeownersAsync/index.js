@@ -54,5 +54,5 @@ module.exports = async (files, callback) => {
     .map(u => u.replace(/^@/, ""));
   
   console.log('Resolved', {files, resolved});
-  return callback(null, JSON.stringify(resolved)); 
+  return callback(null, resolved); 
 }
