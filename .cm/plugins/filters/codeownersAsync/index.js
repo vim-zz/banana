@@ -51,7 +51,7 @@ module.exports = async (files, callback) => {
   const resolved = files
     .map(f => resolveCodeowner(mapping, f))
     .flat()
-    .map(u => u.replace(/^@/, "");
+    .map(u => u.replace(/^@/, ""));
   
   console.log('Resolved', {files, resolved});
   return callback(null, resolved); 
