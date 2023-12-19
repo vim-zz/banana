@@ -15,21 +15,20 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            // experts = vimperator-dev
-            // owners =  vim-zz,vimperator-dev
-
             Experts: {{ experts }}
-            SAFE Experts : {{ experts | safe | dump }}
-            
             Codeowners: {{ owners }}
-            SAFE Codeowners : {{ owners | safe | dump }}
             
-            Codeowners and Experts: {{ owners | intersection(list=experts) }} ❌
-            Codeowners and Experts: {{ experts | intersection(list=owners) }} ❌
+            Codeowners and Experts: {{ owners | intersection(list=experts) }}
+            or
+            Experts and Codeowners: {{ experts | intersection(list=owners) }}
 
       - action: explain-code-experts@v1
         args:
           gt: 10
+
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ experts | intersection(list=owners) }}
 
 experts: {{ repo | codeExperts(gt=10) }}
 owners: {{ files | codeownersAsync }}
