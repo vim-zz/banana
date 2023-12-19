@@ -33,5 +33,3 @@ automations:
 
 experts: {{ repo | codeExperts(gt=10) }}
 owners: {{ files | codeownersAsync }}
-
-{{ files | codeownersAsync(experts) }}
