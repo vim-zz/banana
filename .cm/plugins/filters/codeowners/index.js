@@ -66,8 +66,9 @@ function resolveCodeowner(mapping, file) {
 module.exports = {
    async: true,
    filter: async (files, pr, callback) => {
-    const fileData = await loadCodeownersFile(pr.owner, pr.repo);
     console.log('FILES context', { files });
+    console.log('PR context', { pr });
+    const fileData = await loadCodeownersFile(pr.owner, pr.repo);
     const mapping = codeownersMapping(fileData);
     console.log('CODEOWNERS mapping', { mapping });
     
