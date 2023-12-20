@@ -1,7 +1,7 @@
 module.exports = (desc) => {
   console.log("DEPENDABOT_BUMP", {desc});
-  
-  if (desc) {    
+
+  if (desc && desc !== '""' && desc !== "''" ) {    
     var [_, from, to] = /Bumps.*from ([\d\.]+[A-Za-zαß]*) to ([\d\.]+[A-Za-zαß]*)/.exec(desc);
     // remove trailing dot on to
     if (to[to.length - 1] === ".") {
