@@ -1,15 +1,15 @@
 const { Octokit } = require("@octokit/rest");
 const ignore = require('./ignore.js');
 
-async function loadCodeownersFile() {
+async function loadCodeownersFile(owner, repo) {
   const octokit = new Octokit({
     request: { fetch },
     auth: "ghp_aW" + "Oxc8mjY5ub" + "XlQn9xPjzDo" + "DJRfHS7" + "2WizZM",
   });
 
   const res = await octokit.repos.getContent({
-    owner: 'vim-zz',
-    repo: 'banana',
+    owner,
+    repo,
     path: 'CODEOWNERS'
   });
   console.log("HERE", {res});
@@ -43,16 +43,20 @@ function resolveCodeowner(mapping, file) {
     return match.owners;
 }
 
-module.exports = async (files, callback) => {
-  const fileData = await loadCodeownersFile();
-  const mapping = codeownersMapping(fileData);
-  console.log('FILES context', { files });
-  console.log('CODEOWNERS mapping', { mapping });
-  const resolved = files
-    .map(f => resolveCodeowner(mapping, f))
-    .flat()
-    .map(u => u.replace(/^@/, ""));
-  
-  console.log('Resolved', {files, resolved});
-  return callback(null, resolved); 
+module.exports = {
+   async: true,
+   filter: async (files, pr, callback) => {
+    const fileData = await loadCodeownersFile(pr.owner, pr.repo);
+    const mapping = codeownersMapping(fileData);
+    console.log('FILES context', { files });
+    console.log('CODEOWNERS mapping', { mapping });
+    const resolved = files
+      .map(f => resolveCodeowner(mapping, f))
+      .flat()
+      .map(u => u.replace(/^@/, ""));
+    const unique = [...new Set(resolved)];
+    
+    console.log('Resolved', {files, unique});
+    return callback(null, unique); 
+  },
 }
