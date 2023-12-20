@@ -1,0 +1,40 @@
+# codeowners plugin
+
+Can be used like this
+
+```
+# -*- mode: yaml -*-
+# This configuration is for gitStream. To know more visit: https://docs.gitstream.cm/quick-start/
+manifest:
+  version: 1.0
+
+# on:
+#   - commit
+
+automations:
+  # Flag the author if an appropriate type label isn't present
+  senior_review:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            Experts: {{ experts }}
+            Codeowners: {{ owners }}
+            
+            Codeowners and Experts: {{ owners | intersection(list=experts) }}
+            or
+            Experts and Codeowners: {{ experts | intersection(list=owners) }}
+
+      - action: explain-code-experts@v1
+        args:
+          gt: 10
+
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ experts | intersection(list=owners) }}
+
+experts: {{ repo | codeExperts(gt=10) }}
+owners: {{ files | codeowners(pr) }}
+```
