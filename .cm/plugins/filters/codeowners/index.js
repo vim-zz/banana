@@ -67,13 +67,16 @@ module.exports = {
    async: true,
    filter: async (files, pr, callback) => {
     const fileData = await loadCodeownersFile(pr.owner, pr.repo);
-    const mapping = codeownersMapping(fileData);
     console.log('FILES context', { files });
+    const mapping = codeownersMapping(fileData);
     console.log('CODEOWNERS mapping', { mapping });
+    
     const resolved = files
       .map(f => resolveCodeowner(mapping, f))
       .flat()
+      .filter(i => typeof i === 'string')
       .map(u => u.replace(/^@/, ""));
+
     const unique = [...new Set(resolved)];
     
     console.log('Resolved', {files, unique});
