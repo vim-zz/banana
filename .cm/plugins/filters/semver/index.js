@@ -20,6 +20,7 @@
  */
 
 module.exports = (v1, v2, options = {}) => {
+  console.log("SEMVER", {v1, v2, options});
 
   // support array as input 
   if (Array.isArray(v1) && v2 === undefined) {

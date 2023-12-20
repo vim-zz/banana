@@ -32,7 +32,6 @@ async function loadCodeownersFile(owner, repo) {
     repo,
     path: 'CODEOWNERS'
   });
-  console.log("HERE", {res});
    
   return Buffer.from(res.data.content, 'base64').toString()
 }
@@ -66,8 +65,7 @@ function resolveCodeowner(mapping, file) {
 module.exports = {
    async: true,
    filter: async (files, pr, callback) => {
-    console.log('FILES context', { files });
-    console.log('PR context', { pr });
+    console.log('CODEOWNERS context', { files, pr });
     const fileData = await loadCodeownersFile(pr.author, pr.repo);
     const mapping = codeownersMapping(fileData);
     console.log('CODEOWNERS mapping', { mapping });
@@ -80,7 +78,7 @@ module.exports = {
 
     const unique = [...new Set(resolved)];
     
-    console.log('Resolved', {files, unique});
+    console.log('CODEOWNERS resolved', {unique});
     return callback(null, unique); 
   },
 }

@@ -1,4 +1,6 @@
 module.exports = (desc) => {
+  console.log("DEPENDABOT_BUMP", {desc});
+  
   if (desc) {    
     var [_, from, to] = /Bumps.*from ([\d\.]+[A-Za-zαß]*) to ([\d\.]+[A-Za-zαß]*)/.exec(desc);
     // remove trailing dot on to
@@ -8,6 +10,6 @@ module.exports = (desc) => {
 
     return [to, from];
   }
-  
+
   return null;
 }
