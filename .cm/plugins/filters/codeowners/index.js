@@ -68,7 +68,7 @@ module.exports = {
    filter: async (files, pr, callback) => {
     console.log('FILES context', { files });
     console.log('PR context', { pr });
-    const fileData = await loadCodeownersFile(pr.owner, pr.repo);
+    const fileData = await loadCodeownersFile(pr.author, pr.repo);
     const mapping = codeownersMapping(fileData);
     console.log('CODEOWNERS mapping', { mapping });
     
