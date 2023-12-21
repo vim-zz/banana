@@ -8,12 +8,7 @@ const server = http.createServer((req,
 
 // hello 
 const server = http.createServer((req, res) => {
-  res.statusCode = 20; 
-  res.end("hi");
-});ateServer((req, res) => {
-  res.statusCode = 20; 
-  res.end("hi");
-});
+  res.statusCode = 20;
 // hello 
 const server = http.createServer((req, res) => {
   res.statusCode = 20; 
