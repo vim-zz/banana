@@ -40,6 +40,8 @@ jobs:
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@stage
         id: rules-engine
+        env: 
+          CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
           head_ref: ${{ github.event.inputs.head_ref }}

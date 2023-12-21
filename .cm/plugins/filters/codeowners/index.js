@@ -1,10 +1,10 @@
 const { Octokit } = require("@octokit/rest");
 const ignore = require('./ignore/index.js');
 
-async function loadCodeownersFile(owner, repo) {
+async function loadCodeownersFile(owner, repo, auth) {
   const octokit = new Octokit({
     request: { fetch },
-    auth: "ghp_aW" + "Oxc8mjY5ub" + "XlQn9xPjzDo" + "DJRfHS7" + "2WizZM",
+    auth,
   });
 
   const res = await octokit.repos.getContent({
@@ -44,9 +44,9 @@ function resolveCodeowner(mapping, file) {
 
 module.exports = {
    async: true,
-   filter: async (files, pr, callback) => {
+   filter: async (files, pr, token, callback) => {
     console.log('CODEOWNERS context', { files, pr });
-    const fileData = await loadCodeownersFile(pr.author, pr.repo);
+    const fileData = await loadCodeownersFile(pr.author, pr.repo, token);
     const mapping = codeownersMapping(fileData);
     console.log('CODEOWNERS mapping', { mapping });
     
