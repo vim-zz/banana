@@ -7,6 +7,8 @@ automations:
   bump_minor:
     if:
       - {{ bump == 'minor' }}
+      - {{ branch.name | includes(term="dependabot") }}
+      - {{ branch.author | includes(term="dependabot") }}
     run:
       - action: approve@v1
       - action: add-comment@v1
@@ -16,6 +18,8 @@ automations:
   bump_patch:
     if:
       - {{ bump == 'patch' }}
+      - {{ branch.name | includes(term="dependabot") }}
+      - {{ branch.author | includes(term="dependabot") }}
     run:
       - action: approve@v1
       - action: merge@v1
