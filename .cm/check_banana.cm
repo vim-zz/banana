@@ -6,9 +6,9 @@ manifest:
 automations:
   banana_check:
     if:
-      - {{ pr.description | includes(term='banana') }}
+      - {{ pr.description | includes(list=['banana', 'star']) }}
     run:
       - action: add-comment@v1
         args:
           comment: |
-            BANANAS! {{ pr.description | bananify }}
+            BANANAS! {{ pr.description | bananify | starify }}
