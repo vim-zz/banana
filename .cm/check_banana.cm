@@ -23,9 +23,12 @@ automations:
             PARSE SFAE: {{ json_output | safe | dump }} 
             PARSE LOW: {{ json_output.low }} 
             PARSE LOW: {{ json_output.low == 1 }} 
+            PARSE LOW: {{ (json_output.low | int) == 1 }} 
             PARSE MED: {{ json_output.medium }} 
             PARSE MED: {{ json_output.medium > 1 }} 
+            PARSE MED: {{ (json_output.medium | int) > 1 }} 
             PARSE HIGH: {{ json_output.high }} 
             PARSE HIGH: {{ json_output.high - 1 == json_output.medium }} 
+            PARSE HIGH: {{ (json_output.high | int) - 1 == (json_output.medium | int) }} 
 
 json_output: {{ '{"low": 1, "medium": 2, "high":3}' | parseJson }}
