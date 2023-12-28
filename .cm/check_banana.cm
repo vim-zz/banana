@@ -19,10 +19,10 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-          PARSE: {{ json_output | safe | dump }} 
-          PARSE: {{ json_output | safe | dump }} 
-          PARSE LOW: {{ json_output.low == 1 }} 
-          PARSE MED: {{ json_output.medium > 1 }} 
-          PARSE HIGH: {{ json_output.high - 1 == json_output.medium }} 
+            PARSE: {{ json_output }} 
+            PARSE SFAE: {{ json_output | safe | dump }} 
+            PARSE LOW: {{ json_output.low == 1 }} 
+            PARSE MED: {{ json_output.medium > 1 }} 
+            PARSE HIGH: {{ json_output.high - 1 == json_output.medium }} 
 
 json_output: {{ '{"low": 1, "medium": 2, "high":3}' | parseJson }}
