@@ -20,4 +20,4 @@ automations:
         args:
           comment: = {{ json_output.high + json_output.low }} 
 
-json_output: {{ "{low: 1, medium:2, high:3}" | parseJson }}
+json_output: {{ '{"low": 1, "medium": 2, "high":3}' | parseJson }}
