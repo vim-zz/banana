@@ -14,10 +14,10 @@ automations:
             BANANAS! {{ pr.description | bananify | starify }}
   check:
     if:
-      - {{ json_output.medium > 1 }}
+      - {{ json_output.medium | int > 1 }}
     run:
       - action: add-comment@v1
         args:
-          comment: = {{ json_output.high + json_output.low }} 
+          comment: = {{ (json_output.high | int) + (json_output.low | int) }} 
 
 json_output: {{ '{"low": 1, "medium": 2, "high":3}' | parseJson }}
