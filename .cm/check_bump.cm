@@ -28,4 +28,4 @@ automations:
           comment: |
             Dependabot `patch` version bump are approved and merged automatically.
 
-bump: {{ pr.description | dependabot_bump | semver }}
+bump: {{ pr.description | dependabotBump | semver }}
