@@ -18,6 +18,7 @@ function extractNewFiles(subObjects, fileType) {
             delete filteredSubObjects[k];
         }
     }
+    console.log("result.", {filteredSubObjects})
     return filteredSubObjects;
 }
 
