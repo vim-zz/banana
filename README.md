@@ -8,6 +8,7 @@ Foobar is a Python library for dealing with word pluralization.
 pip install foobar
 ```
 
+
 ## Intro 
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
