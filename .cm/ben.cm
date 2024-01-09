@@ -15,5 +15,5 @@ automations:
             INXEX: {{ newPlugins | safe | dump }}
 
 
-gitStreamPlugins: {{ source.diff.files | sortFiles("plugins/filters") }}
-newPlugins: {{ source.diff.files | sortFiles("plugins/filters") | extractNewFiles("index.js") }}
+gitStreamPlugins: {{ source.diff.files | sortFiles(".cm/plugins/filters") }}
+newPlugins: {{ source.diff.files | sortFiles(".cm/plugins/filters") | extractNewFiles("index.js") }}
