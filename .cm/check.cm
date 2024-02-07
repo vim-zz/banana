@@ -1,0 +1,18 @@
+
+manifest:
+  version: 1.0
+
+automations:
+  plugin_test:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            INXEX: {{ newPlugins | safe | dump }}
+
+
+newFiles: {{ source.diff.files | extractNewFiles("pom\.xml$") }}
+parseConfig: {{ repo | getRepoFile("dependabot.yml", env.CODEOWNERS_TOKEN) }}
+stuff: {{ parseConfig | lookForDependabotStuff(newFiles) }}

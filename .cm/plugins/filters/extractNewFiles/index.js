@@ -1,25 +1,12 @@
-function extractNewFiles(subObjects, fileType) {
-    console.log("Identifying new files...", {subObjects, fileType})
-
-    const filteredSubObjects = {};
-
-    for (const [plugin, objects] of Object.entries(subObjects)) {
-        const hasIndexJS = objects.some((subObject) => subObject.new_file.includes(fileType) && subObject.original_file === '');
-    
-        if (hasIndexJS) {
-            filteredSubObjects[plugin] = objects;
-        } else {
-            filteredSubObjects[plugin] = [];
-        }
-    }
-
-    for (const k in filteredSubObjects) {
-        if (Array.isArray(filteredSubObjects[k]) && filteredSubObjects[k].length === 0) {
-            delete filteredSubObjects[k];
-        }
-    }
-    console.log("result.", {filteredSubObjects})
-    return filteredSubObjects;
+function extractNewFiles(fileDiffs, fileTypeRegexStr) {
+    // console.log("Identifying new files...", {fileDiffs, fileTypeRegexStr})
+    const fileTypeRegex = new RegExp(fileTypeRegexStr);
+    const newFiles = src
+      .filter(item => item.original_file === "")
+      .filter(item => fileTypeRegex.test(item.new_file))
+      .map(item => item.new_file);
+ 
+    return newFiles;
 }
 
 module.exports = extractNewFiles;
