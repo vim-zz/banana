@@ -10,7 +10,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            INXEX: {{ newPlugins | safe | dump }}
+            STUFF: {{ stuff }}
 
 
 newFiles: {{ source.diff.files | extractNewFiles("pom\.xml$") }}

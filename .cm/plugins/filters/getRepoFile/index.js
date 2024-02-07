@@ -24,8 +24,9 @@ const getRepoFile = async (repo, path, auth, callback) => {
         repo: repo.name,
         path
     });
-
-    return callback(error, Buffer.from(res.data.content, 'base64').toString());
+    const content = Buffer.from(res.data.content, 'base64').toString();
+    console.log("getRepoFile result", {content});
+    return callback(error, content);
 }
 
 module.exports = {

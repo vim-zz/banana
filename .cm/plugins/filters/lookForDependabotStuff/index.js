@@ -15,9 +15,11 @@ function extractDirectories(dependabotYmlContent) {
 
 function lookForDependabotStuff(newFiles, dependabotYmlContent) {
     const dependabotDirectories = extractDirectories(dependabotYmlContent);
-    return newFiles
+    const result = newFiles
         .map(file => '/' + file)
         .some(file => dependabotDirectories.some(x => file.startsWith(x)));
+    console.log("lookForDependabotStuff result", {result});
+    return result;
 }
 
 module.exports = lookForDependabotStuff;
