@@ -36,12 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
     name: gitStream workflow automation
+    env: 
+      CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
     steps:
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@v1
         id: rules-engine
-        env: 
-          CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
           head_ref: ${{ github.event.inputs.head_ref }}
