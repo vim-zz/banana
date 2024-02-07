@@ -14,6 +14,7 @@ function extractDirectories(dependabotYmlContent) {
 }
 
 function lookForDependabotStuff(newFiles, dependabotYmlContent) {
+    console.log("lookForDependabotStuff input", {newFiles, dependabotYmlContent});
     const dependabotDirectories = extractDirectories(dependabotYmlContent);
     const result = newFiles
         .map(file => '/' + file)
