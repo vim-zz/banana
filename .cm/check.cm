@@ -11,10 +11,10 @@ automations:
         args:
           comment: |
             newFiles: {{ newFiles }}
-            newFiles SAFE: {{ newFiles | safe | dump }}
             parseConfig: {{ parseConfig }}
-            parseConfig SAFE: {{ parseConfig | safe | dump }}
+            stuff: {{ stuff }}
 
 
 newFiles: {{ source.diff.files | extractNewFiles("pom\.xml$") }}
 parseConfig: {{ repo | getRepoFile("dependabot.yml", env.CODEOWNERS) }}
+stuff: {{ parseConfig | lookForDependabotStuff(newFiles) }}
