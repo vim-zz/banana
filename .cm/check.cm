@@ -15,5 +15,4 @@ automations:
             stuff: {{ stuff }}
 
 
-newFiles: {{ source.diff.files | extractNewFiles("pom\.xml$") }}
-parseConfig: {{ repo | getRepoFile("dependabot.yml", env.CODEOWNERS) | lookForDependabotStuff(newFiles) }}
+parseConfig: {{ [source.diff.files, repo] | lookForDependabotStuff("pom\.xml$", env.CODEOWNERS) }}

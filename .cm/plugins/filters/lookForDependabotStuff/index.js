@@ -1,3 +1,7 @@
+function dirname(filepath) {
+    return filepath.split("/").slice(0, -1).join("/");
+}
+
 function extractDirectories(dependabotYmlContent) {
     const lines = dependabotYmlContent.split('\n');
     const directories = [];
@@ -13,14 +17,59 @@ function extractDirectories(dependabotYmlContent) {
     return directories;
 }
 
-function lookForDependabotStuff(newFiles, dependabotYmlContent) {
-    console.log("lookForDependabotStuff input", {newFiles, dependabotYmlContent});
-    const dependabotDirectories = extractDirectories(dependabotYmlContent);
+function extractNewFiles(fileDiffs, fileTypeRegexStr) {
+    // console.log("Identifying new files...", {fileDiffs, fileTypeRegexStr})
+    const fileTypeRegex = new RegExp(fileTypeRegexStr);
+    const newFiles = fileDiffs
+      .filter(item => item.original_file === "")
+      .filter(item => fileTypeRegex.test(item.new_file))
+      .map(item => item.new_file);
+    console.log("extractNewFiles result", {newFiles});
+    return newFiles;
+}
+
+const getRepoFile = async (repo, path, auth, callback) => {
+    authString = String(auth);
+    console.log (repo.owner, repo.name, path, authString)
+    const octokit = new Octokit({
+        request: { fetch },
+        auth: authString,
+    });
+
+    const result = await octokit.repos.getContent({
+        owner: repo.owner,
+        repo: repo.name,
+        path
+    });
+    const contentData = Buffer.from(result.data.content, 'base64').toString();
+    const content = JSON.stringify(contentData);
+    console.log("getRepoFile", {content});
+    return callback(null, JSON.stringify(content));
+}
+
+const lookForDependabotStuff = async ([fileDiffs, repo], fileRegexStr, auth, callback) {
+    const newFiles = extractNewFiles(fileDiffs, fileRegexStr);
+    console.log("newFiles", {newFiles});
+
+    const fileContent = await getRepoFile(repo, "dependabot.yml", auth);
+    console.log("fileContent", {fileContent});
+
+    const dependabotDirectories = extractDirectories(fileContent);
+    console.log("dependabotDirectories", {dependabotDirectories});
+
     const result = newFiles
         .map(file => '/' + file)
-        .some(file => dependabotDirectories.some(x => file.startsWith(x)));
+        .some(file => dependabotDirectories.some(x => {
+            console.log("checking", {file, x, dir: dirname(file)});
+            return dirname(file) === x;
+        }));
     console.log("lookForDependabotStuff result", {result});
     return result;
 }
 
-module.exports = lookForDependabotStuff;
+
+
+module.exports = {
+    async: true,
+    filter: lookForDependabotStuff
+}
