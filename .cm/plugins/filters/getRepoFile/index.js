@@ -19,14 +19,15 @@ const getRepoFile = async (repo, path, auth, callback) => {
         auth: authString,
     });
 
-    const res = await octokit.repos.getContent({
+    const result = await octokit.repos.getContent({
         owner: repo.owner,
         repo: repo.name,
         path
     });
-    const content = Buffer.from(res.data.content, 'base64').toString();
-    console.log("getRepoFile result", {content});
-    return callback(null, content);
+    const contentData = Buffer.from(result.data.content, 'base64').toString();
+    const content = JSON.stringify(contentData);
+    console.log("getRepoFile", {content});
+    return callback(null, JSON.stringify(content));
 }
 
 module.exports = {
