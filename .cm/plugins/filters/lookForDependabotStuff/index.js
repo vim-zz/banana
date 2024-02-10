@@ -43,11 +43,9 @@ async function getRepoFile(repo, path, auth) {
         repo: repo.name,
         path
     });
-    const contentData = Buffer.from(result.data.content, 'base64').toString();
-    const content = JSON.stringify(contentData);
-
+    const content = Buffer.from(result.data.content, 'base64').toString();
     console.log("getRepoFile", {content});
-    return JSON.stringify(content);
+    return content;
 }
 
 const lookForDependabotStuff = async (fileDiffs, repo, fileRegexStr, auth, callback) => {
