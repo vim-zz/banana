@@ -15,4 +15,4 @@ automations:
             stuff: {{ stuff }}
 
 
-parseConfig: {{ [source.diff.files, repo] | lookForDependabotStuff("pom\.xml$", env.CODEOWNERS) }}
+parseConfig: {{ source.diff.files | lookForDependabotStuff(repo, "pom\.xml$", env.CODEOWNERS) }}

@@ -28,7 +28,7 @@ function extractNewFiles(fileDiffs, fileTypeRegexStr) {
     return newFiles;
 }
 
-const getRepoFile = async (repo, path, auth, callback) => {
+const getRepoFile = async function (repo, path, auth, callback) {
     authString = String(auth);
     console.log (repo.owner, repo.name, path, authString)
     const octokit = new Octokit({
@@ -43,11 +43,12 @@ const getRepoFile = async (repo, path, auth, callback) => {
     });
     const contentData = Buffer.from(result.data.content, 'base64').toString();
     const content = JSON.stringify(contentData);
+
     console.log("getRepoFile", {content});
     return callback(null, JSON.stringify(content));
 }
 
-const lookForDependabotStuff = async ([fileDiffs, repo], fileRegexStr, auth, callback) {
+const lookForDependabotStuff = async function (fileDiffs, repo, fileRegexStr, auth, callback) {
     const newFiles = extractNewFiles(fileDiffs, fileRegexStr);
     console.log("newFiles", {newFiles});
 
@@ -64,12 +65,11 @@ const lookForDependabotStuff = async ([fileDiffs, repo], fileRegexStr, auth, cal
             return dirname(file) === x;
         }));
     console.log("lookForDependabotStuff result", {result});
-    return result;
+    return callback(null, result);
 }
-
-
 
 module.exports = {
     async: true,
     filter: lookForDependabotStuff
 }
+
