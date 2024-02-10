@@ -68,10 +68,16 @@ const checkNewFilesAgainstDependabotConfig = async (fileDiffs, repo, fileRegexSt
 
     const result = newFiles
         .map(file => '/' + file)
-        .some(file => dependabotDirectories.some(x => {
-            console.log("checking", {file, x, dir: dirname(file)});
-            return dirname(file) !== x;
-        }));
+        // check for new files, that are not covered yet, a single matcn is sufficient
+        .some(file => {
+            // check if the file already covered in the exisintg config
+            // a single match of path to directory is sufficient 
+            const isCovered = dependabotDirectories.some(x => {
+                console.log("checking", {file, x, dir: dirname(file)});
+                return dirname(file) === x;
+            });
+            return !isCovered;
+        });
     console.log("checkNewFilesAgainstDependabotConfig result", {result});
     return callback(null, result);
 }
