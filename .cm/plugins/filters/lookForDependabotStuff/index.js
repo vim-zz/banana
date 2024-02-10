@@ -1,3 +1,5 @@
+const { Octokit } = require("@octokit/rest");
+
 function dirname(filepath) {
     return filepath.split("/").slice(0, -1).join("/");
 }
