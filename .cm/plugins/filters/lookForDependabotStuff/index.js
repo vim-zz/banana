@@ -30,7 +30,7 @@ function extractNewFiles(fileDiffs, fileTypeRegexStr) {
     return newFiles;
 }
 
-const getRepoFile = async function (repo, path, auth, callback) {
+async function getRepoFile(repo, path, auth) {
     authString = String(auth);
     console.log (repo.owner, repo.name, path, authString)
     const octokit = new Octokit({
@@ -47,10 +47,10 @@ const getRepoFile = async function (repo, path, auth, callback) {
     const content = JSON.stringify(contentData);
 
     console.log("getRepoFile", {content});
-    return callback(null, JSON.stringify(content));
+    return JSON.stringify(content);
 }
 
-const lookForDependabotStuff = async function (fileDiffs, repo, fileRegexStr, auth, callback) {
+const lookForDependabotStuff = async (fileDiffs, repo, fileRegexStr, auth, callback) => {
     const newFiles = extractNewFiles(fileDiffs, fileRegexStr);
     console.log("newFiles", {newFiles});
 
