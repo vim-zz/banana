@@ -11,7 +11,15 @@ function extractDirectories(dependabotYmlContent) {
     lines.forEach(line => {
         if (line.trim().startsWith('directory:')) {
             // Extract the value after 'directory:'
-            const directory = line.split(':')[1].trim().replace(/['"]+/g, '');
+            const directory = line
+                // get the dir name value after the directory key
+                .split(':')[1]
+                .trim()
+                // remove string's double or single quotes
+                .replace(/['"]+/g, '')
+                // remove comments
+                .split('#')[0]
+                .trim();
             directories.push(directory);
         }
     });
