@@ -1,8 +1,9 @@
 const { Octokit } = require("@octokit/rest");
+const path = require("path");
 
-function dirname(filepath) {
-    return filepath.split("/").slice(0, -1).join("/");
-}
+// function dirname(filepath) {
+//     return filepath.split("/").slice(0, -1).join("/");
+// }
 
 function extractDirectories(dependabotYmlContent) {
     const lines = dependabotYmlContent.split('\n');
@@ -73,8 +74,8 @@ const checkNewFilesAgainstDependabotConfig = async (fileDiffs, repo, fileRegexSt
             // check if the file already covered in the exisintg config
             // a single match of path to directory is sufficient 
             const isCovered = dependabotDirectories.some(x => {
-                console.log("checking", {file, x, dir: dirname(file)});
-                return dirname(file) === x;
+                console.log("checking", {file, x, dir: path.dirname(file)});
+                return path.dirname(file) === x;
             });
             return !isCovered;
         });
