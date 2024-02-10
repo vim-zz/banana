@@ -1,10 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 const path = require("path");
 
-// function dirname(filepath) {
-//     return filepath.split("/").slice(0, -1).join("/");
-// }
-
 function extractDirectories(dependabotYmlContent) {
     const lines = dependabotYmlContent.split('\n');
     const directories = [];
@@ -29,19 +25,18 @@ function extractDirectories(dependabotYmlContent) {
 }
 
 function extractNewFiles(fileDiffs, fileTypeRegexStr) {
-    // console.log("Identifying new files...", {fileDiffs, fileTypeRegexStr})
     const fileTypeRegex = new RegExp(fileTypeRegexStr);
     const newFiles = fileDiffs
       .filter(item => item.original_file === "")
       .filter(item => fileTypeRegex.test(item.new_file))
       .map(item => item.new_file);
-    console.log("extractNewFiles result", {newFiles});
+    // console.log("extractNewFiles result", {newFiles});
     return newFiles;
 }
 
 async function getRepoFile(repo, path, auth) {
     authString = String(auth);
-    console.log (repo.owner, repo.name, path, authString)
+    // console.log (repo.owner, repo.name, path, authString)
     const octokit = new Octokit({
         request: { fetch },
         auth: authString,
@@ -53,19 +48,19 @@ async function getRepoFile(repo, path, auth) {
         path
     });
     const content = Buffer.from(result.data.content, 'base64').toString();
-    console.log("getRepoFile", {content});
+    // console.log("getRepoFile", {content});
     return content;
 }
 
 const checkNewFilesAgainstDependabotConfig = async (fileDiffs, repo, fileRegexStr, auth, callback) => {
     const newFiles = extractNewFiles(fileDiffs, fileRegexStr);
-    console.log("newFiles", {newFiles});
+    // console.log("newFiles", {newFiles});
 
     const fileContent = await getRepoFile(repo, "dependabot.yml", auth);
-    console.log("fileContent", {fileContent});
+    // console.log("fileContent", {fileContent});
 
     const dependabotDirectories = extractDirectories(fileContent);
-    console.log("dependabotDirectories", {dependabotDirectories});
+    // console.log("dependabotDirectories", {dependabotDirectories});
 
     const result = newFiles
         .map(file => '/' + file)
@@ -74,12 +69,12 @@ const checkNewFilesAgainstDependabotConfig = async (fileDiffs, repo, fileRegexSt
             // check if the file already covered in the exisintg config
             // a single match of path to directory is sufficient 
             const isCovered = dependabotDirectories.some(x => {
-                console.log("checking", {file, x, dir: path.dirname(file)});
+                // console.log("checking", {file, x, dir: path.dirname(file)});
                 return path.dirname(file) === x;
             });
             return !isCovered;
         });
-    console.log("checkNewFilesAgainstDependabotConfig result", {result});
+    // console.log("checkNewFilesAgainstDependabotConfig result", {result});
     return callback(null, result);
 }
 
