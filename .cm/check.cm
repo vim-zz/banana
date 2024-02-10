@@ -10,9 +10,6 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            newFiles: {{ newFiles }}
-            parseConfig: {{ parseConfig }}
-            stuff: {{ stuff }}
+            newPom: {{ newPom }}
 
-
-parseConfig: {{ source.diff.files | lookForDependabotStuff(repo, "pom\.xml$", env.CODEOWNERS) }}
+newPom: {{ source.diff.files | checkNewFilesAgainstDependabotConfig(repo, "pom\.xml$", env.CODEOWNERS) }}

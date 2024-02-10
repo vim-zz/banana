@@ -56,7 +56,7 @@ async function getRepoFile(repo, path, auth) {
     return content;
 }
 
-const lookForDependabotStuff = async (fileDiffs, repo, fileRegexStr, auth, callback) => {
+const checkNewFilesAgainstDependabotConfig = async (fileDiffs, repo, fileRegexStr, auth, callback) => {
     const newFiles = extractNewFiles(fileDiffs, fileRegexStr);
     console.log("newFiles", {newFiles});
 
@@ -70,14 +70,14 @@ const lookForDependabotStuff = async (fileDiffs, repo, fileRegexStr, auth, callb
         .map(file => '/' + file)
         .some(file => dependabotDirectories.some(x => {
             console.log("checking", {file, x, dir: dirname(file)});
-            return dirname(file) === x;
+            return dirname(file) !== x;
         }));
-    console.log("lookForDependabotStuff result", {result});
+    console.log("checkNewFilesAgainstDependabotConfig result", {result});
     return callback(null, result);
 }
 
 module.exports = {
     async: true,
-    filter: lookForDependabotStuff
+    filter: checkNewFilesAgainstDependabotConfig
 }
 
