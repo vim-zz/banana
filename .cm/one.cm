@@ -38,6 +38,8 @@ automations:
           gt: 10
   label_copilot:
     # Detect PRs that contain the text '#copilot#' in the title, description, comments, or commit messages
+    on:
+      - comment_added
     if:
       - {{ copilot_tag.pr_title or copilot_tag.pr_desc or copilot_tag.pr_comments or copilot_tag.commit_messages  }}
     # Apply a label indicating the user has adopted Copilot
