@@ -13,9 +13,6 @@ pause
  addStyles(asdsad)
 lorem	
 lorem	
-lorem	
-lorem	
-lorem	
-lorem	
+1
 lorem	
 lorem	
