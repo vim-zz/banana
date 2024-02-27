@@ -8,7 +8,7 @@
 # Install
 
 ```
-npm install
+npm 123213
 ```
 
 
