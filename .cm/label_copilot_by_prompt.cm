@@ -6,8 +6,6 @@ manifest:
 automations:
   # You should use this automation in conjunction with comment_copilot_prompt.cm
   label_copilot_pr:
-    on:
-      - comment
     # If the PR author has indicated that they used Copilot to assist coding in this PR, 
     # apply a label indicating the PR was supported by Copilot
     if:
