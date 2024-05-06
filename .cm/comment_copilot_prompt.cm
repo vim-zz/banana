@@ -3,8 +3,13 @@
 manifest:
   version: 1.0
 
-on:
-  - pr_created
+triggers:
+  on:
+    - pr_created
+  exclude:
+    branch:
+      - renovate
+      - Renovate
 
 automations:
   comment_copilot_prompt:
