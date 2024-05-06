@@ -3,6 +3,13 @@
 manifest:
   version: 1.0
 
+triggers:
+  exclude:
+    branch:
+      - renovate
+      - Renovate
+
+
 automations:
   # You should use this automation in conjunction with comment_copilot_prompt.cm
   label_copilot_pr:
