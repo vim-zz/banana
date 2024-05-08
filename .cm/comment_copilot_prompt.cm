@@ -8,8 +8,9 @@ triggers:
     - pr_created
   exclude:
     branch:
-      - renovate
-      - Renovate
+      - reno
+    repository:
+      - r/bana/
 
 automations:
   comment_copilot_prompt:
