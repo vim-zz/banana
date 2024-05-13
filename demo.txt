@@ -9,11 +9,7 @@
 # say hello world after input
 display "Hello World."
 prompt
-pause
- addStyles(asdsad)
-lorem	
-lorem	
-lorem	
+pa
 lorem	
 # TODO: banana!
 lorem	
