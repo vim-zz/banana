@@ -1,0 +1,25 @@
+manifest:
+  version: 1.0
+
+automations:
+  pr_review:
+    if:
+      - true
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [acme/team-a]
+
+  pr_merge:
+    if:
+      - true
+    run:
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+      - action: require-reviewers@v1
+        args:
+          reviewers: [acme/team-a]
+      - action: require-reviewers@v1
+        args:
+          reviewers: [luke-the-team-lead]
