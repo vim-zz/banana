@@ -12,6 +12,7 @@ module.exports = (desc) => {
   let results = [];
   if (desc && desc !== '""' && desc !== "''" ) {
     const regex = /\[(\\)?`([\d\.]+[A-Za-zαß]*)(\\)?` -> (\\)?`([\d\.]+[A-Za-zαß]*)(\\)?`\]/g;
+    console.log("RENOVATE!", {desc});
 
     let matches = null;
     do {
