@@ -16,6 +16,7 @@ module.exports = (desc) => {
     let matches = null;
     do {
       matches = regex.exec(desc);
+      console.log("RENOVATE", {matches});
       if (matches && matches.length == 3) {
         var [_, from, to] = matches;
         // remove trailing dot on to
@@ -23,9 +24,11 @@ module.exports = (desc) => {
           to = to.slice(0, -1);
         }
         results.push([to, from]);
+        console.log("RENOVATE.", {results});
       }
     } while(matches !== null);
   }
 
+  console.log("RENOVATE..", {results});
   return results;
 }
