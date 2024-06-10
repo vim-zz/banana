@@ -15,7 +15,7 @@
  */
 
 
-const compareSemver = require('../compareSemver');
+const compareSemver = require('../compareSemver/index.js');
 
 module.exports = (listOfPairs) => {
 
