@@ -1,4 +1,12 @@
 automations:
+  check_regex:
+    if:
+      - true
+    run:
+      - action: add-comment@v1
+        comment: |
+          sourceBranchNames: {{ sourceBranchNames }}
+          targetBranchNames: {{ targetBranchNames }}
   add_jira_to_desc:
     if:
       - {{ has.jira_ticket_in_title and (not has.jira_ticket_in_desc) }}
@@ -12,3 +20,7 @@ automations:
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
   jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
+
+
+sourceBranchNames: {{ pr.source | includes(regex=r/\b(?:master|main|release\/\d+\.\d+\.\d+|Master|hotfix\/\d+\.\d+\.\d+|develop|release|hotfix)\b/gmi) }}
+targetBranchNames: {{ pr.target | includes(regex=r/\b(?:master|main|release\/\d+\.\d+\.\d+|Master|hotfix\/\d+\.\d+\.\d+|develop|release|hotfix)\b/gmi) }}
