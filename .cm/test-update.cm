@@ -5,9 +5,9 @@ automations:
     run:
       - action: update-description@v1
         args:
+          concat_mode: prepend
           description: |
             {{ pr.title | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
-            {{ pr.description }}
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
