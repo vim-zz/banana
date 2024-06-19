@@ -4,9 +4,10 @@ automations:
       - true
     run:
       - action: add-comment@v1
-        comment: |
-          sourceBranchNames: {{ sourceBranchNames }}
-          targetBranchNames: {{ targetBranchNames }}
+        args:
+          comment: |
+            sourceBranchNames: {{ sourceBranchNames }}
+            targetBranchNames: {{ targetBranchNames }}
   add_jira_to_desc:
     if:
       - {{ has.jira_ticket_in_title and (not has.jira_ticket_in_desc) }}
