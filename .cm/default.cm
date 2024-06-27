@@ -4,6 +4,10 @@
 manifest:
   version: 1.0
 
+triggers:
+  exclude:
+    branch:
+      - r/(Dependabot|dependabot|renovate|Renovate)/
 
 automations:
   # Add a label that indicates how many minutes it will take to review the PR.
@@ -43,7 +47,6 @@ automations:
       - action: explain-code-experts@v1
         args:
           gt: 10
-          verbose: false
 
 
 # +----------------------------------------------------------------------------+
