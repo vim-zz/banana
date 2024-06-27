@@ -7,14 +7,7 @@
 # 3. pause for input
 
 # say hello world after input
-display "Hello World."
-prompt
-pause
- addStyles(asdsad)
-lorem	
-lorem	
-lorem	
-lorem	
+di
 # TODO: banana!
 lorem	
 lorem	
