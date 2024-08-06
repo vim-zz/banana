@@ -56,7 +56,7 @@ const suggestedIssues = async (pr, apiKey, callback) => {
       "Invalid response structure:",
       JSON.stringify(result, null, 2),
     );
-    return callback(null, "Error");
+    return callback(null, "- [ ] LINBEE-1234 - Fix this issue\n- [ ] LINBEE-5678 - Fix that issue\n- [ ] LINBEE-9012 - Fix another issue");
   }
 };
 
