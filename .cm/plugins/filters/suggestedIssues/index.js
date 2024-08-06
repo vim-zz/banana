@@ -47,16 +47,16 @@ const suggestedIssues = async (pr, apiKey, callback) => {
       }))
       // Map to the desired object format containing the issue URL and issue title
       .map((issue) => `- [ ] [${issue.key} - ${issue.title}](${issue.url})`)
-      .join("\n");
+      .join("\\n");
     console.log("suggestedIssues:", {issuesMarkdown});
 
-    return callback(null, "- [ ] LINBEE-1234 - Fix this issue\\n- [ ] LINBEE-1235 - Fix another issue");
+    return callback(null, issuesMarkdown));
   } else {
     console.log(
       "Invalid response structure:",
       JSON.stringify(result, null, 2),
     );
-    return callback(null, "- [ ] LINBEE-1234 - Fix this issue");
+    return callback(null, "Error: Service returned an invalid response structure");
   }
 };
 
