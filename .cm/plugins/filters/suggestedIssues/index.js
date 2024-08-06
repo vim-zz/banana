@@ -48,8 +48,9 @@ const suggestedIssues = async (pr, apiKey, callback) => {
       // Map to the desired object format containing the issue URL and issue title
       .map((issue) => `- [ ] [${issue.key} - ${issue.title}](${issue.url})`)
       .join("\n");
+    console.log({issuesMarkdown});
 
-    return callback(null, issuesMarkdown);
+    return callback(null, JSON.stringify(issuesMarkdown));
   } else {
     console.log(
       "Invalid response structure:",

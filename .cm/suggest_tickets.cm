@@ -19,7 +19,7 @@ automations:
             gitStream will automatically update the PR title and description with the
             selected issue key.
 
-            {{ pr | suggestedIssues(env.LINEARB_TOKEN)) | dump | safe }}
+            {{ pr | suggestedIssues(env.LINEARB_TOKEN)) }}
 
             *✨ This list was created using LinearB’s AI service*
 
