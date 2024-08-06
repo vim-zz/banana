@@ -3,15 +3,10 @@
  * @description Fetches ticket recommendations based on given pull request details.
  * @param {object} pr - The pull request object containing title, author, and created_at properties.
  * @param {string} apiKey - The API key used to authenticate requests.
- * @returns {Promise<string>} A markdown string of the top three recommended Jira issues, each formatted with the issue key, title, and URL.
- * @example
- * suggestedIssues({pr, "your-api-key").then(result => {
- *   console.log(result);
- * }).catch(error => {
- *   console.error(error);
- * });
+ * @returns {Array} Returns an array of suggested issues related to the current Pull Request.
+ * @example {{ pr | suggestedIssues(env.LINEARB_TOKEN) }}
  * @license MIT
- */
+**/
 
 const suggestedIssues = async (pr, apiKey, callback) => {
   const url =
