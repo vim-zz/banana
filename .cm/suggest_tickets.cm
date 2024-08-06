@@ -24,7 +24,7 @@ automations:
   # add it to the PR description and title
   add_selected_issue_to_pr:
     if:
-      - true
+      - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | some }}
     run:
       - action: update-title@v1
         args:
