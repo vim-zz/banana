@@ -30,12 +30,14 @@ automations:
         args:
           concat_mode: prepend
           title: |
-            XXX -
+            {{ selected_issue_key }} -
       - action: update-description@v1
         args:
           concat_mode: prepend
           description: |
-            Jira issue: XXX
+            Jira issue: {{ selected_issue_key }}
+
+selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
