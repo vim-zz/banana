@@ -13,7 +13,7 @@
  * @license MIT
  */
 
-const suggestedIssues = async (pr, apiKey) => {
+const suggestedIssues = async (pr, apiKey, callback) => {
   const url =
     "https://public-api.linearb-dev-01.io/api/v1/inference/get_ticket_recommendation";
 
@@ -54,7 +54,7 @@ const suggestedIssues = async (pr, apiKey) => {
       .map((issue) => `- [ ] [${issue.key} - ${issue.title}](${issue.url})`)
       .join("\n");
 
-    return issuesMarkdown;
+    return callback(null, issuesMarkdown);
   } else {
     console.log(
       "Invalid response structure:",
