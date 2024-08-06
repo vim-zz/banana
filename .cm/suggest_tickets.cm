@@ -18,6 +18,9 @@ automations:
             Select one of the suggested issues to connect to this PR. Once you select,
             gitStream will automatically update the PR title and description with the
             selected issue key.
+
+            {{ pr | suggestedIssues(env.LINEARB_TOKEN)) | dump | safe }}
+
             *✨ This list was created using LinearB’s AI service*
 
   # If the PR author has indicated that they used a specific issue,
