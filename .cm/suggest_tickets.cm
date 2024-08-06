@@ -18,29 +18,24 @@ automations:
             Select one of the suggested issues to connect to this PR. Once you select,
             gitStream will automatically update the PR title and description with the
             selected issue key.
-
-            {{ pr | suggestedIssues(env.LINEARB_TOKEN)) }}
-
             *✨ This list was created using LinearB’s AI service*
 
   # If the PR author has indicated that they used a specific issue,
   # add it to the PR description and title
   add_selected_issue_to_pr:
     if:
-      - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | some }}
+      - true
     run:
       - action: update-title@v1
         args:
           concat_mode: prepend
           title: |
-            {{ selected_issue_key }} -
+            XXX -
       - action: update-description@v1
         args:
           concat_mode: prepend
           description: |
-            Jira issue: {{ selected_issue_key }}
-
-selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
+            Jira issue: XXX
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
