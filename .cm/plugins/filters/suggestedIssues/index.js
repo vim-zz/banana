@@ -50,7 +50,7 @@ const suggestedIssues = async (pr, apiKey, callback) => {
       .join("\n");
     console.log("suggestedIssues:", {issuesMarkdown});
 
-    return callback(null, "- [ ] LINBEE-1234 - Fix this issue");
+    return callback(null, "- [ ] LINBEE-1234 - Fix this issue\\n- [ ] LINBEE-1235 - Fix another issue");
   } else {
     console.log(
       "Invalid response structure:",
