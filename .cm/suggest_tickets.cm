@@ -48,9 +48,9 @@ automations:
           comment: |
             gS comment: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | dump | safe }}
             gS comment X: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\].*/) | first | dump | safe }}
-            gS comment 123: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\].*/) | first | map(attr='content') | capture(regex=r/Select/) }}
+            gS comment 123: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | map(attr='content') | filter (regex=r/\- \[x\].*/) | first | capture(regex=r/Select/) }}
 
-selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\].*/) | first | map(attr='content') | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
+selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | map(attr='content') | filter (regex=r/\- \[x\].*/) | first | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
