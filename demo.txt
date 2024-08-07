@@ -10,11 +10,7 @@
 display "Hello World."
 prompt
 pause
- addStyles(asdsad)
-lorem	
-lorem	
-lorem	
-lorem	
+ addStyles(asd
 # TODO: banana!
 lorem	
 lorem	
