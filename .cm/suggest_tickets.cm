@@ -15,9 +15,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            Select one of the suggested issues to connect to this PR. Once you select,
-            gitStream will automatically update the PR title and description with the
-            selected issue key.
+            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key.
 
             {{ pr | suggestedIssues(env.LINEARB_TOKEN) }}
 
@@ -28,6 +26,7 @@ automations:
   add_selected_issue_to_pr:
     if:
       - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | some }}
+      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
     run:
       - action: update-title@v1
         args:
@@ -40,7 +39,7 @@ automations:
           description: |
             Jira issue: {{ selected_issue_key }}
 
-selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\]/) | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
+selected_issue_key: {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter (attr='content', regex=r/\- \[x\].*/) | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
