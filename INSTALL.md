@@ -7,9 +7,6 @@
 
 # Install
 
-```
-npm install
-```
 
 
 banana
