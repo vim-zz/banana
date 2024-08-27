@@ -10,7 +10,7 @@
 
 const suggestedIssues = async (pr, apiKey, callback) => {
   const url =
-    "https://public-api.linearb-dev-01.io/api/v1/inference/get_ticket_recommendation";
+    "https://public-api.linearb.io/api/v1/inference/get_ticket_recommendation";
 
   const requestData = {
     request_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // <-- local UUID per call
@@ -26,7 +26,7 @@ const suggestedIssues = async (pr, apiKey, callback) => {
     headers: {
       "x-api-key": apiKey,
       "Content-Type": "application/json",
-      accept: "application/json",
+      "accept": "application/json",
     },
     body: JSON.stringify(requestData),
   })
@@ -52,12 +52,12 @@ const suggestedIssues = async (pr, apiKey, callback) => {
     console.log("suggestedIssues:", {issuesMarkdown});
 
     return callback(null, issuesMarkdown);
+  } else if (result && result.recommendations && Array.isArray(result.recommendations.jira_tickets) && result.recommendations.jira_tickets.length === 0) {
+    console.log("No issues found.", JSON.stringify(result, null, 2));
+    return callback(null, "No related issues found. The pull request title and the author were used to search the Jira board, but no good match was found.");
   } else {
-    console.log(
-      "Invalid response structure:",
-      JSON.stringify(result, null, 2),
-    );
-    return callback(null, "Error: Service returned an invalid response structure");
+    console.log("Invalid response structure:", JSON.stringify(result, null, 2) );
+    return callback(null, "Error: Service returned an invalid response structure.");
   }
 };
 
