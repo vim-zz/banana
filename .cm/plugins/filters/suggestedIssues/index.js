@@ -8,7 +8,7 @@
  * @license MIT
 **/
 
-const suggestedIssues = async (pr, apiKey, callback) => {
+const suggestedIssues = async (pr, branch, apiKey, callback) => {
   const url =
     "https://public-api.linearb.io/api/v1/inference/get_ticket_recommendation";
 
@@ -18,6 +18,7 @@ const suggestedIssues = async (pr, apiKey, callback) => {
       title: pr.title, // PR title
       issuer_name: pr.author, // PR author
       created_at: pr.created_at, // PR creation date
+      branch_name: branch.name, // PR branch name
     },
   };
 
