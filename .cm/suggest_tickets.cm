@@ -16,11 +16,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key (taking into account issues opened up to the last 2 hours).
-
-            {{ pr | suggestedIssues(branch, env.LINEARB_TOKEN) }}
-
-            *✨ This list was created using LinearB’s AI service*
+            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key (taking into account issues opened up to the last 2 hours)
 
   # If the PR author has indicated that they used a specific issue,
   # add it to the PR description and title
