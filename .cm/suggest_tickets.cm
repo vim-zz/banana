@@ -9,7 +9,7 @@ automations:
   # ticket in the title or description
   suggest_issues:
     on:
-      - label_added
+      - pr_created
     if:
       - {{ pr.labels | match(term='suggest-ticket') | some }}
     run:
