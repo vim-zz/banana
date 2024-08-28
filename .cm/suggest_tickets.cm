@@ -8,16 +8,16 @@ automations:
   # ticket in the title or description
   suggest_issues:
     on:
-      - pr_created
+      - label_added
     if:
-      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+      - {{ pr.labels | match(term='suggest-ticket') | some }}
     run:
       - action: add-comment@v1
         args:
           comment: |
-            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key.
+            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key (taking into account issues opened up to the last 2 hours).
 
-            {{ pr | suggestedIssues(env.LINEARB_TOKEN) }}
+            {{ pr | suggestedIssues(branch, env.LINEARB_TOKEN) }}
 
             *✨ This list was created using LinearB’s AI service*
 
