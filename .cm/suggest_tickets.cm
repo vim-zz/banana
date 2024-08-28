@@ -11,7 +11,7 @@ automations:
     on:
       - pr_created
     if:
-      - {{ pr.labels | match(term='suggest-ticket') | some }}
+      - true
     run:
       - action: add-comment@v1
         args:
