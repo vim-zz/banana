@@ -1,0 +1,7 @@
+a/another_file.txt b/another_file.txt
+      new file mode 100644
+      index 0000000..e69de29
+      --- /dev/null
+      +++ b/another_file.txt
+      @@ -0,0 +1 @@
+      +This is a new file added to the repository.
