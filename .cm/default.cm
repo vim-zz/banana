@@ -18,4 +18,4 @@ automations:
       - action: add-label@v1
         args:
           label: 'merged-by-gitstream'
-          color: {{ colors.green }}
+          color: #00FF00
