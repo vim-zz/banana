@@ -14,7 +14,12 @@ You can add all sorts of items, for example, a list of fruits like:
 *   🍞 Bread
 *   🥚 Eggs
 *   🧀 Cheese
-
+*   🍌 Bananas
+*   🍊 Oranges
+*   🍇 Grapes
+*   🍓 Strawberries
+*   🥭 Mangoes
+  
 Keep your shopping organized and efficient!
 
 ## Features
