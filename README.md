@@ -18,7 +18,6 @@ You can add all sorts of items, for example, a list of fruits like:
 *   🍊 Oranges
 *   🍇 Grapes
 *   🍓 Strawberries
-*   🫐 Blueberries
 *   🥭 Mangoes
   
 Keep your shopping organized and efficient!
