@@ -14,6 +14,6 @@ automations:
         args:
           guidelines: {{ GUIDELINES | dump }}
 
-GUIDELINES:
+GUIDELINES: |
     - alert when you notice fruit names in the code
     - ignore and dont alert on bananas specifically 
