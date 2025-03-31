@@ -8,7 +8,12 @@ This app provides a straightforward way to keep track of the items you need to b
 
 You can add all sorts of items, for example, a list of fruits like:
 
-*   🍌 Bananas
+*   🥦 Broccoli
+*   🧅 Onions
+*   🥛 Milk
+*   🍞 Bread
+*   🥚 Eggs
+*   🧀 Cheese
 
 Keep your shopping organized and efficient!
 
