@@ -8,13 +8,7 @@ This app provides a straightforward way to keep track of the items you need to b
 
 You can add all sorts of items, for example, a list of fruits like:
 
-*   🍎 Apples
 *   🍌 Bananas
-*   🍊 Oranges
-*   🍇 Grapes
-*   🍓 Strawberries
-*   🫐 Blueberries
-*   🥭 Mangoes
 
 Keep your shopping organized and efficient!
 
