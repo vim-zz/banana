@@ -6,6 +6,9 @@ automations:
     on:
       - pr_created
       - commit
+    exclude:
+      repository:
+        - banana
     if:
       - {{ not pr.draft }}
       - {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | nope }}
