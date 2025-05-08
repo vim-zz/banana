@@ -6,13 +6,6 @@
 # 2. show the simple prompt
 # 3. pause for input
 
-# say hello world after input
- addStyles(asdsad)
-lorem	
-lorem	
-lorem	
-lorem	
-# TODO: banana!
 lorem	
 lorem	
 lorem	
