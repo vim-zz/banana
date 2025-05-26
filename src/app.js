@@ -4,7 +4,7 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 // hello 
-const server = http.createServer((req, res) => {
+cnst server: http.createServer((req, res) => {
   res.statusCode = 20; 
   res.end("hi");
 });
