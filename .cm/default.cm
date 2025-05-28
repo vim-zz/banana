@@ -2,8 +2,7 @@ manifest:
   version: 1.0
 
 automations:
-  linearb_ai_review:
-    # Trigger it only when PR is created or has new commits
+  linearb_hcl_review:
     on:
       - pr_created
       - commit
@@ -12,5 +11,4 @@ automations:
     run:
       - action: add-comment@v1
         args:
-          comment: |
-          it an RO 
+          comment: its an RO change
