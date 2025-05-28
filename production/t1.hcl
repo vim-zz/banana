@@ -50,7 +50,7 @@ inputs = {
         {
           tables     = ["*"]
           schema     = "schema_one"
-          privileges = "rw"
+          privileges = "ro"
         }
       ]
     },
@@ -63,7 +63,6 @@ inputs = {
       access = [
         {
           tables     = ["orders", "transactions"]
-          schema     = "sales"
           privileges = "ro"
         }
       ]
