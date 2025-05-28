@@ -76,8 +76,7 @@ inputs = {
       expires     = "2025-10-15"
       access = [
         {
-          tables     = ["*"]
-          schema     = "analytics"
+
           privileges = "rw"
         }
       ]
