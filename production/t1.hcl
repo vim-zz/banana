@@ -64,7 +64,7 @@ inputs = {
         {
           tables     = ["orders", "transactions"]
           schema     = "sales"
-          privileges = "ro"
+          privileges = "rw"
         }
       ]
     },
