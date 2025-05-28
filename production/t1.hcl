@@ -56,7 +56,7 @@ inputs = {
     },
     {
       user        = "user_beta"
-      default_ttl = 60 * 60 * 6
+      default_ttl = 60 * 60 * 7
       max_ttl     = 60 * 60 * 24 * 7
       type        = "temporary"
       expires     = "2025-12-31"
@@ -84,14 +84,13 @@ inputs = {
     },
     {
       user        = "user_delta"
-      default_ttl = 60 * 60 * 8
+      default_ttl = 60 * 60 * 6
       max_ttl     = 60 * 60 * 24 * 10
       type        = "temporary"
       expires     = "2026-01-01"
       access = [
         {
           tables     = ["logs", "events"]
-          schema     = "monitoring"
           privileges = "ro"
         }
       ]
