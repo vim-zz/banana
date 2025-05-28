@@ -57,14 +57,7 @@ inputs = {
     {
       user        = "user_beta"
       default_ttl = 60 * 60 * 6
-      max_ttl     = 60 * 60 * 24 * 7
-      type        = "temporary"
-      expires     = "2025-12-31"
-      access = [
-        {
-          tables     = ["orders", "transactions"]
-          schema     = "sales"
-          privileges = "ro"
+ 
         }
       ]
     },
