@@ -63,7 +63,6 @@ inputs = {
       access = [
         {
           tables     = ["orders", "transactions"]
-          schema     = "sales"
           privileges = "ro"
         }
       ]
