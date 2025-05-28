@@ -10,6 +10,3 @@
 ```
 npm install
 ```
-
-
-banana
