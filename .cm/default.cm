@@ -1,15 +1,152 @@
+# -*- mode: yaml -*-
+# This example configuration for provides basic automations to get started with gitStream.
+# View the gitStream quickstart for more examples: https://docs.gitstream.cm/examples/
 manifest:
   version: 1.0
 
+triggers:
+  on:
+    - pr_created
+    - commit
+    - pr_ready_for_review
+
 automations:
-  linearb_hcl_review:
-    on:
-      - pr_created
-      - commit
+  linearb_ai_description:
     if:
-      - {{ files | match(regex=r/production.*\.hcl/) | some }}
-      - {{ (source.diff.files | extractTerraformChanges) == 'ro' }}
+      - {{ not pr.draft }}
+      - {{ IS_NOT_A_BOT }}
+    run:
+      - action: describe-changes@v1
+        args:
+          concat_mode: append
+
+
+  explain_code_experts:
+    if:
+      - true
+    run:
+      - action: explain-code-experts@v1
+        args:
+          gt: 10
+
+  estimated_time_to_review:
+    if:
+      - {{ IS_NOT_A_BOT }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+  label_missing_jira_info:
+    if:
+      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "missing-jira"
+          color: 'E94637'
+      - action: add-comment@v1
+        args:
+          comment: |
+            This PR is missing a Jira ticket reference in the title or description.
+            Please add a Jira ticket reference to the title or description of this PR.
+
+  comment_ai_assistance_prompt:
+    # Post a comment for all PRs to prompt the PR author to indicate whether they used AI to assist coding in this PR
+    # Only do this if there's no existing AI-related label and we haven't asked before
+    if:
+      - {{ pr.labels | match(regex=r/🤖 ai-*/) | nope }}
+      - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/Please mark which AI tools you used/) | nope }}
     run:
       - action: add-comment@v1
         args:
-          comment: its an RO change
+          comment: |
+            Please mark which AI tools you used for this PR by checking the appropriate boxes:
+
+            - [ ] GitHub Copilot
+            - [ ] Cursor
+            - [ ] Tabnine
+            - [ ] JetBrains AI Assistant
+            - [ ] VSCode IntelliCode
+            - [ ] ChatGPT
+            - [ ] Claude
+            - [ ] Gemini
+            - [ ] Other AI tool
+            - [ ] No AI tools were used
+
+            Tip: If you want to avoid this comment in the future, you can add a label of the format `🤖 ai-*` when creating your PR.
+
+  label_ai_tools_by_checkbox:
+    # Apply labels based on the checkboxes selected in the PR comment
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] GitHub Copilot/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-copilot"
+
+  label_ai_cursor:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] Cursor/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-cursor"
+
+  label_ai_tabnine:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] Tabnine/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-tabnine"
+
+  label_ai_jetbrains:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] JetBrains AI Assistant/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-jetbrains"
+
+  label_ai_intellicode:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] VSCode IntelliCode/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-intellicode"
+
+  label_ai_chatgpt:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] ChatGPT/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-chatgpt"
+
+  label_ai_other:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] Other AI tool/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-other"
+
+  label_ai_none:
+    if:
+      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\] No AI tools were used/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "🤖 ai-none"
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+has:
+  jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
+  jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
+
+IS_NOT_A_BOT: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | nope }}
