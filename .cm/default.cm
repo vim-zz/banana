@@ -11,16 +11,6 @@ triggers:
     - pr_ready_for_review
 
 automations:
-  linearb_ai_description:
-    if:
-      - {{ not pr.draft }}
-      - {{ IS_NOT_A_BOT }}
-    run:
-      - action: describe-changes@v1
-        args:
-          concat_mode: append
-
-
   explain_code_experts:
     if:
       - true
