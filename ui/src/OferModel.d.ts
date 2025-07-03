@@ -5,18 +5,7 @@ lorem OferModel
 lorem OferModel 
 lorem OferModel 
 lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-sd dssd ds dsfstranslateByKey
-  dsf dsf translateByKey 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
-lorem OferModel 
+lorem OferModel
 lorem OferModel 
 lorem OferModel 
 lorem OferModel 
