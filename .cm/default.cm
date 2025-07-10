@@ -18,7 +18,7 @@ automations:
       - action: explain-code-experts@v1
         args:
           gt: 10
-          since: '2025-02-01'
+          since: '2021-02-01'
 
   estimated_time_to_review:
     if:
