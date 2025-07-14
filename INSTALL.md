@@ -6,9 +6,7 @@
 4. start
 
 # Install
-
-```
-npm install
+tall
 ```
 
 
