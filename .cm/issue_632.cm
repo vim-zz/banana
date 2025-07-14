@@ -27,4 +27,4 @@ automations:
              * forms
              * http 
 titlePolicy:
-    titleRegex: r/^(build|feat):\s[a-z][-.,;/a-zA-Z0-9_ ]*\s[A-Z]+-\d+$/
+    titleRegex: r/^(build|feat):\s[a-z][,a-zA-Z0-9_ ]*\s[A-Z]+-\d+$/
