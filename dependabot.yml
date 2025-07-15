@@ -9,11 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    commit-message:
-      prefix: "chore: "
-
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/apps" # Location of package manifests
+    commit-message:on of package manifests
     schedule:
       interval: "weekly"
     commit-message:
