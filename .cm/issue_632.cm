@@ -9,22 +9,15 @@ automations:
       - action: request-changes@v1
         args: 
           comment: | 
-            All PRs must be titled according to our semantic naming policy: `<type>(<scope>): <short summary>`
+            includes cought an issue 
+  enforce_pr_title2: 
+    if:       
+      - {{ pr.title | match(regex=titlePolicy.titleRegex) | nope }}
+    run:
+      - action: request-changes@v1
+        args: 
+          comment: | 
+            match cought an issue 
 
-            Type must be one of the following:
-
-             * build
-             * ci 
-             * docs
-             * feature
-             * fix
-
-            Scope must be one of the following:
-
-             * common
-             * core
-             * elements
-             * forms
-             * http 
 titlePolicy:
     titleRegex: r/^(build|feat):\s[a-z][,a-zA-Z0-9_ ]*\s[A-Z]+-\d+$/
