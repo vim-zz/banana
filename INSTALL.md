@@ -6,10 +6,4 @@
 4. start
 
 # Install
-
-```
-npm install
-```
-
-
 banana
