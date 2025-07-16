@@ -4,7 +4,7 @@ manifest:
 automations:
   enforce_pr_title: 
     if:       
-      - {{ (pr.title | includes(regex=titlePolicy.titleRegex)) == false }}
+      - {{ pr.title | includes(regex=titlePolicy.titleRegex) == false }}
     run:
       - action: request-changes@v1
         args: 
