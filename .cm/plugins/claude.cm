@@ -1,0 +1,13 @@
+manifest:
+  version: 1.0
+
+automations:
+  tag_claude_pr:
+    if:
+      - {{ pr.author | lower | match(regex=r/[Cc]laude/) }}
+      - {{ branch.commits.messages | match(regex=r/[Cc]o-[Aa]uthored-[Bb]y:.*[Cc]laude/) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: ":robot_face: Claude Code"
+            
