@@ -3,15 +3,7 @@
 . $HOME/bin/scriptcast
 
 # 1. clear the screen
-# 2. show the simple prompt
-# 3. pause for input
-
-# say hello world after input
- addStyles(asdsad)
-lorem	
-lorem	
-lorem	
-lorem	
+# 2. show the s
 # TODO: banana!
 lorem	
 lorem	
