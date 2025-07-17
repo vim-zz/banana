@@ -8,7 +8,7 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: ":robot_face: Claude Code"
+          label: "🤖 Claude Code"
             
 is:
   claude_author: {{ pr.author | lower | match(regex=r/[Cc]laude/) }}
