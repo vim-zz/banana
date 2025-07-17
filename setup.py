@@ -2,9 +2,6 @@
 
 
 # sadas
-# banana
-# dsa
-# sadas
 
 def function():
 	print('1')
