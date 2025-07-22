@@ -41,7 +41,7 @@ jobs:
       LINEARB_TOKEN: ${{ secrets.LINEARB_TOKEN }}
     steps:
       - name: Evaluate Rules
-        uses: linear-b/gitstream-github-action@v2-rc12
+        uses: linear-b/gitstream-github-action@v2-rc13
         id: rules-engine
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
