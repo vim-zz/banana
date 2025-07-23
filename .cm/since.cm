@@ -5,7 +5,7 @@ manifest:
   version: 1.0
 
 config:
-  git_history_since: '2024-07-20'
+  git_history_since: '2025-07-20'
 
 automations:
   explain_code_experts:
