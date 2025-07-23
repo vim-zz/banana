@@ -2,17 +2,21 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
+
 include "dependencies" {
   path = find_in_parent_folders("dependencies.hcl")
 }
+
 
 locals {
   service = read_terragrunt_config(find_in_parent_folders("service.hcl")).locals
 }
 
+
 terraform {
   source = "${get_repo_root()}/modules/vault-database"
 }
+
 
 dependency "rds" {
   config_path = "../rds"
@@ -23,12 +27,14 @@ dependency "rds" {
   mock_outputs_allowed_terraform_commands = ["validate", "fmt", "init", "plan", "providers", "show", "refresh"]
 }
 
+
 inputs = {
   domain_name      = local.service.account.vault_domain_name
   env              = local.service.account.env
   azuread_oidc     = dependency.vault_azuread.outputs.accessor
   timestamp        = timestamp()
   rotate_on_create = true
+
 
   db = {
     username      = "vault"
@@ -38,6 +44,7 @@ inputs = {
     engine        = dependency.rds.outputs.engine
     database_name = local.service.name
   }
+
 
   jits = [
     {
@@ -98,3 +105,5 @@ inputs = {
     }
   ]
 }
+
+
