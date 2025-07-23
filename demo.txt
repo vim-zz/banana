@@ -14,6 +14,3 @@ lorem
 lorem	
 # TODO: banana!
 lorem	
-lorem	
-lorem	
-lorem	
