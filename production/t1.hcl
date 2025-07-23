@@ -12,7 +12,6 @@ locals {
   service = read_terragrunt_config(find_in_parent_folders("service.hcl")).locals
 }
 
-
 terraform {
   source = "${get_repo_root()}/modules/vault-database"
 }
