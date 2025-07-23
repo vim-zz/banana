@@ -5,12 +5,7 @@ include "root" {
 
 include "dependencies" {
   path = find_in_parent_folders("dependencies.hcl")
-}
 
-
-locals {
-  service = read_terragrunt_config(find_in_parent_folders("service.hcl")).locals
-}
 
 
 terraform {
