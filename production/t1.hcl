@@ -14,7 +14,7 @@ locals {
 
 
 terraform {
-  source = "${get_repo_root()}/modules/vault-database"
+  source = "{get_repo_root()}/modules/vault-database"
 }
 
 
