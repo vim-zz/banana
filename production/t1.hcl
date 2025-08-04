@@ -50,9 +50,9 @@ inputs = {
     {
       user        = "user_alpha"
       default_ttl = 60 * 60 * 24
-      max_ttl     = 60 * 60 * 24 * 30
+      max_ttl     = 60 * 60 * 24 * 21
       type        = "temporary"
-      expires     = "2026-04-01"
+      expires     = "2026-03-01"
       access = [
         {
           tables     = ["*"]
@@ -89,20 +89,6 @@ inputs = {
         }
       ]
     },
-    {
-      user        = "user_delta"
-      default_ttl = 60 * 60 * 8
-      max_ttl     = 60 * 60 * 24 * 10
-      type        = "temporary"
-      expires     = "2026-01-01"
-      access = [
-        {
-          tables     = ["logs", "events"]
-          schema     = "monitoring"
-          privileges = "ro"
-        }
-      ]
-    }
   ]
 }
 
