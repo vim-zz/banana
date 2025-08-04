@@ -50,9 +50,9 @@ inputs = {
     {
       user        = "user_alpha"
       default_ttl = 60 * 60 * 24
-      max_ttl     = 60 * 60 * 24 * 30
+      max_ttl     = 60 * 60 * 24 * 20
       type        = "temporary"
-      expires     = "2026-04-01"
+      expires     = "2026-05-01"
       access = [
         {
           tables     = ["*"]
@@ -74,7 +74,7 @@ inputs = {
           privileges = "ro"
         }
       ]
-    },
+    }
     {
       user        = "user_gamma"
       default_ttl = 60 * 60 * 12
