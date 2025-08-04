@@ -41,10 +41,18 @@ automations:
         args:
           guidelines: {{ guidelines | dump }} # optional
 
+  linearb_ai_description:
+    if:
+      - true
+    run:
+      - action: describe-changes@v1
+        args:
+          concat_mode: append
+          guidelines: {{ guidelines | dump }} # optional
 
 # Add your prompts to the review as inline text
 guidelines: |
-    - Provide the review in Spanish
+    - IMPORTANT: Provide the review or description in Spanish
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
