@@ -5,60 +5,13 @@ manifest:
   version: 1.0
 
 automations:
-
-  comment_ai_assistance_prompt:
-    # Post a comment for all PRs to prompt the PR author to indicate whether they used AI to assist coding in this PR
-    # Only do this if there's no existing AI-related label and we haven't asked before
+  mark_examples:
+    on:
+      - pr_created
     if:
-      - {{ pr.labels | match(regex=r/🤖 ai-*/) | nope }}
-      - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/Please mark which AI tools you used/) | nope }}
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            Please mark which AI tools you used for this PR by checking the appropriate boxes:
-
-            - [ ] Zed
-            - [ ] Claude Code
-            - [ ] Nope
-
-            Tip: If you want to avoid this comment in the future, you can add a label of the format `🤖 ai-*` when creating your PR.
-
-  label_ai_tools_by_checkbox:
-    # Apply labels based on the checkboxes selected in the PR comment
-    if:
-      - {{ pr.comments | filter(attr='content', regex=r/\- \[x\]/) | some }}
+      - true
     run:
       - action: add-label@v1
         args:
-          label: "🤖 ai-assited"
-
-  linearb_ai_review:
-    if:
-      - true
-    run:
-      - action: code-review@v1
-        args:
-          guidelines: {{ guidelines | dump }} # optional
-
-  linearb_ai_description:
-    if:
-      - true
-    run:
-      - action: describe-changes@v1
-        args:
-          concat_mode: append
-          guidelines: {{ guidelines | dump }} # optional
-
-# Add your prompts to the review as inline text
-guidelines: |
-    - IMPORTANT: Provide the review or description in Spanish
-
-calc:
-  etr: {{ branch | estimatedReviewTime }}
-
-has:
-  jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
-  jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
-
-IS_NOT_A_BOT: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | nope }}
+          label: 'pr-opened'
+          color: '#FFEC00'
