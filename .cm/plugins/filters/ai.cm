@@ -1,0 +1,74 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+
+# Enforcement based on risk
+automations:
+  ai_high_risk:
+    if:
+      - {{ is.ai_generated }}
+      - {{ ai_risk_level == 'high' }}
+    run:
+      - action: request-changes@v1
+        args:
+          comment: "This AI-generated PR is too complex. Please split into smaller PRs (<500 lines, <15 files)."
+      - action: add-label@v1
+        args:
+          label: '⚠️ AI-High-Risk'
+
+  ai_medium_risk:
+    if:
+      - {{ is.ai_generated }}
+      - {{ ai_risk_level == 'medium' }}
+    run:
+      - action: code-review@v1
+        args:
+          approve_on_LGTM: false
+          guidelines: |
+            - Flag functions longer than 50 lines
+            - Check for proper error handling
+            - Verify test coverage for new logic
+            - Look for over-abstraction or unnecessary complexity
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | codeExperts(gt=20) }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+  ai_low_risk:
+    if:
+      - {{ is.ai_generated }}
+      - {{ ai_risk_level == 'low' }}
+      - {{ is.docs or is.tests or is.formatting }}
+    run:
+      - action: code-review@v1
+        args:
+          approve_on_LGTM: true
+
+
+
+# AI Safety Levels
+ai_risk_level: |
+  {{
+    'high' if (
+      files | length > 15 or
+      branch.diff.size > 500 or
+      calc.etr > 20 or
+      files | match(list=sensitive_files) | some
+    ) else (
+      'medium' if (
+        files | length > 5 or
+        branch.diff.size > 200 or
+        calc.etr > 10
+      ) else 'low'
+    )
+  }}
+
+is:
+  ai_generated: |
+    {{
+      branch.name | includes(list=['codex/', 'copilot/']) | some
+    }}
