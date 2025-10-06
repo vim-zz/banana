@@ -8,7 +8,7 @@ manifest:
 automations:
   ai_high_risk:
     if:
-      - {{ is.ai_generated }}
+      - {{ is.ai_generated or is.ai_authored }}
       - {{ ai_risk_level == 'high' }}
     run:
       - action: request-changes@v1
@@ -20,7 +20,7 @@ automations:
 
   ai_medium_risk:
     if:
-      - {{ is.ai_generated }}
+      - {{ is.ai_generated or is.ai_authored }}
       - {{ ai_risk_level == 'medium' }}
     run:
       - action: code-review@v1
@@ -43,7 +43,7 @@ automations:
 
   ai_low_risk:
     if:
-      - {{ is.ai_generated }}
+      - {{ is.ai_generated or is.ai_authored }}
       - {{ ai_risk_level == 'low' }}
     run:
       - action: code-review@v1
@@ -91,6 +91,7 @@ risk:
 
 is:
   ai_generated: {{ branch.name | includes(list=agents_branch_identifiers) }}
+  ai_authored: {{ branch.commits.messages | match(regex=r/[Cc]o-[Aa]uthored-[Bb]y:.*([Cc]laude|[Cc]opilot|[Cc]ursor)/) | some}}
   formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
