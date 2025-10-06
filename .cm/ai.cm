@@ -51,24 +51,16 @@ automations:
 
 
 # AI Safety Levels
-ai_risk_level: |
-  {{
-    'high' if (
-      files | length > 15 or
-      branch.diff.size > 500 or
-      calc.etr > 20 or
-      files | match(list=sensitive_files) | some
-    ) else (
-      'medium' if (
-        files | length > 5 or
-        branch.diff.size > 200 or
-        calc.etr > 10
-      ) else 'low'
-    )
-  }}
+ai_risk_level: {{ 'high' if is.high_risk else ('medium' if is.medium_risk else 'low') }}
 
 is:
-  ai_generated: |
-    {{
-      branch.name | includes(list=['codex/', 'copilot/']) | some
-    }}
+  ai_generated: {{ branch.name | includes(list=['codex/', 'copilot/']) | some }}
+  high_risk: {{ (files | length > 15) or (branch.diff.size > 500) or (calc.etr > 20) or (files | match(list=sensitive_files) | some) }}
+  medium_risk: {{ (files | length > 5) or (branch.diff.size > 200) or (calc.etr > 10) }}
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+sensitive_files:
+  - demo.txt
+  - setup.py
