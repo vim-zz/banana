@@ -31,6 +31,9 @@ automations:
             - Check for proper error handling
             - Verify test coverage for new logic
             - Look for over-abstraction or unnecessary complexity
+      - action: add-label@v1
+        args:
+          label: 'AI-Medium-Risk'
       - action: add-reviewers@v1
         args:
           reviewers: {{ repo | codeExperts(gt=20) }}
@@ -46,8 +49,27 @@ automations:
       - action: code-review@v1
         args:
           approve_on_LGTM: {{ is.docs or is.tests or is.formatting }}
+      - action: add-label@v1
+        args:
+          label: 'AI-Low-Risk'
 
+# +----------------------------------------------------------------------------+
+# | Constants                                                                  |
+# +----------------------------------------------------------------------------+
 
+# List here sensitive files
+sensitive_files: []
+
+# List here agents branch identifiers
+agents_branch_identifiers:
+  - 'codex/'
+  - 'copilot/'
+  - 'devin/'
+  - 'vim-'
+
+# +----------------------------------------------------------------------------+
+# | Custom Expressions                                                         |
+# +----------------------------------------------------------------------------+
 
 # AI Safety Levels
 ai_risk_level: {{ 'high' if is.risk.high else ('medium' if is.risk.medium else 'low') }}
@@ -68,15 +90,10 @@ risk:
     }}
 
 is:
-  ai_generated: {{ branch.name | includes(list=['codex/', 'copilot/']) }}
+  ai_generated: {{ branch.name | includes(list=agents_branch_identifiers) }}
   formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
 
-
 calc:
   etr: {{ branch | estimatedReviewTime }}
-
-sensitive_files:
-  - demo.txt
-  - setup.py
