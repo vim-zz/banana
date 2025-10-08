@@ -95,9 +95,8 @@ const categorizePR = async (files, title, description, diffFiles, callback) => {
         ? diffFiles
             .map((f) => {
               const filepath = f.new_file || f.original_file || f.file;
-              const additions = f.additions || 0;
-              const deletions = f.deletions || 0;
-              return `${filepath}: +${additions}/-${deletions}`;
+              const diff = f.diff || 0;
+              return `${filepath}:\n${diff}\n`;
             })
             .join("\n")
         : "";
