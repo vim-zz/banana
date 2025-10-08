@@ -64,8 +64,6 @@ automations:
             risk: {{ risk | dump }}
             ai_risk_level: {{ ai_risk_level }}
             pr_categories: {{ pr_categories | dump }}
-            pr_categories.testing: {{ pr_categories.testing | dump }}
-            low_risk_category: {{ is.low_risk_category }}
 
 # +----------------------------------------------------------------------------+
 # | Constants                                                                  |
@@ -88,7 +86,7 @@ agents_branch_identifiers:
 pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) }}
 
 # AI Safety Levels
-ai_risk_level: {{ 'low' if is.low_risk_category else (('high' if risk.high | bool) else ('medium' if (risk.medium | bool) else 'low'))) }}
+ai_risk_level: {{ 'high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low') }}
 
 risk:
   high: |
@@ -112,7 +110,6 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   bot: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | some }}
-  low_risk_category: {{ pr_categories.testing or pr_categories.docs or pr_categories.infrastructure }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
