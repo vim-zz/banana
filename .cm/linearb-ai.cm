@@ -3,12 +3,6 @@
 manifest:
   version: 1.0
 
-triggers:
-  include:
-    repository:
-      - gitstream-sls-pipeline
-
-# Enforcement based on risk
 automations:
   linearb_ai_review:
     if:
@@ -55,6 +49,21 @@ automations:
       - action: add-label@v1
         args:
           label: 'AI-Low-Risk'
+
+  debug:
+    if:
+      - false
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            files: {{ files | length }}
+            loc: {{ branch.diff.size }}
+            estimeted time: {{ calc.etr }}
+            sensitive: {{ (files | match(list=sensitive_files) | some) }}
+            risk: {{ risk | dump }}
+            ai_risk_level: {{ ai_risk_level }}
+            pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) | dump }}
 
 # +----------------------------------------------------------------------------+
 # | Constants                                                                  |
