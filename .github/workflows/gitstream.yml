@@ -39,6 +39,7 @@ jobs:
     env:
       CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
       LINEARB_TOKEN: ${{ secrets.LINEARB_TOKEN }}
+      OPEN_AI_TOKEN: ${{ secrets.OPEN_AI_TOKEN }}
     steps:
       - name: Adding PR Url
         run: |
