@@ -116,9 +116,9 @@ PR Diff / Summary:
 ${diffSummary || "(none)"}
 `;
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.OPEN_AI_TOKEN;
     if (!apiKey) {
-      return callback(new Error("OPENAI_API_KEY environment variable is required"));
+      return callback(new Error("OPEN_AI_TOKEN environment variable is required"));
     }
 
     const resp = await axios.post(
