@@ -1,0 +1,128 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+triggers:
+  include:
+    repository:
+      - gitstream-sls-pipeline
+
+# Enforcement based on risk
+automations:
+  linearb_ai_review:
+    if:
+      - {{ not pr.draft }}
+      - {{ not is.bot }}
+    run:
+      - action: code-review@v1
+        args:
+          approve_on_LGTM: {{ ai_lgtm }}
+          guidelines: {{ ai_guidelines }}
+
+  ai_high_risk:
+    if:
+      - {{ is.ai_generated or is.ai_authored }}
+      - {{ ai_risk_level == 'high' }}
+    run:
+      - action: request-changes@v1
+        args:
+          comment: "This AI-generated PR is too complex. Please split into smaller PRs (<500 lines, <15 files)."
+      - action: add-label@v1
+        args:
+          label: '⚠️ AI-High-Risk'
+
+  ai_medium_risk:
+    if:
+      - {{ is.ai_generated or is.ai_authored }}
+      - {{ ai_risk_level == 'medium' }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'AI-Medium-Risk'
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | codeExperts(gt=20) }}
+      - action: set-required-approvals@v1
+        args:
+          approvals: 2
+
+  ai_low_risk:
+    if:
+      - {{ is.ai_generated or is.ai_authored }}
+      - {{ ai_risk_level == 'low' }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'AI-Low-Risk'
+
+# +----------------------------------------------------------------------------+
+# | Constants                                                                  |
+# +----------------------------------------------------------------------------+
+
+# List here sensitive files
+sensitive_files: []
+
+# List here agents branch identifiers
+agents_branch_identifiers:
+  - 'codex/'
+  - 'copilot/'
+  - 'devin/'
+
+# +----------------------------------------------------------------------------+
+# | Custom Expressions                                                         |
+# +----------------------------------------------------------------------------+
+
+# AI Safety Levels
+ai_risk_level: {{ 'high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low') }}
+
+risk:
+  high: |
+    {{
+      (files | length > 15)
+      or (branch.diff.size > 500)
+      or (calc.etr > 20)
+      or (files | match(list=sensitive_files) | some)
+    }}
+  medium: |
+    {{
+      (files | length > 5)
+      or (branch.diff.size > 200)
+      or (calc.etr > 10)
+    }}
+
+is:
+  ai_generated: {{ branch.name | includes(list=agents_branch_identifiers) }}
+  ai_authored: {{ branch.commits.messages | match(regex=r/[Cc]o-[Aa]uthored-[Bb]y:.*([Cc]laude|[Cc]opilot|[Cc]ursor)/) | some}}
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
+  bot: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | some }}
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+# +----------------------------------------------------------------------------+
+# | Conditional Rules                                                          |
+# +----------------------------------------------------------------------------+
+
+ai_lgtm: |
+  {% if (is.ai_generated or is.ai_authored) and ai_risk_level == 'low' and (is.docs or is.tests or is.formatting) %}
+    {{
+      (is.ai_generated or is.ai_authored)
+      and (ai_risk_level == 'low')
+      and (is.docs or is.tests or is.formatting)
+    }}
+  {% else %}
+    []
+  {% endif %}
+
+ai_guidelines: |
+  {% if ai_risk_level == 'medium' %}
+    - Flag functions longer than 50 lines
+    - Check for proper error handling
+    - Verify test coverage for new logic
+    - Look for over-abstraction or unnecessary complexity
+  {% else %}
+    []
+  {% endif %}
