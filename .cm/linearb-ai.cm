@@ -84,7 +84,7 @@ agents_branch_identifiers:
 # +----------------------------------------------------------------------------+
 
 # PR Categories from AI
-pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) | dump }}
+pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) }}
 
 # AI Safety Levels
 ai_risk_level: {{ 'high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low') }}

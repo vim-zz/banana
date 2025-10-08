@@ -152,7 +152,7 @@ ${diffSummary || "(none)"}
     }
 
     // Return the parsed JSON object, not a string
-    return callback(null, jsonText);
+    return callback(null, JSON.stringify(JSON.parse(jsonText)));
   } catch (error) {
     return callback(error);
   }
