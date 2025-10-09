@@ -40,7 +40,7 @@ jobs:
       CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
       LINEARB_TOKEN: ${{ secrets.LINEARB_TOKEN }}
       OPEN_AI_TOKEN: ${{ secrets.OPEN_AI_TOKEN }}
-      ENABLE_ARTIFACTS: true
+      ENABLE_DEBUG_ARTIFACTS: true
     steps:
       - name: Adding PR Url
         run: |
