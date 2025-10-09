@@ -162,5 +162,6 @@ ${diffSummary || "(none)"}
 
 module.exports = {
   async: true,
+  immediate: true,
   filter: categorizePR,
 };
