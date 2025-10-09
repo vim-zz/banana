@@ -152,6 +152,8 @@ ${diffSummary || "(none)"}
     }
 
     // Return the parsed JSON object, not a string
+    console.log(typeof jsonText);
+    console.log(jsonText);
     return callback(null, jsonText);
   } catch (error) {
     return callback(error);
