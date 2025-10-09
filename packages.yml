@@ -1,7 +1,6 @@
 foo:
     bar: true
-    more: 
+    more:
         - lla
         - sa
-        - dfdsf
-        - sdfds   
+        - sdfds
