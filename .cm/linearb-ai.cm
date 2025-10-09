@@ -63,7 +63,7 @@ automations:
             sensitive: {{ (files | match(list=sensitive_files) | some) }}
             risk: {{ risk | dump }}
             ai_risk_level: {{ ai_risk_level }}
-            pr_categories: {{ pr_categories | dump }}
+            pr_categories: {{ pr_categories }}
             pr_categories.testing: {{ pr_categories.testing }}
 
 # +----------------------------------------------------------------------------+
