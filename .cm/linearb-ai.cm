@@ -63,7 +63,7 @@ automations:
             sensitive: {{ (files | match(list=sensitive_files) | some) }}
             risk: {{ risk | dump }}
             ai_risk_level: {{ ai_risk_level }}
-            ai_risk_level as bool: {{ ai_risk_level | bool }}
+            ai_risk_level trimmed: {{ ai_risk_level | trim }}
             pr_categories: {{ pr_categories }}
             pr_categories.testing: {{ pr_categories.testing }}
             low_risk_category: {{ low_risk_category }}
@@ -100,23 +100,8 @@ ai_risk_level: |
   }}
 
 risk:
-  high: {{ tmp_risk.high | trim }}
-  medium: {{ tmp_risk.medium | trim }}
-
-tmp_risk:
-  high: |
-    {{
-      (files | length > 15)
-      or (branch.diff.size > 500)
-      or (calc.etr > 20)
-      or (files | match(list=sensitive_files) | some)
-    }}
-  medium: |
-    {{
-      (files | length > 5)
-      or (branch.diff.size > 200)
-      or (calc.etr > 10)
-    }}
+  high: {{ (files | length > 15) or (branch.diff.size > 500) or (calc.etr > 20) or (files | match(list=sensitive_files) | some) }}
+  medium: {{ (files | length > 5) or (branch.diff.size > 200) or (calc.etr > 10) }}
 
 is:
   ai_generated: {{ branch.name | includes(list=agents_branch_identifiers) }}
