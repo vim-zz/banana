@@ -89,15 +89,7 @@ agents_branch_identifiers:
 pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) }}
 
 # AI Safety Levels
-ai_risk_level: |
-  {{
-    'low' if low_risk_category else (
-      'high' if (risk.high | bool) else (
-        'medium' if (risk.medium | bool)
-        else 'low'
-      )
-    )
-  }}
+ai_risk_level:  {{ 'low' if low_risk_category else ( 'high' if (risk.high | bool) else ( 'medium' if (risk.medium | bool) else 'low' ) ) }}
 
 risk:
   high: {{ (files | length > 15) or (branch.diff.size > 500) or (calc.etr > 20) or (files | match(list=sensitive_files) | some) }}
