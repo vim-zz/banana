@@ -65,6 +65,8 @@ automations:
             ai_risk_level: {{ ai_risk_level }}
             pr_categories: {{ pr_categories }}
             pr_categories.testing: {{ pr_categories.testing }}
+            pr_categories.docs: {{ pr_categories.docs }}
+            low_risk_category formula: {{ pr_categories.testing or pr_categories.docs }}
             low_risk_category: {{ low_risk_category }}
 
 # +----------------------------------------------------------------------------+
