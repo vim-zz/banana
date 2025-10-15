@@ -52,7 +52,7 @@ automations:
 
   debug:
     if:
-      - true
+      - false
     run:
       - action: add-comment@v1
         args:
