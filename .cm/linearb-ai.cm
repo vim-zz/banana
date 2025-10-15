@@ -52,7 +52,7 @@ automations:
 
   debug:
     if:
-      - true
+      - false
     run:
       - action: add-comment@v1
         args:
@@ -63,7 +63,8 @@ automations:
             sensitive: {{ (files | match(list=sensitive_files) | some) }}
             risk: {{ risk | dump }}
             ai_risk_level: {{ ai_risk_level }}
-            pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) | dump }}
+            pr_ctgrz: {{ pr_ctgrz | dump }}
+            low_risk_category: {{ low_risk_ctgrz }}
 
 # +----------------------------------------------------------------------------+
 # | Constants                                                                  |
@@ -82,30 +83,20 @@ agents_branch_identifiers:
 # | Custom Expressions                                                         |
 # +----------------------------------------------------------------------------+
 
+# PR Categories from AI
+pr_ctgrz: {{ files | categorizePR(pr.title, pr.description, source.diff.files) }}
+low_risk_ctgrz: {{ not (pr_ctgrz.business_logic or pr_ctgrz.integration or pr_ctgrz.performance or pr_ctgrz.security or pr_ctgrz.infrastructure) }}
+
 # AI Safety Levels
-ai_risk_level: {{ 'high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low') }}
+ai_risk_level: {{ 'low' if low_risk_ctgrz else ('high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low')) }}
 
 risk:
-  high: |
-    {{
-      (files | length > 15)
-      or (branch.diff.size > 500)
-      or (calc.etr > 20)
-      or (files | match(list=sensitive_files) | some)
-    }}
-  medium: |
-    {{
-      (files | length > 5)
-      or (branch.diff.size > 200)
-      or (calc.etr > 10)
-    }}
+  high: {{ (files | length > 15) or (branch.diff.size > 500) or (calc.etr > 20) or (files | match(list=sensitive_files) | some) }}
+  medium: {{ (files | length > 5) or (branch.diff.size > 200) or (calc.etr > 10) }}
 
 is:
   ai_generated: {{ branch.name | includes(list=agents_branch_identifiers) }}
   ai_authored: {{ branch.commits.messages | match(regex=r/[Cc]o-[Aa]uthored-[Bb]y:.*([Cc]laude|[Cc]opilot|[Cc]ursor)/) | some}}
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
   bot: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | some }}
 
 calc:
@@ -116,11 +107,10 @@ calc:
 # +----------------------------------------------------------------------------+
 
 ai_lgtm: |
-  {% if (is.ai_generated or is.ai_authored) and ai_risk_level == 'low' and (is.docs or is.tests or is.formatting) %}
+  {% if (is.ai_generated or is.ai_authored) and ai_risk_level == 'low' %}
     {{
       (is.ai_generated or is.ai_authored)
       and (ai_risk_level == 'low')
-      and (is.docs or is.tests or is.formatting)
     }}
   {% else %}
     []
