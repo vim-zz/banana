@@ -100,6 +100,10 @@ ai_risk_level: |
   }}
 
 risk:
+  high: {{ tmp_risk.high | trim }}
+  medium: {{ tmp_risk.medium | trim }}
+
+tmp_risk:
   high: |
     {{
       (files | length > 15)
