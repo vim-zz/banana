@@ -63,8 +63,10 @@ automations:
             sensitive: {{ (files | match(list=sensitive_files) | some) }}
             risk: {{ risk | dump }}
             ai_risk_level: {{ ai_risk_level }}
+            ai_risk_level as bool: {{ ai_risk_level | bool }}
             pr_categories: {{ pr_categories }}
             pr_categories.testing: {{ pr_categories.testing }}
+            low_risk_category: {{ low_risk_category }}
 
 # +----------------------------------------------------------------------------+
 # | Constants                                                                  |
@@ -87,7 +89,15 @@ agents_branch_identifiers:
 pr_categories: {{ files | categorizePR(pr.title, pr.description, source.diff.files) }}
 
 # AI Safety Levels
-ai_risk_level: {{ 'high' if (risk.high | bool) else ('medium' if (risk.medium | bool) else 'low') }}
+ai_risk_level: |
+  {{
+    'low' if low_risk_category else (
+      'high' if (risk.high | bool) else (
+        'medium' if (risk.medium | bool)
+        else 'low'
+      )
+    )
+  }}
 
 risk:
   high: |
@@ -111,6 +121,7 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   bot: {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | some }}
+  low_risk_category: {{ pr_categories.testing or pr_categories.docs }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
