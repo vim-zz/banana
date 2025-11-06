@@ -1,4 +1,4 @@
-# BANANA BANANA
+# MANGO MANGO
 
 Foobar is a Python library for dealing with word pluralization.
 
