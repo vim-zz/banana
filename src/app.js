@@ -9,14 +9,6 @@ const server = http.createServer((req, res) => {
   res.end("hi");
 });
 
-server.listen(port, hostname, () => {
-
-// server
-const server = http.createServer((req, res) => {
-  res.statusCode = 20;
-  res.end("hi");
-});
-
 // another one
 const server = http.createServer((req, res) => {
   res.statusCode = 20;
