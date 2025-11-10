@@ -92,7 +92,7 @@ automations:
 
   label_aider_rules:
     if:
-      - {{ has_aider_rules }}
+      - {{ config.has_aider_rules }}
     run:
       - action: add-label@v1
         args:
@@ -109,7 +109,7 @@ automations:
 
   label_amazonq_rules:
     if:
-      - {{ has_amazonq_rules }}
+      - {{ config.has_amazonq_rules }}
     run:
       - action: add-label@v1
         args:
@@ -126,7 +126,7 @@ automations:
 
   label_augmentcode_rules:
     if:
-      - {{ has_augmentcode_rules }}
+      - {{ config.has_augmentcode_rules }}
     run:
       - action: add-label@v1
         args:
@@ -143,7 +143,7 @@ automations:
 
   label_claude_rules:
     if:
-      - {{ has_claude_rules }}
+      - {{ config.has_claude_rules }}
     run:
       - action: add-label@v1
         args:
@@ -160,7 +160,7 @@ automations:
 
   label_cursor_rules:
     if:
-      - {{ has_cursor_rules }}
+      - {{ config.has_cursor_rules }}
     run:
       - action: add-label@v1
         args:
@@ -177,7 +177,7 @@ automations:
 
   label_firebase_rules:
     if:
-      - {{ has_firebase_rules }}
+      - {{ config.has_firebase_rules }}
     run:
       - action: add-label@v1
         args:
@@ -194,7 +194,7 @@ automations:
 
   label_gemini_rules:
     if:
-      - {{ has_gemini_rules }}
+      - {{ config.has_gemini_rules }}
     run:
       - action: add-label@v1
         args:
@@ -211,7 +211,7 @@ automations:
 
   label_github_copilot_rules:
     if:
-      - {{ has_github_copilot_rules }}
+      - {{ config.has_github_copilot_rules }}
     run:
       - action: add-label@v1
         args:
@@ -228,7 +228,7 @@ automations:
 
   label_goose_rules:
     if:
-      - {{ has_goose_rules }}
+      - {{ config.has_goose_rules }}
     run:
       - action: add-label@v1
         args:
@@ -245,7 +245,7 @@ automations:
 
   label_jetbrains_junie_rules:
     if:
-      - {{ has_jetbrains_junie_rules }}
+      - {{ config.has_jetbrains_junie_rules }}
     run:
       - action: add-label@v1
         args:
@@ -262,7 +262,7 @@ automations:
 
   label_kilocode_rules:
     if:
-      - {{ has_kilocode_rules }}
+      - {{ config.has_kilocode_rules }}
     run:
       - action: add-label@v1
         args:
@@ -279,7 +279,7 @@ automations:
 
   label_kiro_rules:
     if:
-      - {{ has_kiro_rules }}
+      - {{ config.has_kiro_rules }}
     run:
       - action: add-label@v1
         args:
@@ -296,7 +296,7 @@ automations:
 
   label_openai_rules:
     if:
-      - {{ has_openai_rules }}
+      - {{ config.has_openai_rules }}
     run:
       - action: add-label@v1
         args:
@@ -313,7 +313,7 @@ automations:
 
   label_openhands_rules:
     if:
-      - {{ has_openhands_rules }}
+      - {{ config.has_openhands_rules }}
     run:
       - action: add-label@v1
         args:
@@ -330,7 +330,7 @@ automations:
 
   label_warp_rules:
     if:
-      - {{ has_warp_rules }}
+      - {{ config.has_warp_rules }}
     run:
       - action: add-label@v1
         args:
@@ -347,7 +347,7 @@ automations:
 
   label_windsurf_rules:
     if:
-      - {{ has_windsurf_rules }}
+      - {{ config.has_windsurf_rules }}
     run:
       - action: add-label@v1
         args:
@@ -364,7 +364,7 @@ automations:
 
   label_zed_rules:
     if:
-      - {{ has_zed_rules }}
+      - {{ config.has_zed_rules }}
     run:
       - action: add-label@v1
         args:
@@ -385,7 +385,7 @@ automations:
 
   label_aider_coauthor:
     if:
-      - {{ has_aider_coauthor }}
+      - {{ config.has_aider_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -402,7 +402,7 @@ automations:
 
   label_claude_coauthor:
     if:
-      - {{ has_claude_coauthor }}
+      - {{ config.has_claude_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -419,7 +419,7 @@ automations:
 
   label_cursor_coauthor:
     if:
-      - {{ has_cursor_coauthor }}
+      - {{ config.has_cursor_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -436,7 +436,7 @@ automations:
 
   label_github_copilot_coauthor:
     if:
-      - {{ has_github_copilot_coauthor }}
+      - {{ config.has_github_copilot_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -453,7 +453,7 @@ automations:
 
   label_gemini_coauthor:
     if:
-      - {{ has_gemini_coauthor }}
+      - {{ config.has_gemini_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -470,7 +470,7 @@ automations:
 
   label_qodo_coauthor:
     if:
-      - {{ has_qodo_coauthor }}
+      - {{ config.has_qodo_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -487,7 +487,7 @@ automations:
 
   label_devin_coauthor:
     if:
-      - {{ has_devin_coauthor }}
+      - {{ config.has_devin_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -504,7 +504,7 @@ automations:
 
   label_windsurf_coauthor:
     if:
-      - {{ has_windsurf_coauthor }}
+      - {{ config.has_windsurf_coauthor }}
     run:
       - action: add-label@v1
         args:
@@ -527,7 +527,7 @@ automations:
 
   label_claude_author:
     if:
-      - {{ is_claude_author }}
+      - {{ config.is_claude_author }}
     run:
       - action: add-label@v1
         args:
@@ -544,7 +544,7 @@ automations:
 
   label_cursor_author:
     if:
-      - {{ is_cursor_author }}
+      - {{ config.is_cursor_author }}
     run:
       - action: add-label@v1
         args:
@@ -561,7 +561,7 @@ automations:
 
   label_github_copilot_author:
     if:
-      - {{ is_github_copilot_author }}
+      - {{ config.is_github_copilot_author }}
     run:
       - action: add-label@v1
         args:
@@ -578,7 +578,7 @@ automations:
 
   label_devin_author:
     if:
-      - {{ is_devin_author }}
+      - {{ config.is_devin_author }}
     run:
       - action: add-label@v1
         args:
@@ -595,7 +595,7 @@ automations:
 
   label_qodo_author:
     if:
-      - {{ is_qodo_author }}
+      - {{ config.is_qodo_author }}
     run:
       - action: add-label@v1
         args:
@@ -612,7 +612,7 @@ automations:
 
   label_coderabbit_author:
     if:
-      - {{ is_coderabbit_author }}
+      - {{ config.is_coderabbit_author }}
     run:
       - action: add-label@v1
         args:
