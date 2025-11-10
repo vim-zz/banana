@@ -85,6 +85,9 @@ config:
   is_greptile_author: {{ pr.author | match(regex=r/greptile/i) }}
   is_qodo_author: {{ pr.author | match(regex=r/(^pr agent|^pr-agent|^pr_agent|codium pr-agent|pr-ia-20240430|qodo\b|s-qce-pr-reviewer)/i) }}
 
+  # General AI detection - true if ANY AI tool/method is detected
+  any_ai_detected: {{ has_aider_rules or has_amazonq_rules or has_augmentcode_rules or has_claude_rules or has_cursor_rules or has_customtool_rules or has_firebase_rules or has_gemini_rules or has_github_copilot_rules or has_goose_rules or has_jetbrains_junie_rules or has_kilocode_rules or has_kiro_rules or has_openai_rules or has_openhands_rules or has_warp_rules or has_windsurf_rules or has_zed_rules or has_aider_coauthor or has_aikido_coauthor or has_amazonq_coauthor or has_atlassian_coauthor or has_bito_coauthor or has_claude_coauthor or has_codeant_coauthor or has_codegen_coauthor or has_coderabbit_coauthor or has_codota_coauthor or has_cubic_coauthor or has_cursor_coauthor or has_devin_coauthor or has_ellipsis_coauthor or has_factory_coauthor or has_fine_coauthor or has_gemini_coauthor or has_github_copilot_coauthor or has_gitlab_duo_coauthor or has_gitstream_coauthor or has_google_jules_coauthor or has_graphite_coauthor or has_greptile_coauthor or has_jazzberry_coauthor or has_jetbrains_junie_coauthor or has_korbit_coauthor or has_meticulous_coauthor or has_openai_coauthor or has_opencode_coauthor or has_qodo_coauthor or has_replit_coauthor or has_rovo_coauthor or has_sourcegraph_coauthor or has_sourcery_coauthor or has_sweep_coauthor or has_tabnine_coauthor or has_tusk_coauthor or has_whatthediff_coauthor or has_windsurf_coauthor or is_claude_author or is_coderabbit_author or is_cursor_author or is_devin_author or is_fine_author or is_gemini_author or is_github_copilot_author or is_gitstream_author or is_greptile_author or is_qodo_author }}
+
 automations:
   # =============================================================================
   # RULES FILE ADOPTION - Label PRs that add/modify AI tool configuration files
@@ -626,3 +629,15 @@ automations:
             🤖 **AI Adoption Detected: CodeRabbit PR Author**
 
             This PR was created by CodeRabbit, indicating AI-driven PR creation.
+
+  # =============================================================================
+  # GENERAL AI USAGE - Label any PR where AI was detected
+  # =============================================================================
+
+  label_ai_used:
+    if:
+      - {{ config.any_ai_detected }}
+    run:
+      - action: add-label@v1
+        args:
+          label: 'ai-used'
