@@ -4,10 +4,7 @@
 
 # 1. clear the screen
 # 2. show the simple prompt
-
-# say hello world after input
- addStyles(asdsad)
-lorem
+asxzc
 lorem
 lorem
 lorem
