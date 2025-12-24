@@ -14,7 +14,7 @@ server.listen(port, hostname, () => {
 });
 
 // server
-const server = http.createServer((req, res) => {
+const servr = http.createServer((req, res) => {
   res.statusCode = 20; 
   res.end("hi");
 });
