@@ -12,3 +12,8 @@ automations:
           comment: |
             Repo {{ "./repo_guidelines.md" | readFile() }}
             Org: {{ "../cm/org_guidelines.md" | readFile() }}
+      - action: code-review@v1
+        args:
+          guidelines: |
+            Repo {{ "./repo_guidelines.md" | readFile() }}
+            Org: {{ "../cm/org_guidelines.md" | readFile() }}
