@@ -4,31 +4,11 @@ manifest:
 
 automations:
   linearb_ai_codereview:
-    # Ai Code Review - Triggers only when PR is ready for review, see docs https://docs.gitstream.cm/execution-model/#action-level-execution-control
-    on: [pr_created, pr_ready_for_review, merge]
     if:
-      - {{ not is.bot }}
+      - true
     run:
-      - action: code-review@v1
-        args:
-          guidelines: |
-            {{ guidelines.org }}
-            {{ guidelines.repo }}
-
-      # ONE consolidated, updatable comment
       - action: add-comment@v1
         args:
           comment: |
-            ## gitStream Summary — Low Noise (Staff Engineer focus)
-            ORG: {{ guidelines.org }}
-            REPO: {{ guidelines.repo }}
-            
-
-# ----------------- config -----------------
-
-is:
-  bot: {{ pr.author | match(list=['github-actions','_bot_','[bot]','dependabot','gitstream-cm') | some }}
-
-guidelines:
-  repo: {{ "./repo_guidelines.md" | readFile() }}
-  org: {{ "../cm/org_guidelines.md" | readFile() }}
+            Repo {{ "./repo_guidelines.md" | readFile() }}
+            Org: {{ "../cm/org_guidelines.md" | readFile() }}
