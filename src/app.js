@@ -1,6 +1,6 @@
 const http = require('http');
 
-const hostname = '127.0.0.2';
+const hostname = '127.0.0.1.2';
 const port = 3000;
 
 // hello 
@@ -14,7 +14,7 @@ server.listen(port, hostname, () => {
 });
 
 // server
-const server = http.createServer((req, res) => {
+const servr = http.createServer((req, res) => {
   res.statusCode = 20; 
   res.end("hi");
 });
